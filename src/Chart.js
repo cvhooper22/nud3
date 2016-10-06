@@ -3,7 +3,7 @@ import shallowCompare from 'react-addons-shallow-compare';
 import _ from 'lodash';
 import * as d3 from 'd3';
 import dataDenormalizer from './helpers/dataDenormalizer';
-import stringOrFunc from './propTypes/stringOrFunc';
+import { stringOrFunc } from './propTypes/customPropTypes';
 
 export default class Chart extends Component {
 
@@ -43,8 +43,6 @@ export default class Chart extends Component {
   constructor (props, ...args) {
     super(props, ...args);
     this.renderChild = ::this.renderChild;
-    this.assignRef = ::this.assignRef;
-    this.onWindowResize = ::this.onWindowResize;
     this.onWindowResize = _.debounce(::this.onWindowResize, props.resizeDebounce);
     this.setupData(props);
     this.state = {};
@@ -81,10 +79,7 @@ export default class Chart extends Component {
   }
 
   setupScale (prop) {
-    if (_.isFunction(prop)) {
-      return prop();
-    }
-    return d3[prop]();
+    return _.isFunction(prop) ? prop() : d3[prop]();
   }
 
   render () {
@@ -101,7 +96,7 @@ export default class Chart extends Component {
         id={ this.props.id }
         className={ this.props.className }
         style={ style }
-        ref={ this.assignRef }
+        ref={ n => this.node = n }
       >
         { this.renderChildren() }
       </Tag>
@@ -162,10 +157,6 @@ export default class Chart extends Component {
         this.xScale.domain([first[this.props.xKey], last[this.props.xKey]]);
       }
     }
-  }
-
-  assignRef (node) {
-    this.node = node;
   }
 
   resize () {

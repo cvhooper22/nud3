@@ -1,11 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import * as d3 from 'd3';
 import _ from 'lodash';
-
-const stringOrArrayOfStrings = PropTypes.oneOfType([
-  PropTypes.string,
-  React.PropTypes.arrayOf(PropTypes.string),
-]);
+import { stringOrArrayOfStrings } from '../propTypes/customPropTypes';
 
 export default class LineChart extends Component {
 
@@ -29,7 +25,7 @@ export default class LineChart extends Component {
     super(...args);
     this.getUniqueDataKey = ::this.getUniqueDataKey;
     this.getStrokeColor = ::this.getStrokeColor;
-    this.line = d3.line()
+    this.lineGenerator = d3.line()
       .x(d => this.props.xScale(d.xValue))
       .y(d => this.props.yScale(d.yValue || 0));
   }
@@ -101,6 +97,6 @@ export default class LineChart extends Component {
 
     this.group
       .selectAll('.line-chart__line')
-        .attr('d', this.line);
+        .attr('d', this.lineGenerator);
   }
 }

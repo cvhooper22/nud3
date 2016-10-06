@@ -1,11 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import * as d3 from 'd3';
 import _ from 'lodash';
-
-const stringOrArrayOfStrings = PropTypes.oneOfType([
-  PropTypes.string,
-  React.PropTypes.arrayOf(PropTypes.string),
-]);
+import { stringOrArrayOfStrings } from '../propTypes/customPropTypes';
 
 export default class PieChart extends Component {
 
@@ -32,6 +28,8 @@ export default class PieChart extends Component {
     this.getUniqueDataKey = ::this.getUniqueDataKey;
     this.getFillColor = ::this.getFillColor;
     this.getPathFilter = ::this.getPathFilter;
+    this.arcGenerator = ::this.arcGenerator;
+    this.pieArcGenerator = ::this.pieArcGenerator;
   }
 
   componentDidMount () {
@@ -43,10 +41,7 @@ export default class PieChart extends Component {
   }
 
   getFillColor (d, i) {
-    if (_.isFunction(this.props.colorPalette)) {
-      return this.props.colorPalette(i);
-    }
-    return this.props.colorPalette[i];
+    return _.isFunction(this.props.colorPalette) ? this.props.colorPalette(i) : this.props.colorPalette[i];
   }
 
   getUniqueDataKey (dataSet, i) {
@@ -93,16 +88,9 @@ export default class PieChart extends Component {
   }
 
   renderPie () {
-    const pieArc = d3.pie()
-      .value(d => this.props.yScale(d.yValue || 0));
-    const arc = d3.arc()
-      .outerRadius(this.props.areaHeight / 2)
-      .innerRadius(this.props.areaHeight / 4)
-      .padAngle(0.03);
-
     const pies = this.group.selectAll('.pie-chart__pie');
     let slices = pies.selectAll('.pie-chart__pie__slice')
-      .data(pieArc)
+      .data(this.pieArcGenerator)
       .enter()
       .append('path')
       .attr('class', 'pie-chart__pie__slice');
@@ -113,9 +101,21 @@ export default class PieChart extends Component {
 
     slices = pies
       .selectAll('.pie-chart__pie__slice')
-      .attr('d', arc);
+      .attr('d', this.arcGenerator);
     if (this.props.colorPalette) {
       slices.style('fill', this.getFillColor);
     }
+  }
+
+  pieArcGenerator () {
+    return d3.pie()
+      .value(d => this.props.yScale(d.yValue || 0));
+  }
+
+  arcGenerator () {
+    return d3.arc()
+      .outerRadius(this.props.areaHeight / 2)
+      .innerRadius(this.props.areaHeight / 4)
+      .padAngle(0.03);
   }
 }
