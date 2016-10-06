@@ -1,11 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import * as d3 from 'd3';
 import _ from 'lodash';
-
-const stringOrArrayOfStrings = PropTypes.oneOfType([
-  PropTypes.string,
-  React.PropTypes.arrayOf(PropTypes.string),
-]);
+import { stringOrArrayOfStrings, stringOrFunc } from '../propTypes/customPropTypes';
 
 export default class PieChart extends Component {
 
@@ -26,10 +22,9 @@ export default class PieChart extends Component {
     areaHeight: PropTypes.number,
     areaWidth: PropTypes.number,
     labelFormat: PropTypes.func,
-    labelDy: PropTypes.string,
-    labelDx: PropTypes.string,
+    labelDy: stringOrFunc,
+    labelDx: stringOrFunc,
     padAngle: PropTypes.number,
-
   };
 
   static defaultProps = {
@@ -53,10 +48,7 @@ export default class PieChart extends Component {
   }
 
   getFillColor (d, i) {
-    if (_.isFunction(this.props.colorPalette)) {
-      return this.props.colorPalette(i);
-    }
-    return this.props.colorPalette[i];
+    return _.isFunction(this.props.colorPalette) ? this.props.colorPalette(i) : this.props.colorPalette[i];
   }
 
   getUniqueDataKey (dataSet, i) {
@@ -107,22 +99,22 @@ export default class PieChart extends Component {
   }
 
   renderPie () {
-    const pieArc = d3.pie()
+    const pieArcGenerator = d3.pie()
       .value(d => d.yValue || 0);
-    const arc = d3.arc()
+    const arcGenerator = d3.arc()
       .outerRadius(Math.min(this.props.areaHeight, this.props.areaWidth) / 2)
       .innerRadius(Math.min(this.props.areaHeight, this.props.areaWidth) / 4)
       .padAngle(this.props.padAngle);
-    this.renderArcs(pieArc, arc);
+    this.renderArcs(pieArcGenerator, arcGenerator);
     if (this.props.labelFormat) {
-      this.renderArcLabels(pieArc, arc);
+      this.renderArcLabels(pieArcGenerator, arcGenerator);
     }
   }
 
-  renderArcs (pieArc, arc) {
+  renderArcs (pieArcGenerator, arcGenerator) {
     const pies = this.group.selectAll('.pie-chart__pie');
     let slices = pies.selectAll('.pie-chart__pie__slice')
-      .data(pieArc)
+      .data(pieArcGenerator)
       .enter()
       .append('path')
       .attr('class', 'pie-chart__pie__slice');
@@ -133,7 +125,7 @@ export default class PieChart extends Component {
 
     slices = pies
       .selectAll('.pie-chart__pie__slice')
-      .attr('d', arc);
+      .attr('d', arcGenerator);
     if (this.props.colorPalette) {
       slices.style('fill', this.getFillColor);
     }

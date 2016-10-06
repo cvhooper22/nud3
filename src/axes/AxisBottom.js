@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import * as d3 from 'd3';
-import stringOrFunc from '../propTypes/stringOrFunc';
+import { stringOrFunc } from '../propTypes/customPropTypes';
 
 export default class AxisBottom extends Component {
 

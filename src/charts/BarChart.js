@@ -1,11 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import * as d3 from 'd3';
 import _ from 'lodash';
-
-const stringOrArrayOfStrings = PropTypes.oneOfType([
-  PropTypes.string,
-  React.PropTypes.arrayOf(PropTypes.string),
-]);
+import { stringOrArrayOfStrings } from '../propTypes/customPropTypes';
 
 export default class BarChart extends Component {
 
