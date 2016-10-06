@@ -25,6 +25,15 @@ export default class PieChart extends Component {
     clipPath: PropTypes.string,
     areaHeight: PropTypes.number,
     areaWidth: PropTypes.number,
+    labelFormat: PropTypes.func,
+    labelDy: PropTypes.string,
+    labelDx: PropTypes.string,
+    padAngle: PropTypes.number,
+
+  };
+
+  static defaultProps = {
+    padAngle: 0.01,
   };
 
   constructor (...args) {
@@ -32,6 +41,7 @@ export default class PieChart extends Component {
     this.getUniqueDataKey = ::this.getUniqueDataKey;
     this.getFillColor = ::this.getFillColor;
     this.getPathFilter = ::this.getPathFilter;
+    this.getSliceText = ::this.getSliceText;
   }
 
   componentDidMount () {
@@ -59,6 +69,10 @@ export default class PieChart extends Component {
       filter = filter[i];
     }
     return `url(#${filter})`;
+  }
+
+  getSliceText (d, ...args) {
+    return this.props.labelFormat(d.data.yValue, d, ...args);
   }
 
   render () {
@@ -94,12 +108,18 @@ export default class PieChart extends Component {
 
   renderPie () {
     const pieArc = d3.pie()
-      .value(d => this.props.yScale(d.yValue || 0));
+      .value(d => d.yValue || 0);
     const arc = d3.arc()
-      .outerRadius(this.props.areaHeight / 2)
-      .innerRadius(this.props.areaHeight / 4)
-      .padAngle(0.03);
+      .outerRadius(Math.min(this.props.areaHeight, this.props.areaWidth) / 2)
+      .innerRadius(Math.min(this.props.areaHeight, this.props.areaWidth) / 4)
+      .padAngle(this.props.padAngle);
+    this.renderArcs(pieArc, arc);
+    if (this.props.labelFormat) {
+      this.renderArcLabels(pieArc, arc);
+    }
+  }
 
+  renderArcs (pieArc, arc) {
     const pies = this.group.selectAll('.pie-chart__pie');
     let slices = pies.selectAll('.pie-chart__pie__slice')
       .data(pieArc)
@@ -116,6 +136,26 @@ export default class PieChart extends Component {
       .attr('d', arc);
     if (this.props.colorPalette) {
       slices.style('fill', this.getFillColor);
+    }
+  }
+
+  renderArcLabels (pieArc, arc) {
+    const pies = this.group.selectAll('.pie-chart__pie');
+    pies.selectAll('.pie-chart__pie__slice__labels')
+      .data(pieArc)
+      .enter()
+      .append('text')
+      .attr('class', 'pie-chart__pie__slice__labels');
+
+    const texts = pies
+      .selectAll('.pie-chart__pie__slice__labels')
+      .attr('transform', d => `translate(${arc.centroid(d)})`)
+      .text(this.getSliceText);
+    if (this.props.labelDx) {
+      texts.attr('dx', this.props.labelDx);
+    }
+    if (this.props.labelDy) {
+      texts.attr('dy', this.props.labelDy);
     }
   }
 }

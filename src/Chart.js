@@ -5,6 +5,11 @@ import * as d3 from 'd3';
 import dataDenormalizer from './helpers/dataDenormalizer';
 import stringOrFunc from './propTypes/stringOrFunc';
 
+const arrayOrFunc = PropTypes.oneOfType([
+  PropTypes.array,
+  PropTypes.func,
+]);
+
 export default class Chart extends Component {
 
   static propTypes = {
@@ -23,6 +28,8 @@ export default class Chart extends Component {
     width: PropTypes.number,
     xScale: stringOrFunc,
     yScale: stringOrFunc,
+    yScaleDomain: arrayOrFunc,
+    xScaleDomain: arrayOrFunc,
     yScaleMinimum: PropTypes.number,
     yScaleMaximum: PropTypes.number,
     resizeDebounce: PropTypes.number,
@@ -122,6 +129,8 @@ export default class Chart extends Component {
       chartData: this.chartData,
       xScale: this.xScale,
       yScale: this.yScale,
+      xScaleDomain: this.props.xScaleDomain,
+      yScaleDomain: this.props.yScaleDomain,
       classNamePrefix: this.props.className,
       paddingBottom: this.props.paddingBottom,
       paddingLeft: this.props.paddingLeft,
@@ -142,20 +151,40 @@ export default class Chart extends Component {
   }
 
   updateScalesFromData (data) {
-    this.updateXScaleFromData();
-    const allExtents = _.flatten(data.map(datum => d3.extent(datum, d => d.yValue)));
-    const valueExtent = d3.extent(allExtents);
-    if (this.props.yScaleMinimum !== undefined) {
-      valueExtent[0] = this.props.yScaleMinimum;
+    if (this.props.xKey) {
+      this.updateXScaleDomain(data);
     }
-    if (this.props.yScaleMaximum !== undefined) {
-      valueExtent[1] = this.props.yScaleMaximum;
-    }
-    this.yScale.domain(valueExtent);
+    this.updateYScaleDomain(data);
   }
 
-  updateXScaleFromData () {
-    if (this.props.xKey) {
+  updateYScaleDomain (data) {
+    if (this.props.yScaleDomain) {
+      if (_.isFunction(this.props.yScaleDomain)) {
+        this.yScale.domain(this.props.yScaleDomain(data));
+      } else {
+        this.yScale.domain(this.props.yScaleDomain);
+      }
+    } else {
+      const allExtents = _.flatten(data.map(datum => d3.extent(datum, d => d.yValue)));
+      const valueExtent = d3.extent(allExtents);
+      if (this.props.yScaleMinimum !== undefined) {
+        valueExtent[0] = this.props.yScaleMinimum;
+      }
+      if (this.props.yScaleMaximum !== undefined) {
+        valueExtent[1] = this.props.yScaleMaximum;
+      }
+      this.yScale.domain(valueExtent);
+    }
+  }
+
+  updateXScaleDomain (data) {
+    if (this.props.xScaleDomain) {
+      if (_.isFunction(this.props.xScaleDomain)) {
+        this.xScale.domain(this.props.xScaleDomain(data));
+      } else {
+        this.xScale.domain(this.props.xScaleDomain);
+      }
+    } else {
       const first = _.first(this.props.data);
       const last = _.last(this.props.data);
       if (first && last) {

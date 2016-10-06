@@ -32,6 +32,18 @@ div#content {
     }
   }
 }
+.basic-bar-chart {
+  &__axis-bottom {
+    text {
+      text-anchor: center;
+    }
+    .tick:nth-child(2n+1) {
+      text {
+        transform: translate(0px, 10px);
+      }
+    }
+  }
+}
 .fancy-line-chart {
   &__axis-bottom {
     text {

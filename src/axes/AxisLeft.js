@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import * as d3 from 'd3';
+import stringOrFunc from '../propTypes/stringOrFunc';
 
 export default class AxisLeft extends Component {
 
@@ -13,6 +14,7 @@ export default class AxisLeft extends Component {
     paddingBottom: PropTypes.number,
     paddingRight: PropTypes.number,
     paddingTop: PropTypes.number,
+    tickFormat: stringOrFunc,
   };
 
   static defaultProps = {
@@ -43,9 +45,12 @@ export default class AxisLeft extends Component {
   }
 
   renderAxis () {
-    this.xAxis = d3.axisLeft(this.props.yScale);
+    const axis = d3.axisLeft(this.props.yScale);
+    if (this.props.tickFormat) {
+      axis.tickFormat(this.props.tickFormat);
+    }
     this.group = d3.select(this.node);
-    this.group.call(this.xAxis);
+    this.group.call(axis);
     const yAxisOffset = this.props.paddingLeft;
     this.group.attr('transform', `translate(${yAxisOffset},${this.props.paddingTop})`);
   }

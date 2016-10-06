@@ -17,6 +17,7 @@ export default class AxisBottom extends Component {
     textTransform: stringOrFunc,
     textDy: stringOrFunc,
     textDx: stringOrFunc,
+    tickFormat: stringOrFunc,
   };
 
   static defaultProps = {
@@ -51,9 +52,12 @@ export default class AxisBottom extends Component {
   }
 
   renderAxis () {
-    this.xAxis = d3.axisBottom(this.props.xScale);
+    const axis = d3.axisBottom(this.props.xScale);
+    if (this.props.tickFormat) {
+      axis.tickFormat(this.props.tickFormat);
+    }
     this.group = d3.select(this.node);
-    this.group.call(this.xAxis);
+    this.group.call(axis);
     const texts = this.group
       .selectAll('text');
     if (this.props.textTransform) {

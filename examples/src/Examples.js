@@ -2,6 +2,8 @@ import React from 'react';
 import DocumentTitle from './DocumentTitle';
 import BasicLineChart from './visualizations/BasicLineChart';
 import FancyLineChart from './visualizations/FancyLineChart';
+import BasicBarChart from './visualizations/BasicBarChart';
+import BasicPieChart from './visualizations/BasicPieChart';
 import MockSeriesData from './data/MockSeriesData.json';
 
 export default class Examples extends React.Component {
@@ -27,6 +29,21 @@ export default class Examples extends React.Component {
           <FancyLineChart
             data={ MockSeriesData }
             valueKeys={ ['mentions_total', 'sentiment_positive', 'sentiment_negative'] }
+          />
+        </section>
+        <section className="visualizations">
+          <h1>Basic Pie Chart</h1>
+          <BasicPieChart
+            data={ MockSeriesData }
+            valueKeys={ ['mentions_total'] }
+            height={ 400 }
+          />
+        </section>
+        <section className="visualizations">
+          <h1>Basic Bar Chart</h1>
+          <BasicBarChart
+            data={ MockSeriesData }
+            valueKeys={ ['mentions_total'] }
           />
         </section>
       </div>
