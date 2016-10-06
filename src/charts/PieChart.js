@@ -24,6 +24,9 @@ export default class PieChart extends Component {
     labelFormat: PropTypes.func,
     labelDy: stringOrFunc,
     labelDx: stringOrFunc,
+    outerLabelFormat: PropTypes.func,
+    outerLabelDy: stringOrFunc,
+    outerLabelDx: stringOrFunc,
     padAngle: PropTypes.number,
   };
 
@@ -36,7 +39,9 @@ export default class PieChart extends Component {
     this.getUniqueDataKey = ::this.getUniqueDataKey;
     this.getFillColor = ::this.getFillColor;
     this.getPathFilter = ::this.getPathFilter;
-    this.getSliceText = ::this.getSliceText;
+    this.getInnerLabelText = ::this.getInnerLabelText;
+    this.getOuterLabelText = ::this.getOuterLabelText;
+    this.getSliceId = ::this.getSliceId;
   }
 
   componentDidMount () {
@@ -63,8 +68,16 @@ export default class PieChart extends Component {
     return `url(#${filter})`;
   }
 
-  getSliceText (d, ...args) {
+  getInnerLabelText (d, ...args) {
     return this.props.labelFormat(d.data.yValue, d, ...args);
+  }
+
+  getOuterLabelText (d, ...args) {
+    return this.props.outerLabelFormat(d.data.yValue, d, ...args);
+  }
+
+  getSliceId (d, i) {
+    return `arc-${d.data.yKey}-${i}`;
   }
 
   render () {
@@ -107,7 +120,10 @@ export default class PieChart extends Component {
       .padAngle(this.props.padAngle);
     this.renderArcs(pieArcGenerator, arcGenerator);
     if (this.props.labelFormat) {
-      this.renderArcLabels(pieArcGenerator, arcGenerator);
+      this.renderArcInnerLabels(pieArcGenerator, arcGenerator);
+    }
+    if (this.props.outerLabelFormat) {
+      this.renderArcOuterLabels(pieArcGenerator, arcGenerator);
     }
   }
 
@@ -120,34 +136,64 @@ export default class PieChart extends Component {
       .attr('class', 'pie-chart__pie__slice');
     if (this.props.filter) {
       slices.style('filter', this.getPathFilter);
+    } else {
+      slices.style('filter', '');
     }
-
 
     slices = pies
       .selectAll('.pie-chart__pie__slice')
-      .attr('d', arcGenerator);
+      .attr('d', arcGenerator)
+      .attr('id', this.getSliceId);
     if (this.props.colorPalette) {
       slices.style('fill', this.getFillColor);
+    } else {
+      slices.style('fill', '');
     }
   }
 
-  renderArcLabels (pieArc, arc) {
+  renderArcInnerLabels (pieArc, arc) {
     const pies = this.group.selectAll('.pie-chart__pie');
-    pies.selectAll('.pie-chart__pie__slice__labels')
+    pies.selectAll('.pie-chart__pie__slice__inner-labels')
       .data(pieArc)
       .enter()
       .append('text')
-      .attr('class', 'pie-chart__pie__slice__labels');
+      .attr('class', 'pie-chart__pie__slice__inner-labels');
 
     const texts = pies
-      .selectAll('.pie-chart__pie__slice__labels')
+      .selectAll('.pie-chart__pie__slice__inner-labels')
       .attr('transform', d => `translate(${arc.centroid(d)})`)
-      .text(this.getSliceText);
+      .text(this.getInnerLabelText);
     if (this.props.labelDx) {
       texts.attr('dx', this.props.labelDx);
+    } else {
+      texts.attr('dx', '');
     }
     if (this.props.labelDy) {
       texts.attr('dy', this.props.labelDy);
+    } else {
+      texts.attr('dy', '');
     }
+  }
+
+  renderArcOuterLabels (pieArc) {
+    const pies = this.group.selectAll('.pie-chart__pie');
+    pies.selectAll('.pie-chart__pie__slice__outer-labels')
+      .data(pieArc)
+      .enter()
+      .append('text')
+      .attr('class', 'pie-chart__pie__slice__outer-labels')
+      .append('textPath');
+
+    const texts = pies
+      .selectAll('.pie-chart__pie__slice__outer-labels');
+    if (this.props.outerLabelDx) {
+      texts.attr('dx', this.props.outerLabelDx);
+    }
+    if (this.props.outerLabelDy) {
+      texts.attr('dy', this.props.outerLabelDy);
+    }
+    pies.selectAll('.pie-chart__pie__slice__outer-labels textPath')
+      .text(this.getOuterLabelText)
+      .attr('xlink:href', (...args) => `#${this.getSliceId(...args)}`);
   }
 }

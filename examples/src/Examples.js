@@ -36,7 +36,7 @@ export default class Examples extends React.Component {
           <BasicPieChart
             data={ MockSeriesData }
             valueKeys={ ['mentions_total'] }
-            height={ 400 }
+            height={ 500 }
           />
         </section>
         <section className="visualizations">
