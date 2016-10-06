@@ -29,6 +29,7 @@ export default class LineChart extends Component {
     super(...args);
     this.getUniqueDataKey = ::this.getUniqueDataKey;
     this.getStrokeColor = ::this.getStrokeColor;
+    this.getPathFilter = ::this.getPathFilter;
     this.line = d3.line()
       .x(d => this.props.xScale(d.xValue))
       .y(d => this.props.yScale(d.yValue || 0));
@@ -92,10 +93,12 @@ export default class LineChart extends Component {
       .enter()
       .append('path');
     paths
-      .attr('class', 'line-chart__line')
-      .style('stroke', this.getStrokeColor);
+      .attr('class', 'line-chart__line');
+    if (this.props.colorPalette) {
+      paths.style('stroke', this.getStrokeColor);
+    }
     if (this.props.filter) {
-      paths.style('filter', ::this.getPathFilter);
+      paths.style('filter', this.getPathFilter);
     }
 
 

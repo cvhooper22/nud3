@@ -1,0 +1,154 @@
+[
+  {
+    "mentions_total": 1,
+    "reach_total": 0,
+    "spread_total": 2,
+    "sentiment_positive": 6,
+    "sentiment_negative": 8,
+    "date": "2016-08-21"
+  },
+  {
+    "mentions_total": 4,
+    "reach_total": 0,
+    "spread_total": 8,
+    "sentiment_positive": 6,
+    "sentiment_negative": 8,
+    "date": "2016-08-22"
+  },
+  {
+    "mentions_total":4,
+    "reach_total":1,
+    "spread_total":2,
+    "sentiment_positive": 6,
+    "sentiment_negative": 8,
+    "date":"2016-08-23"
+  },
+  {
+    "mentions_total":10,
+    "reach_total":0,
+    "spread_total":4,
+    "sentiment_positive": 6,
+    "sentiment_negative": 8,
+    "date":"2016-08-24"
+  },
+  {
+    "mentions_total":1,
+    "reach_total":0,
+    "spread_total":1,
+    "sentiment_positive": 6,
+    "sentiment_negative": 8,
+    "date":"2016-08-28"
+  },
+  {
+    "mentions_total":7,
+    "reach_total":1,
+    "spread_total":12,
+    "sentiment_positive": 6,
+    "sentiment_negative": 8,
+    "date":"2016-08-29"
+  },
+  {
+    "mentions_total":2,
+    "reach_total":0,
+    "spread_total":2,
+    "sentiment_positive": 6,
+    "sentiment_negative": 8,
+    "date":"2016-08-30"
+  },
+  {
+    "mentions_total":1,
+    "reach_total":3,
+    "spread_total":3,
+    "sentiment_positive": 2,
+    "sentiment_negative": 1,
+    "date":"2016-09-02"
+  },
+  {
+    "mentions_total":1,
+    "reach_total":3,
+    "spread_total":3,
+    "sentiment_positive": 2,
+    "sentiment_negative": 1,
+    "date":"2016-09-03"
+  },
+  {
+    "mentions_total":9,
+    "reach_total":0,
+    "spread_total":3,
+    "sentiment_positive": 2,
+    "sentiment_negative": 1,
+    "date":"2016-09-04"
+  },
+  {
+    "mentions_total":10,
+    "reach_total":0,
+    "spread_total":3,
+    "sentiment_positive": 3,
+    "sentiment_negative": 1,
+    "date":"2016-09-05"
+  },
+  {
+    "mentions_total":0,
+    "reach_total":0,
+    "spread_total":4,
+    "sentiment_positive": 6,
+    "sentiment_negative": 8,
+    "date":"2016-09-06"
+  },
+  {
+    "mentions_total":0,
+    "reach_total":0,
+    "spread_total":2,
+    "sentiment_positive": 6,
+    "sentiment_negative": 8,
+    "date":"2016-09-07"
+  },
+  {
+    "mentions_total":1,
+    "reach_total":0,
+    "spread_total":2,
+    "sentiment_positive": 6,
+    "sentiment_negative": 8,
+    "date":"2016-09-08"
+  },
+  {
+    "mentions_total":2,
+    "reach_total":0,
+    "spread_total":3,
+    "sentiment_positive": 6,
+    "sentiment_negative": 8,
+    "date":"2016-09-13"
+  },
+  {
+    "mentions_total":2,
+    "reach_total":0,
+    "spread_total":5,
+    "sentiment_positive": 6,
+    "sentiment_negative": 8,
+    "date":"2016-09-14"
+  },
+  {
+    "mentions_total":1,
+    "reach_total":0,
+    "spread_total":2,
+    "sentiment_positive": 6,
+    "sentiment_negative": 8,
+    "date":"2016-09-15"
+  },
+  {
+    "mentions_total":6,
+    "reach_total":1,
+    "spread_total":6,
+    "sentiment_positive": 6,
+    "sentiment_negative": 8,
+    "date":"2016-09-18"
+  },
+  {
+    "mentions_total":2,
+    "reach_total":0,
+    "spread_total":1,
+    "sentiment_positive": 6,
+    "sentiment_negative": 8,
+    "date":"2016-09-19"
+  }
+]

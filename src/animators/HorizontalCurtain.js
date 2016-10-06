@@ -19,8 +19,6 @@ export default class HorizontalCurtain extends Component {
   };
 
   static defaultProps = {
-    delay: 0,
-    duration: 300,
   };
 
   componentDidMount () {

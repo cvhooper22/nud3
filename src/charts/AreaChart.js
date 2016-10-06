@@ -32,8 +32,8 @@ export default class AreaChart extends Component {
     this.getUniqueDataKey = ::this.getUniqueDataKey;
     this.getFillColor = ::this.getFillColor;
     this.area = d3.area()
-      .x(d => this.props.xScale(d.yValue))
-      .y1(d => this.props.yScale(d.xValue || 0))
+      .x(d => this.props.xScale(d.xValue))
+      .y1(d => this.props.yScale(d.yValue || 0))
       .y0(() => this.props.areaHeight);
   }
 
@@ -46,14 +46,10 @@ export default class AreaChart extends Component {
   }
 
   getFillColor (d, i) {
-    if (this.props.colorPalette) {
-      if (_.isFunction(this.props.colorPalette)) {
-        return this.props.colorPalette(i);
-      } else {
-        return this.props.colorPalette[i];
-      }
+    if (_.isFunction(this.props.colorPalette)) {
+      return this.props.colorPalette(i);
     }
-    return '';
+    return this.props.colorPalette[i];
   }
 
   getUniqueDataKey (dataSet, i) {
@@ -100,9 +96,11 @@ export default class AreaChart extends Component {
       paths.style('filter', ::this.getPathFilter);
     }
 
-    this.group
+    const areas = this.group
       .selectAll('.area-chart__area')
       .attr('d', this.area)
-      .style('fill', this.getFillColor);
+    if (this.props.colorPalette) {
+      areas.style('fill', this.getFillColor);
+    }
   }
 }

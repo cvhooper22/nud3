@@ -9,6 +9,7 @@
     "clean": "rm -rf lib",
     "build": "babel src/ -d lib",
     "watch": "babel src/ -d lib -w",
+    "start": "node examples/server.js",
     "lint": "eslint src/"
   },
   "files": [
@@ -41,15 +42,23 @@
     "babel-preset-es2015": "^6.16.0",
     "babel-preset-react": "^6.16.0",
     "babel-preset-stage-0": "^6.16.0",
+    "css-loader": "^0.25.0",
     "eslint": "^3.7.1",
     "eslint-config-airbnb": "^12.0.0",
     "eslint-plugin-import": "^1.16.0",
     "eslint-plugin-jsx-a11y": "^2.2.2",
     "eslint-plugin-react": "^6.3.0",
     "file-loader": "^0.9.0",
+    "json-loader": "^0.5.4",
+    "node-sass": "^3.10.1",
     "react": "^15.3.2",
     "react-addons-shallow-compare": "^15.3.2",
+    "react-dom": "^15.3.2",
+    "react-hot-loader": "^3.0.0-beta.5",
+    "sass-loader": "^4.0.2",
+    "style-loader": "^0.13.1",
     "webpack": "^1.13.2",
-    "webpack-dev-middleware": "^1.8.3"
+    "webpack-dev-middleware": "^1.8.3",
+    "webpack-dev-server": "^1.16.2"
   }
 }
