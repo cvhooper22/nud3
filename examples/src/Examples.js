@@ -4,6 +4,7 @@ import BasicLineChart from './visualizations/BasicLineChart';
 import FancyLineChart from './visualizations/FancyLineChart';
 import BasicBarChart from './visualizations/BasicBarChart';
 import BasicPieChart from './visualizations/BasicPieChart';
+import BasicBubbleChart from './visualizations/BasicBubbleChart';
 import MockSeriesData from './data/MockSeriesData.json';
 
 export default class Examples extends React.Component {
@@ -42,6 +43,13 @@ export default class Examples extends React.Component {
         <section className="visualizations">
           <h1>Basic Bar Chart</h1>
           <BasicBarChart
+            data={ MockSeriesData }
+            valueKeys={ ['mentions_total'] }
+          />
+        </section>
+        <section className="visualizations">
+          <h1>Basic Bubble Chart</h1>
+          <BasicBubbleChart
             data={ MockSeriesData }
             valueKeys={ ['mentions_total'] }
           />

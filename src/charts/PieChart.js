@@ -137,7 +137,7 @@ export default class PieChart extends Component {
     if (this.props.filter) {
       slices.style('filter', this.getPathFilter);
     } else {
-      slices.style('filter', '');
+      slices.style('filter', null);
     }
 
     slices = pies
@@ -147,7 +147,7 @@ export default class PieChart extends Component {
     if (this.props.colorPalette) {
       slices.style('fill', this.getFillColor);
     } else {
-      slices.style('fill', '');
+      slices.style('fill', null);
     }
   }
 
@@ -166,33 +166,33 @@ export default class PieChart extends Component {
     if (this.props.labelDx) {
       texts.attr('dx', this.props.labelDx);
     } else {
-      texts.attr('dx', '');
+      texts.attr('dx', null);
     }
     if (this.props.labelDy) {
       texts.attr('dy', this.props.labelDy);
     } else {
-      texts.attr('dy', '');
+      texts.attr('dy', null);
     }
   }
 
   renderArcOuterLabels (pieArc) {
     const pies = this.group.selectAll('.pie-chart__pie');
-    pies.selectAll('.pie-chart__pie__slice__outer-labels')
+    pies.selectAll('.pie-chart__pie__slice__outer-label')
       .data(pieArc)
       .enter()
       .append('text')
-      .attr('class', 'pie-chart__pie__slice__outer-labels')
+      .attr('class', 'pie-chart__pie__slice__outer-label')
       .append('textPath');
 
     const texts = pies
-      .selectAll('.pie-chart__pie__slice__outer-labels');
+      .selectAll('.pie-chart__pie__slice__outer-label');
     if (this.props.outerLabelDx) {
       texts.attr('dx', this.props.outerLabelDx);
     }
     if (this.props.outerLabelDy) {
       texts.attr('dy', this.props.outerLabelDy);
     }
-    pies.selectAll('.pie-chart__pie__slice__outer-labels textPath')
+    pies.selectAll('.pie-chart__pie__slice__outer-label textPath')
       .text(this.getOuterLabelText)
       .attr('xlink:href', (...args) => `#${this.getSliceId(...args)}`);
   }

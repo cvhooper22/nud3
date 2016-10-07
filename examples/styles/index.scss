@@ -54,3 +54,13 @@ div#content {
     fill: red;
   }
 }
+.bubble-chart {
+  &__bubble {
+    &__label {
+      text-anchor: middle;
+      fill: white;
+      alignment-baseline: middle;
+      font-size: 10px;
+    }
+  }
+}
