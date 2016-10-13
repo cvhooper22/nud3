@@ -1,11 +1,14 @@
 import React from 'react';
 import DocumentTitle from './DocumentTitle';
 import BasicLineChart from './visualizations/BasicLineChart';
+import BasicAreaChart from './visualizations/BasicAreaChart';
 import FancyLineChart from './visualizations/FancyLineChart';
 import BasicBarChart from './visualizations/BasicBarChart';
 import BasicPieChart from './visualizations/BasicPieChart';
 import BasicBubbleChart from './visualizations/BasicBubbleChart';
+import BasicStatesMap from './visualizations/BasicStatesMap';
 import MockSeriesData from './data/MockSeriesData.json';
+import MockStatesData from './data/MockStatesData.json';
 
 export default class Examples extends React.Component {
   render () {
@@ -19,13 +22,6 @@ export default class Examples extends React.Component {
           <p>NUD3 is pronounced &quote;new dee three&quote; or nude.</p>
         </section>
         <section className="visualizations">
-          <h1>Basic Line Chart</h1>
-          <BasicLineChart
-            data={ MockSeriesData }
-            valueKeys={ ['mentions_total'] }
-          />
-        </section>
-        <section className="visualizations">
           <h1>Fancy Line Chart</h1>
           <FancyLineChart
             data={ MockSeriesData }
@@ -33,10 +29,24 @@ export default class Examples extends React.Component {
           />
         </section>
         <section className="visualizations">
+          <h1>Basic Line Chart</h1>
+          <BasicLineChart
+            data={ MockSeriesData }
+            valueKeys={ ['mentions_total'] }
+          />
+        </section>
+        <section className="visualizations">
+          <h1>Basic Area Chart</h1>
+          <BasicAreaChart
+            data={ MockSeriesData }
+            valueKeys={ ['mentions_total'] }
+          />
+        </section>
+        <section className="visualizations">
           <h1>Basic Pie Chart</h1>
           <BasicPieChart
             data={ MockSeriesData }
-            valueKeys={ ['mentions_total'] }
+            valueKeys={ ['sentiment_positive'] }
             height={ 500 }
           />
         </section>
@@ -52,6 +62,14 @@ export default class Examples extends React.Component {
           <BasicBubbleChart
             data={ MockSeriesData }
             valueKeys={ ['mentions_total'] }
+          />
+        </section>
+        <section className="visualizations">
+          <h1>Basic United States Map</h1>
+          <BasicStatesMap
+            data={ MockStatesData }
+            valueKeys={ ['population'] }
+            xKey="state"
           />
         </section>
       </div>

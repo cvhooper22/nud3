@@ -98,6 +98,7 @@ export default class Chart extends Component {
         id={ this.props.id }
         className={ this.props.className }
         style={ style }
+        xmlns="http://www.w3.org/2000/svg"
         ref={ n => this.node = n }
       >
         { this.renderChildren() }
@@ -184,6 +185,9 @@ export default class Chart extends Component {
   }
 
   resize () {
+    if (!this.node) {
+      return; // its debounced so its possible that its unmounted.
+    }
     const rect = this.node.getBoundingClientRect();
     const height = this.props.height || rect.height;
     const width = this.props.width || rect.width;

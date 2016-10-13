@@ -1,0 +1,9 @@
+[
+  { "state": "Utah", "population": 29e5 },
+  { "state": "Wyoming", "population": 8e5 },
+  { "state": "California", "population": 388e5 },
+  { "state": "New York", "population": 194e5 },
+  { "state": "Texas", "population": 264e5 },
+  { "state": "Washington", "population": 69e5 },
+  { "state": "Florida", "population": 189e5 }
+]

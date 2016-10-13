@@ -15,9 +15,27 @@ div#content {
   max-width: 1080px;
   padding: 20px;
 }
+.tooltip {
+  position: absolute;
+  background: #666;
+  color: white;
+  border: 1px solid #333;
+  box-sizing: border-box;
+  pointer-events: none;
+  padding: 10px 20px;
+  box-shadow: 0px 2px 5px rgba(0,0,0,0.25);
+  border-radius: 2px;
+  text-shadow: -1px 0 0 rgba(0,0,0,0.5); 
+}
 .description {
   background: #F0F0F0;
   padding: 0.5em 1em;
+  margin-bottom: 4em;
+}
+.visualizations {
+  margin-bottom: 4em;
+  padding-bottom: 4em;
+  border-bottom: 2px solid #F0F0F0;
 }
 .line-chart {
   &__line {
@@ -29,6 +47,18 @@ div#content {
   &__axis-bottom {
     text {
       text-anchor: end;
+    }
+  }
+}
+.basic-area-chart {
+  &__axis-bottom {
+    text {
+      text-anchor: end;
+    }
+  }
+  .area-chart {
+    &__area {
+      fill: rgba(200,0,0,0.8);
     }
   }
 }
@@ -54,6 +84,13 @@ div#content {
     fill: red;
   }
 }
+.pie-chart {
+  &__pie__slice {
+    &__outer-label {
+      font-size: 10px;
+    }
+  }
+}
 .bubble-chart {
   &__bubble {
     &__label {
@@ -62,5 +99,19 @@ div#content {
       alignment-baseline: middle;
       font-size: 10px;
     }
+  }
+}
+.basic-states-map__choropleth-map {
+  path {
+    fill: transparent;
+    stroke: #666;
+    &:hover {
+      opacity: 0.8;
+    }
+  }
+}
+.map-tooltip {
+  &__name {
+    font-size: 1.4em;
   }
 }

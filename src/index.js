@@ -8,5 +8,9 @@ export HorizontalCurtain from './animators/HorizontalCurtain';
 export LineChart from './charts/LineChart';
 export PieChart from './charts/PieChart';
 export VerticalCurtain from './animators/VerticalCurtain';
+export ChoroplethMap from './charts/ChoroplethMap';
+export TooltipRenderer from './helpers/TooltipRenderer';
+export HorizontalHoverBar from './axes/HorizontalHoverBar';
+export VerticalHoverBar from './axes/VerticalHoverBar';
 
 export PadDataBetweenDates from './manipulators/PadDataBetweenDates';

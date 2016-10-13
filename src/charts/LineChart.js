@@ -21,8 +21,8 @@ export default class LineChart extends Component {
     clipPath: PropTypes.string,
   };
 
-  constructor (...args) {
-    super(...args);
+  constructor (props, ...args) {
+    super(props, ...args);
     this.getUniqueDataKey = ::this.getUniqueDataKey;
     this.getStrokeColor = ::this.getStrokeColor;
     this.getPathFilter = ::this.getPathFilter;
@@ -32,11 +32,11 @@ export default class LineChart extends Component {
   }
 
   componentDidMount () {
-    this.renderLine();
+    this.renderChart();
   }
 
   componentDidUpdate () {
-    this.renderLine();
+    this.renderChart();
   }
 
   getStrokeColor (d, i) {
@@ -75,16 +75,15 @@ export default class LineChart extends Component {
     return (
       <g
         className={ className.join(' ') }
-        ref={ n => this.node = n }
         transform={ `translate(${this.props.paddingLeft},${this.props.paddingTop})` }
         clipPath={ this.props.clipPath }
+        ref={ n => this.lines = d3.select(n) }
       />
     );
   }
 
-  renderLine () {
-    this.group = d3.select(this.node);
-    const paths = this.group.selectAll('.line-chart__line')
+  renderChart () {
+    const paths = this.lines.selectAll('.line-chart__line')
       .data(this.props.chartData, this.getUniqueDataKey)
       .enter()
       .append('path');
@@ -97,9 +96,8 @@ export default class LineChart extends Component {
       paths.style('filter', this.getPathFilter);
     }
 
-
-    this.group
+    this.lines
       .selectAll('.line-chart__line')
-        .attr('d', this.lineGenerator);
+      .attr('d', this.lineGenerator);
   }
 }
