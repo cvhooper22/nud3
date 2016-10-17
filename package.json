@@ -10,6 +10,7 @@
     "build": "babel src/ -d lib",
     "watch": "babel src/ -d lib -w",
     "start": "node docs/server.js",
+    "build-examples": "webpack --config docs/webpack.config.js ",
     "lint": "eslint src/"
   },
   "files": [
