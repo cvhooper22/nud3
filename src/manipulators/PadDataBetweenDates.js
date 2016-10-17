@@ -14,10 +14,12 @@ export default class PadDataBetweenDates extends Component {
     startDate: PropTypes.instanceOf(Date),
     xScale: PropTypes.func,
     xScaleDomain: PropTypes.any,
+    padWith: PropTypes.any,
   };
 
   static defaultProps = {
     dateInterval: 'day',
+    padWith: {},
   };
 
   constructor (...args) {
@@ -35,7 +37,9 @@ export default class PadDataBetweenDates extends Component {
       return padDataBetweenDates(datum,
                                  this.props.startDate,
                                  this.props.endDate,
-                                 this.props.dateInterval);
+                                 this.props.dateInterval,
+                                 this.props.padWith
+                                );
     });
     this.xScale = this.props.xScale.copy();
     this.updateXScaleDomain();
