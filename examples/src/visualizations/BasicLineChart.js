@@ -9,6 +9,7 @@ import {
   PadDataBetweenDates,
   HorizontalHoverBar,
   VerticalHoverBar,
+  TooltipPositions,
 } from 'nud3';
 import LineTooltip from '../tooltips/LineTooltip';
 
@@ -28,9 +29,11 @@ export default function BasicLineChart (props) {
       <AxisLeft />
       <PadDataBetweenDates startDate={ startDate } endDate={ endDate }>
         <AxisBottom textTransform="rotate(-45)" textDy="-0.25em" textDx="-0.75em" />
-        <LineChart />
+        <LineChart transitionDuration={ 400 } transitionDelay={ 100 } />
         <HorizontalHoverBar barWidth={ 2 } />
-        <VerticalHoverBar barWidth={ 2 } tooltip={ LineTooltip } />
+        <VerticalHoverBar barWidth={ 2 }>
+          <LineTooltip position={ TooltipPositions.topRight } titleKeys={ props.titleKeys } />
+        </VerticalHoverBar>
       </PadDataBetweenDates>
     </Chart>
   );
@@ -38,4 +41,5 @@ export default function BasicLineChart (props) {
 BasicLineChart.propTypes = {
   data: React.PropTypes.array,
   valueKeys: React.PropTypes.array,
+  titleKeys: React.PropTypes.array,
 };

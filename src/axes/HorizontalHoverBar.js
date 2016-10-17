@@ -3,12 +3,9 @@ import ReactDOM from 'react-dom';
 import * as d3 from 'd3';
 import _ from 'lodash';
 import curryThisElement from '../helpers/curryThisElement';
+import tooltipPositioner from '../helpers/tooltipPositioner';
 
 export default class HorizontalHoverBar extends Component {
-
-  static tooltipLeft = Symbol.for('left');
-  static tooltipCenter = Symbol.for('center');
-  static tooltipRight = Symbol.for('right');
 
   static propTypes = {
     className: PropTypes.string,
@@ -22,15 +19,13 @@ export default class HorizontalHoverBar extends Component {
     areaHeight: PropTypes.number,
     barHeight: PropTypes.number,
     filter: PropTypes.string,
-    tooltip: PropTypes.any,
-    tooltipLocation: PropTypes.symbol,
     tooltipClassName: PropTypes.string,
+    children: PropTypes.node,
   };
 
   static defaultProps = {
     barHeight: 2,
     tooltipClassName: 'tooltip',
-    tooltipLocation: Symbol.for('left'),
   };
 
   constructor (...args) {
@@ -54,9 +49,9 @@ export default class HorizontalHoverBar extends Component {
   componentWillUnmount () {
     this.hideTooltip();
     const ownerSVGElement = d3.select(this.bar.node().ownerSVGElement);
-    ownerSVGElement.on('mouseover.HorizontalHoverBar', null);
-    ownerSVGElement.on('mousemove.HorizontalHoverBar', null);
-    ownerSVGElement.on('mouseout.HorizontalHoverBar', null);
+    ownerSVGElement.off('mouseover.HorizontalHoverBar', null);
+    ownerSVGElement.off('mousemove.HorizontalHoverBar', null);
+    ownerSVGElement.off('mouseout.HorizontalHoverBar', null);
   }
 
   onMouseOver (element) {
@@ -78,22 +73,6 @@ export default class HorizontalHoverBar extends Component {
       this.tooltipContainer.className = this.props.tooltipClassName;
     }
     return this.tooltipContainer;
-  }
-
-  getLocationOffset (bar, tooltip) {
-    const barRect = bar.getBoundingClientRect();
-    const tooltipRect = tooltip.getBoundingClientRect();
-    const offset = {
-      top: barRect.top + window.scrollY,
-    };
-    if (this.props.tooltipLocation === HorizontalHoverBar.tooltipLeft) {
-      offset.left = barRect.left + window.scrollX;
-    } else if (this.props.tooltipLocation === HorizontalHoverBar.tooltipRight) {
-      offset.left = (barRect.left + window.scrollX + this.props.areaWidth) - tooltipRect.width;
-    } else {
-      offset.left = (barRect.left + window.scrollX + (this.props.areaWidth / 2)) - (tooltipRect.width / 2);
-    }
-    return offset;
   }
 
   setupEvents () {
@@ -139,19 +118,21 @@ export default class HorizontalHoverBar extends Component {
   }
 
   renderTooltip () {
-    if (this.state.data && this.props.tooltip) {
+    if (this.state.data && React.Children.count(this.props.children)) {
+      const child = React.Children.only(this.props.children);
       const container = this.getTooltipContainer();
       if (!container.parentNode) {
         window.document.body.appendChild(container);
       }
-      const TooltipComponent = this.props.tooltip;
       ReactDOM.render((
-        <TooltipComponent data={ this.state.data } />
+        React.cloneElement(child, {
+          ...this.props,
+          ...child.props,
+          children: child.props.children,
+          data: this.state.data,
+        })
       ), container);
-
-      const style = this.getLocationOffset(this.bar.node(), container);
-      container.style.left = `${style.left}px`;
-      container.style.top = `${style.top}px`;
+      tooltipPositioner(child.props.position, this.bar.node(), container, child.props);
     } else {
       this.hideTooltip();
     }

@@ -23,8 +23,8 @@ export default function BasicAreaChart (props) {
       <AxisLeft />
       <PadDataBetweenDates startDate={ startDate } endDate={ endDate }>
         <AxisBottom textTransform="rotate(-45)" textDy="-0.25em" textDx="-0.75em" />
-        <AreaChart />
-        <VerticalHoverBar barWidth={ 2 } tooltip={ LineTooltip } />
+        <AreaChart transitionDuration={ 400 } transitionDelay={ 100 } />
+        <VerticalHoverBar barWidth={ 2 } />
       </PadDataBetweenDates>
     </Chart>
   );

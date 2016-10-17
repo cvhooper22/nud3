@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import * as d3 from 'd3';
 import _ from 'lodash';
-import { stringOrArrayOfStrings } from '../propTypes/customPropTypes';
+import { stringOrArrayOfStrings, stringOrFunc } from '../propTypes/customPropTypes';
 
 export default class BarChart extends Component {
 
@@ -23,11 +23,17 @@ export default class BarChart extends Component {
     areaHeight: PropTypes.number,
     groupPadding: PropTypes.number,
     barPadding: PropTypes.number,
+    transitionDuration: PropTypes.number,
+    transitionDelay: PropTypes.number,
+    transitionEase: stringOrFunc,
   };
 
   static defaultProps = {
     groupPadding: 12,
     barPadding: 2,
+    transitionDelay: 0,
+    transitionDuration: 0,
+    transitionEase: d3.easePolyInOut,
   };
 
   constructor (...args) {
@@ -117,18 +123,27 @@ export default class BarChart extends Component {
 
   renderGroupedBars (barWidth) {
     const groups = this.group.selectAll('.bar-chart__group');
+    const bottomY = this.props.yScale(this.props.yScale.domain()[0]);
     const rects = groups.selectAll('.bar-chart__group__bar')
       .data(d => d)
       .enter()
-      .append('rect');
-    rects
+      .append('rect')
+      .attr('y', bottomY)
+      .attr('height', 0)
+      .attr('width', barWidth)
+      .attr('x', d => this.props.xScale(d.xValue))
       .attr('class', 'bar-chart__group__bar');
     if (this.props.filter) {
       rects.style('filter', this.getPathFilter);
     }
 
+    const ease = _.isFunction(this.props.transitionEase) ? this.props.transitionEase : d3[this.props.transitionEase];
     groups
       .selectAll('.bar-chart__group__bar')
+      .transition()
+      .duration(this.props.transitionDuration)
+      .delay(this.props.transitionDelay)
+      .ease(ease)
       .attr('width', barWidth)
       .attr('y', d => this.props.yScale(d.yValue || 0))
       .attr('x', d => this.props.xScale(d.xValue))

@@ -62,6 +62,7 @@ export default class PadDataBetweenDates extends Component {
     return React.cloneElement(child, {
       ...this.props,
       ...child.props,
+      children: child.props.children,
       xScale: this.xScale,
       chartData: this.chartData,
       key: i,

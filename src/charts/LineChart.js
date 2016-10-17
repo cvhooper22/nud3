@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import * as d3 from 'd3';
 import _ from 'lodash';
-import { stringOrArrayOfStrings } from '../propTypes/customPropTypes';
+import { stringOrArrayOfStrings, stringOrFunc } from '../propTypes/customPropTypes';
 
 export default class LineChart extends Component {
 
@@ -19,6 +19,15 @@ export default class LineChart extends Component {
     xScale: PropTypes.func,
     yScale: PropTypes.func,
     clipPath: PropTypes.string,
+    transitionDuration: PropTypes.number,
+    transitionDelay: PropTypes.number,
+    transitionEase: stringOrFunc,
+  };
+
+  static defaultProps = {
+    transitionDelay: 0,
+    transitionDuration: 0,
+    transitionEase: d3.easePolyInOut,
   };
 
   constructor (props, ...args) {
@@ -26,9 +35,6 @@ export default class LineChart extends Component {
     this.getUniqueDataKey = ::this.getUniqueDataKey;
     this.getStrokeColor = ::this.getStrokeColor;
     this.getPathFilter = ::this.getPathFilter;
-    this.lineGenerator = d3.line()
-      .x(d => this.props.xScale(d.xValue))
-      .y(d => this.props.yScale(d.yValue || 0));
   }
 
   componentDidMount () {
@@ -83,10 +89,19 @@ export default class LineChart extends Component {
   }
 
   renderChart () {
+    const enterLineGenerator = d3.line()
+      .x(d => this.props.xScale(d.xValue))
+      .y(() => this.props.yScale(this.props.yScale.domain()[0]));
+
+    const lineGenerator = d3.line()
+      .x(d => this.props.xScale(d.xValue))
+      .y(d => this.props.yScale(d.yValue || 0));
+
     const paths = this.lines.selectAll('.line-chart__line')
       .data(this.props.chartData, this.getUniqueDataKey)
       .enter()
-      .append('path');
+      .append('path')
+      .attr('d', enterLineGenerator);
     paths
       .attr('class', 'line-chart__line');
     if (this.props.colorPalette) {
@@ -96,8 +111,14 @@ export default class LineChart extends Component {
       paths.style('filter', this.getPathFilter);
     }
 
+    const ease = _.isFunction(this.props.transitionEase) ? this.props.transitionEase : d3[this.props.transitionEase];
+
     this.lines
       .selectAll('.line-chart__line')
-      .attr('d', this.lineGenerator);
+      .transition()
+      .duration(this.props.transitionDuration)
+      .delay(this.props.transitionDelay)
+      .ease(ease)
+      .attr('d', lineGenerator);
   }
 }

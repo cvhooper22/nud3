@@ -3,7 +3,6 @@ import _ from 'lodash';
 import numeral from 'numeral';
 
 export default function LineTooltip (props) {
-  console.log('props', props.data);
   const name = _.get(props, 'data.original.date') || 'no date';
   const number = _.get(props, 'data.original.mentions_total') || 0;
   return (

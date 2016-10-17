@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import * as d3 from 'd3';
 import _ from 'lodash';
+import { stringOrFunc } from '../propTypes/customPropTypes';
 
 const stringOrArrayOfStrings = PropTypes.oneOfType([
   PropTypes.string,
@@ -25,16 +26,22 @@ export default class AreaChart extends Component {
     height: PropTypes.number,
     areaHeight: PropTypes.number,
     clipPath: PropTypes.string,
+    transitionDuration: PropTypes.number,
+    transitionDelay: PropTypes.number,
+    transitionEase: stringOrFunc,
+  };
+
+  static defaultProps = {
+    transitionDelay: 0,
+    transitionDuration: 0,
+    transitionEase: d3.easePolyInOut,
   };
 
   constructor (...args) {
     super(...args);
     this.getUniqueDataKey = ::this.getUniqueDataKey;
     this.getFillColor = ::this.getFillColor;
-    this.area = d3.area()
-      .x(d => this.props.xScale(d.xValue))
-      .y1(d => this.props.yScale(d.yValue || 0))
-      .y0(() => this.props.areaHeight);
+    this.getPathFilter = ::this.getPathFilter;
   }
 
   componentDidMount () {
@@ -85,20 +92,38 @@ export default class AreaChart extends Component {
   }
 
   renderArea () {
+    const enterAreaGenerator = d3.area()
+      .x(d => this.props.xScale(d.xValue))
+      .y1(() => this.props.yScale(this.props.yScale.domain()[0]))
+      .y0(() => this.props.areaHeight);
+
+    const areaGenerator = d3.area()
+      .x(d => this.props.xScale(d.xValue))
+      .y1(d => this.props.yScale(d.yValue || 0))
+      .y0(() => this.props.areaHeight);
     this.group = d3.select(this.node);
     const paths = this.group.selectAll('.area-chart__area')
       .data(this.props.chartData, this.getUniqueDataKey)
       .enter()
-        .append('path');
+      .append('path')
+      .attr('d', enterAreaGenerator);
+    if (this.props.colorPalette) {
+      paths.style('fill', this.getFillColor);
+    }
     paths
       .attr('class', 'area-chart__area');
     if (this.props.filter) {
-      paths.style('filter', ::this.getPathFilter);
+      paths.style('filter', this.getPathFilter);
     }
 
+    const ease = _.isFunction(this.props.transitionEase) ? this.props.transitionEase : d3[this.props.transitionEase];
     const areas = this.group
       .selectAll('.area-chart__area')
-      .attr('d', this.area)
+      .transition()
+      .duration(this.props.transitionDuration)
+      .delay(this.props.transitionDelay)
+      .ease(ease)
+      .attr('d', areaGenerator);
     if (this.props.colorPalette) {
       areas.style('fill', this.getFillColor);
     }

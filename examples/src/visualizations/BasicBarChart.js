@@ -30,7 +30,7 @@ export default function BasicBarChart (props) {
       <AxisLeft />
       <PadDataBetweenDates startDate={ startDate } endDate={ endDate }>
         <AxisBottom tickFormat={ d3.timeFormat('%b %d') } />
-        <BarChart colorPalette={ colorPalette } />
+        <BarChart colorPalette={ colorPalette } transitionDelay={ 100 } transitionDuration={ 500 } />
       </PadDataBetweenDates>
     </Chart>
   );

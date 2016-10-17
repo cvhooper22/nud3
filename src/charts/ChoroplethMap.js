@@ -20,30 +20,25 @@ export default class ChoroplethMap extends Component {
     topologyMatcher: PropTypes.string,
     fillColor: PropTypes.any,
     strokeColor: PropTypes.any,
-    tooltip: PropTypes.any,
-    tooltipLocation: PropTypes.number,
+    children: PropTypes.node,
   };
 
   static defaultProps = {
-    tooltipLocation: TooltipRenderer.topCenter,
   };
 
-  constructor (props, ...args) {
-    super(props, ...args);
-    this.tooltipRenderer = new TooltipRenderer(props.tooltip, {
-      location: props.tooltipLocation,
-    });
-  }
-
   componentDidMount () {
+    this.tooltipRenderer = new TooltipRenderer();
+    if (this.hasTooltip()) {
+      this.tooltipRenderer.update(React.Children.only(this.props.children));
+    }
     this.renderMap();
   }
 
   componentDidUpdate () {
     this.renderMap();
-    this.tooltipRenderer.update(this.props.tooltip, {
-      location: this.props.tooltipLocation,
-    });
+    if (this.hasTooltip()) {
+      this.tooltipRenderer.update(React.Children.only(this.props.children));
+    }
   }
 
   getPathGenerator () {
@@ -102,7 +97,7 @@ export default class ChoroplethMap extends Component {
   renderTooltip () {
     const group = d3.select(this.node);
     const features = group.selectAll('.choropleth-map__feature');
-    if (this.props.tooltip) {
+    if (this.hasTooltip()) {
       group.call(this.tooltipRenderer.bind);
       features.on('mouseover', this.tooltipRenderer.onShow);
       features.on('mouseout', this.tooltipRenderer.onHide);
@@ -136,5 +131,9 @@ export default class ChoroplethMap extends Component {
     const first = _.first(this.props.chartData) || [];
     first.forEach(d => hashMap[d.xValue] = d);
     return hashMap;
+  }
+
+  hasTooltip () {
+    return React.Children.count(this.props.children) === 1;
   }
 }

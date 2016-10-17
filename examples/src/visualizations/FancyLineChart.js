@@ -31,15 +31,14 @@ export default function FancyLineChart (props) {
       paddingLeft={ 30 }
       paddingBottom={ 50 }
     >
-      <VerticalCurtain id="vertical-curtain" delay={ 250 } duration={ 1200 } />
       <BlurFilter id="blur" />
       <GradientFilters colorPalette={ colorPalette } idPrefix="gradient-" />
       <AxisLeft />
       <PadDataBetweenDates startDate={ startDate } endDate={ endDate }>
         <AxisBottom textTransform="rotate(-45)" textDy="-0.25em" textDx="-0.75em" />
-        <AreaChart colorPalette={ gradientPalette } clipPath="url(#vertical-curtain)" />
-        <LineChart colorPalette={ colorPalette } filter="blur" clipPath="url(#vertical-curtain)" />
-        <LineChart colorPalette={ colorPalette } clipPath="url(#vertical-curtain)" />
+        <AreaChart colorPalette={ gradientPalette } clipPath="url(#vertical-curtain)" transitionDuration={ 400 } transitionDelay={ 100 } />
+        <LineChart colorPalette={ colorPalette } filter="blur" clipPath="url(#vertical-curtain)" transitionDuration={ 400 } transitionDelay={ 100 } />
+        <LineChart colorPalette={ colorPalette } clipPath="url(#vertical-curtain)" transitionDuration={ 400 } transitionDelay={ 100 } />
       </PadDataBetweenDates>
     </Chart>
   );

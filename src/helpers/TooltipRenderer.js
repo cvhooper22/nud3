@@ -1,22 +1,14 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import curryThisElement from './curryThisElement';
+import tooltipPositioner from './tooltipPositioner';
+import TooltipPositions from './TooltipPositions';
 
 export default class TooltipRenderer {
 
-  static topLeft = 0;
-  static topCenter = 1;
-  static topRight = 2;
-  static middleLeft = 3;
-  static middleCenter = 4;
-  static middleRight = 5;
-  static bottomLeft = 6;
-  static bottomCenter = 7;
-  static bottomRight = 8;
-
   static defaultOptions = {
     className: 'tooltip',
-    location: 1,
+    position: TooltipPositions.topLeft,
     offsetTop: 0,
     offsetLeft: 0,
   };
@@ -55,22 +47,24 @@ export default class TooltipRenderer {
     return undefined;
   }
 
-  onShow (el, data, i) {
-    if (!el || !data) {
+  onShow (anchorElement, data, i) {
+    if (!anchorElement || !data) {
       return;
     }
     const container = this.getContainer();
     if (!container.parentNode) {
       window.document.body.appendChild(container);
     }
-    const Component = this.component;
-    ReactDOM.render((
-      <Component data={ data } i={ i } options={ this.options } />
+    ReactDOM.render(React.cloneElement(
+      this.component, {
+        options: this.options,
+        ...this.component.props,
+        data,
+        i,
+      }
     ), container);
 
-    const style = this.getLocationOffset(el, container);
-    container.style.left = `${style.left}px`;
-    container.style.top = `${style.top}px`;
+    tooltipPositioner(this.component.props.position || this.options.position, anchorElement, container, this.options);
   }
 
   onHide () {
@@ -85,39 +79,6 @@ export default class TooltipRenderer {
       ...this.constructor.defaultOptions,
       ...options,
     };
-  }
-
-  getLocationOffset (element, tooltip) {
-    const clientRectElement = element.getBoundingClientRect();
-    const clientRectTooltip = tooltip.getBoundingClientRect();
-    const elementLeft = clientRectElement.left + window.scrollX;
-    const elementTop = clientRectElement.top + window.scrollY;
-    const leftAnchored = (this.options.location % 3) === 0;
-    const rightAnchored = (this.options.location % 3) === 2;
-    const topAnchored = this.options.location < 3;
-    const bottomAnchored = this.options.location > 5;
-    const offset = {};
-    if (leftAnchored) {
-      offset.left = elementLeft - clientRectTooltip.width;
-    } else if (rightAnchored) {
-      offset.left = elementLeft + clientRectElement.width;
-    } else {
-      offset.left = elementLeft + ((clientRectElement.width / 2) - (clientRectTooltip.width / 2));
-    }
-    if (topAnchored) {
-      offset.top = elementTop - clientRectTooltip.height;
-    } else if (bottomAnchored) {
-      offset.top = elementTop + clientRectElement.height;
-    } else {
-      offset.top = elementTop + ((clientRectElement.height / 2) - (clientRectTooltip.height / 2));
-    }
-    if (this.options.offsetTop) {
-      offset.top += this.options.offsetTop;
-    }
-    if (this.options.offsetLeft) {
-      offset.left += this.options.offsetLeft;
-    }
-    return offset;
   }
 
 }

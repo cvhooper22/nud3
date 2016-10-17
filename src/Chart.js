@@ -130,6 +130,7 @@ export default class Chart extends Component {
       valueKeys: this.props.valueKeys,
       ...this.state,
       ...child.props,
+      children: child.props.children,
     });
   }
 

@@ -3,12 +3,9 @@ import ReactDOM from 'react-dom';
 import * as d3 from 'd3';
 import _ from 'lodash';
 import curryThisElement from '../helpers/curryThisElement';
+import tooltipPositioner from '../helpers/tooltipPositioner';
 
 export default class VerticalHoverBar extends Component {
-
-  static tooltipTop = Symbol.for('top');
-  static tooltipMiddle = Symbol.for('middle');
-  static tooltipBottom = Symbol.for('bottom');
 
   static propTypes = {
     className: PropTypes.string,
@@ -22,15 +19,14 @@ export default class VerticalHoverBar extends Component {
     areaHeight: PropTypes.number,
     barWidth: PropTypes.number,
     filter: PropTypes.string,
-    tooltip: PropTypes.any,
-    tooltipLocation: PropTypes.symbol,
+    location: PropTypes.symbol,
+    children: PropTypes.node,
     tooltipClassName: PropTypes.string,
   };
 
   static defaultProps = {
     barWidth: 2,
     tooltipClassName: 'tooltip',
-    tooltipLocation: Symbol.for('top'),
   };
 
   constructor (...args) {
@@ -54,9 +50,9 @@ export default class VerticalHoverBar extends Component {
   componentWillUnmount () {
     this.hideTooltip();
     const ownerSVGElement = d3.select(this.bar.node().ownerSVGElement);
-    ownerSVGElement.on('mouseover.VerticalHoverBar', null);
-    ownerSVGElement.on('mousemove.VerticalHoverBar', null);
-    ownerSVGElement.on('mouseout.VerticalHoverBar', null);
+    ownerSVGElement.off('mouseover.VerticalHoverBar', null);
+    ownerSVGElement.off('mousemove.VerticalHoverBar', null);
+    ownerSVGElement.off('mouseout.VerticalHoverBar', null);
   }
 
   onMouseOver (element) {
@@ -78,22 +74,6 @@ export default class VerticalHoverBar extends Component {
       this.tooltipContainer.className = this.props.tooltipClassName;
     }
     return this.tooltipContainer;
-  }
-
-  getLocationOffset (bar, tooltip) {
-    const barRect = bar.getBoundingClientRect();
-    const tooltipRect = tooltip.getBoundingClientRect();
-    const offset = {
-      left: barRect.left + window.scrollX + barRect.width,
-    };
-    if (this.props.tooltipLocation === VerticalHoverBar.tooltipTop) {
-      offset.top = barRect.top + window.scrollY;
-    } else if (this.props.tooltipLocation === VerticalHoverBar.tooltipBottom) {
-      offset.top = (barRect.top + window.scrollY + barRect.height) - tooltipRect.height;
-    } else {
-      offset.top = (barRect.top + window.scrollY + (barRect.height / 2)) - (tooltipRect.height / 2);
-    }
-    return offset;
   }
 
   setupEvents () {
@@ -138,6 +118,27 @@ export default class VerticalHoverBar extends Component {
     );
   }
 
+  renderTooltip () {
+    if (this.state.data && React.Children.count(this.props.children)) {
+      const child = React.Children.only(this.props.children);
+      const container = this.getTooltipContainer();
+      if (!container.parentNode) {
+        window.document.body.appendChild(container);
+      }
+      ReactDOM.render((
+        React.cloneElement(child, {
+          ...this.props,
+          ...child.props,
+          children: child.props.children,
+          data: this.state.data,
+        })
+      ), container);
+      tooltipPositioner(child.props.position, this.bar.node(), container, child.props);
+    } else {
+      this.hideTooltip();
+    }
+  }
+
   updateHighlightBar (mouseEvent) {
     const mouse = d3.mouse(mouseEvent);
     mouse[0] -= this.props.paddingLeft;
@@ -169,25 +170,6 @@ export default class VerticalHoverBar extends Component {
     });
   }
 
-  renderTooltip () {
-    if (this.state.data && this.props.tooltip) {
-      const container = this.getTooltipContainer();
-      if (!container.parentNode) {
-        window.document.body.appendChild(container);
-      }
-      const TooltipComponent = this.props.tooltip;
-      ReactDOM.render((
-        <TooltipComponent data={ this.state.data } />
-      ), container);
-
-      const style = this.getLocationOffset(this.bar.node(), container);
-      container.style.left = `${style.left}px`;
-      container.style.top = `${style.top}px`;
-    } else {
-      this.hideTooltip();
-    }
-  }
-  
   hideTooltip () {
     if (this.tooltipContainer && this.tooltipContainer.parentNode) {
       this.tooltipContainer.parentNode.removeChild(this.tooltipContainer);

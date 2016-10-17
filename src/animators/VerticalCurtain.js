@@ -1,5 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import * as d3 from 'd3';
+import _ from 'lodash';
+import { stringOrFunc } from '../propTypes/customPropTypes';
 
 export default class VerticalCurtain extends Component {
   static propTypes = {
@@ -15,11 +17,13 @@ export default class VerticalCurtain extends Component {
     paddingTop: PropTypes.number,
     duration: PropTypes.number,
     delay: PropTypes.number,
+    ease: stringOrFunc,
   };
 
   static defaultProps = {
     delay: 0,
     duration: 300,
+    ease: d3.easePolyInOut,
   };
 
   componentDidMount () {
@@ -52,9 +56,11 @@ export default class VerticalCurtain extends Component {
   }
 
   animate () {
+    const ease = _.isFunction(this.props.ease) ? this.props.ease : d3[this.props.ease];
     const transition = d3.transition()
       .duration(this.props.duration)
-      .delay(this.props.delay);
+      .delay(this.props.delay)
+      .ease(ease);
     const rectSelection = d3.select(this.rect);
     const rectHeight = parseFloat(rectSelection.attr('height') || 0);
     if (this.props.areaHeight && this.props.areaHeight !== rectHeight) {
