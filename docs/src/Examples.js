@@ -19,7 +19,7 @@ export default class Examples extends React.Component {
         <section className="description">
           <p>Nud3 is a composable d3 library for react.</p>
           <p>These examples will show you how we create and use NUD3.</p>
-          <p>NUD3 is pronounced &quote;new dee three&quote; or nude.</p>
+          <p>NUD3 is pronounced &quot;new dee three&quot; or nude.</p>
         </section>
         <section className="visualizations">
           <h1>Fancy Line Chart</h1>

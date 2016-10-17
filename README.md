@@ -1,12 +1,14 @@
 NUD3
 ====
 
-Nud3 is a composable charting/graph library for React utilizing D3.
+Nud3 is a [composable](https://facebook.github.io/react/docs/multiple-components.html) charting/graph library for React utilizing D3.
 It is super opinionated and not very opinionated at the same time.
 
 
 It utilizes React's cloneElement for prop injection, that way you don't need to pass the data to each component for your graph.
 We do this, so composing charts is declarative and obvious. You say what you want and nothing more.
+
+[Our demo can be viewed at https://inlineblock.github.io/nud3](https://inlineblock.github.io/nud3)
 
 Nud3's base render is called "Chart" (super clever we know). It makes some assumptions about your data and scales then renders its children, by injecting the 
 denormalized data into each child, which should all have one purpose. An x-axis, y-axis, and line chart renderer should all be separate components making your
