@@ -9,7 +9,7 @@
     "clean": "rm -rf lib",
     "build": "babel src/ -d lib",
     "watch": "babel src/ -d lib -w",
-    "start": "node examples/server.js",
+    "start": "node docs/server.js",
     "lint": "eslint src/"
   },
   "files": [

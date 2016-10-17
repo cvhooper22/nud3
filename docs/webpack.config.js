@@ -8,12 +8,12 @@ module.exports = {
     'react-hot-loader/patch',
     'webpack-dev-server/client?http://localhost:8000',
     'webpack/hot/only-dev-server',
-    './examples/index.js',
+    './docs/index.js',
   ],
   output: {
-    path: path.join(__dirname, 'examples', 'dist'),
+    path: path.join(__dirname, 'docs'),
     filename: 'bundle.js',
-    publicPath: '/dist/',
+    publicPath: '/',
   },
   plugins: [
     new webpack.HotModuleReplacementPlugin(),
