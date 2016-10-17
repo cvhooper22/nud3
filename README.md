@@ -77,3 +77,18 @@ We try to include plenty of the basic to setup your own charts without much work
 #### Animators
 * HorizontalCurtain
 * VerticalCurtain
+
+
+
+
+## Run the examples locally
+
+
+`$ npm install`
+`$ npm start`
+`open browser to http://localhost:8000`
+
+
+If the package isn't published yet, then do this first, then install and start.
+`npm link`
+`npm link nud3`
