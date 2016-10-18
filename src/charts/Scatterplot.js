@@ -24,6 +24,7 @@ export default class Scatterplot extends Component {
     transitionEase: stringOrFunc,
     dotRadius: PropTypes.any,
     children: PropTypes.node,
+    fillColor: PropTypes.any,
   };
 
   static defaultProps = {
@@ -36,7 +37,7 @@ export default class Scatterplot extends Component {
   constructor (props, ...args) {
     super(props, ...args);
     this.getUniqueDataKey = ::this.getUniqueDataKey;
-    this.getFillColor = ::this.getFillColor;
+    this.getFillFromColorPalette = ::this.getFillFromColorPalette;
     this.getPathFilter = ::this.getPathFilter;
     this.onMouseOver = curryThisElement(this.onMouseOver, this);
     this.onMouseOut = curryThisElement(this.onMouseOut, this);
@@ -58,7 +59,7 @@ export default class Scatterplot extends Component {
     }
   }
 
-  getFillColor (d, i) {
+  getFillFromColorPalette (d, i) {
     if (this.props.colorPalette) {
       if (_.isFunction(this.props.colorPalette)) {
         return this.props.colorPalette(i);
@@ -112,6 +113,13 @@ export default class Scatterplot extends Component {
       .enter()
       .append('g')
       .attr('class', 'scatterplot__dots');
+
+    const dots = this.group.selectAll('.scatterplot__dots');
+    if (this.props.colorPalette) {
+      dots.style('fill', this.getFillFromColorPalette);
+    } else {
+      dots.style('fill', null);
+    }
   }
 
   renderDots () {
@@ -150,8 +158,8 @@ export default class Scatterplot extends Component {
       dot.off('mouseover.Scatterplot');
       dot.off('mouseout.Scatterplot');
     }
-    if (this.props.colorPalette) {
-      dot.style('fill', this.getFillColor);
+    if (this.props.fillColor) {
+      dot.style('fill', this.props.fillColor);
     } else {
       dot.style('fill', null);
     }

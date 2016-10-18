@@ -19,7 +19,6 @@ export default class PadDataBetweenDates extends Component {
 
   static defaultProps = {
     dateInterval: 'day',
-    padWith: {},
   };
 
   constructor (...args) {
@@ -34,11 +33,16 @@ export default class PadDataBetweenDates extends Component {
       return;
     }
     this.chartData = this.props.chartData.map((datum) => {
+      const first = _.first(datum) || {};
       return padDataBetweenDates(datum,
                                  this.props.startDate,
                                  this.props.endDate,
                                  this.props.dateInterval,
-                                 this.props.padWith
+                                 this.props.padWith || {
+                                   ...first,
+                                   yValue: undefined,
+                                   xValue: undefined,
+                                 }
                                 );
     });
     this.xScale = this.props.xScale.copy();

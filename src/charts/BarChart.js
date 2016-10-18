@@ -39,7 +39,7 @@ export default class BarChart extends Component {
   constructor (...args) {
     super(...args);
     this.getUniqueDataKey = ::this.getUniqueDataKey;
-    this.getFillColor = ::this.getFillColor;
+    this.getFillFromColorPalette = ::this.getFillFromColorPalette;
     this.getPathFilter = ::this.getPathFilter;
   }
 
@@ -51,7 +51,7 @@ export default class BarChart extends Component {
     this.renderChart();
   }
 
-  getFillColor (d, i) {
+  getFillFromColorPalette (d, i) {
     if (this.props.colorPalette) {
       if (_.isFunction(this.props.colorPalette)) {
         return this.props.colorPalette(i);
@@ -114,7 +114,7 @@ export default class BarChart extends Component {
       .append('g')
       .attr('class', 'bar-chart__group')
       .attr('transform', (d, i) => `translate(${i * barAreaWidth},0)`)
-      .style('fill', this.getFillColor);
+      .style('fill', this.getFillFromColorPalette);
     if (this.props.filter) {
       groups.style('filter', this.getPathFilter);
     }
