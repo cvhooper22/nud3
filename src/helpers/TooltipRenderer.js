@@ -13,12 +13,12 @@ export default class TooltipRenderer {
     offsetLeft: 0,
   };
 
-  constructor (component, options) {
+  constructor (ownerComponent, options) {
+    this.ownerComponent = ownerComponent;
     this.options = {
       ...this.constructor.defaultOptions,
       ...options,
     };
-    this.component = component;
     this.onShow = curryThisElement(this.onShow, this);
     this.onHide = curryThisElement(this.onHide, this);
     this.bind = ::this.bind;
@@ -58,6 +58,7 @@ export default class TooltipRenderer {
     ReactDOM.render(React.cloneElement(
       this.component, {
         options: this.options,
+        ...this.ownerComponent.props,
         ...this.component.props,
         data,
         i,

@@ -4,25 +4,22 @@ import _ from 'lodash';
 import {
   Chart,
   LineChart,
-  AreaChart,
   AxisBottom,
   AxisLeft,
   PadDataBetweenDates,
+  TooltipPositions,
+  Scatterplot,
 } from 'nud3';
 import * as d3 from 'd3';
-import BlurFilter from './BlurFilter';
-import GradientFilters from './GradientFilters';
+import LineTooltip from '../tooltips/LineTooltip';
 
-export default function FancyLineChart (props) {
+export default function ScatterLineChart (props) {
   const startDate = moment(_.first(props.data).date).toDate();
   const endDate = moment(_.last(props.data).date).toDate();
   const colorPalette = d3.scaleOrdinal(d3.schemeCategory10);
-  const gradients = props.valueKeys.map(vk => `url(#gradient-${vk})`);
-  const gradientPalette = d3.scaleOrdinal(gradients);
-
   return (
     <Chart
-      className="fancy-line-chart"
+      className="scatter-line-chart"
       data={ props.data }
       xKey="date"
       valueKeys={ props.valueKeys }
@@ -30,19 +27,28 @@ export default function FancyLineChart (props) {
       paddingLeft={ 30 }
       paddingBottom={ 50 }
     >
-      <BlurFilter id="blur" />
-      <GradientFilters colorPalette={ colorPalette } idPrefix="gradient-" />
       <AxisLeft />
       <PadDataBetweenDates startDate={ startDate } endDate={ endDate }>
         <AxisBottom textTransform="rotate(-45)" textDy="-0.25em" textDx="-0.75em" />
-        <AreaChart colorPalette={ gradientPalette } transitionDuration={ 400 } transitionDelay={ 100 } />
-        <LineChart colorPalette={ colorPalette } filter="blur" transitionDuration={ 400 } transitionDelay={ 100 } />
-        <LineChart colorPalette={ colorPalette } transitionDuration={ 400 } transitionDelay={ 100 } />
+        <LineChart
+          colorPalette={ colorPalette }
+          transitionDuration={ 400 }
+          transitionDelay={ 100 }
+        />
+        <Scatterplot
+          colorPalette={ colorPalette }
+          transitionDuration={ 100 }
+          transitionDelay={ 500 }
+          dotRadius={ 10 }
+        >
+          <LineTooltip position={ TooltipPositions.topCenter } titleKeys={ props.titleKeys } />
+        </Scatterplot>
       </PadDataBetweenDates>
     </Chart>
   );
 }
-FancyLineChart.propTypes = {
+ScatterLineChart.propTypes = {
   data: React.PropTypes.array,
   valueKeys: React.PropTypes.array,
+  titleKeys: React.PropTypes.array,
 };

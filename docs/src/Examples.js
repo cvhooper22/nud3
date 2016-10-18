@@ -8,6 +8,7 @@ import BasicLineChart from './visualizations/BasicLineChart';
 import BasicPieChart from './visualizations/BasicPieChart';
 import BasicStatesMap from './visualizations/BasicStatesMap';
 import FancyLineChart from './visualizations/FancyLineChart';
+import ScatterLineChart from './visualizations/ScatterLineChart';
 import MockSeriesData from './data/MockSeriesData.json';
 import MockStatesData from './data/MockStatesData.json';
 
@@ -22,6 +23,7 @@ const BasicLineChartCode = fs.readFileSync(path.join(__dirname, './visualization
 const BasicPieChartCode = fs.readFileSync(path.join(__dirname, './visualizations', 'BasicPieChart.js'));
 const BasicStatesMapCode = fs.readFileSync(path.join(__dirname, './visualizations', 'BasicStatesMap.js'));
 const FancyLineChartCode = fs.readFileSync(path.join(__dirname, './visualizations', 'FancyLineChart.js'));
+const ScatterLineChartCode = fs.readFileSync(path.join(__dirname, './visualizations', 'ScatterLineChart.js'));
 
 export default class Examples extends React.Component {
   render () {
@@ -92,6 +94,15 @@ export default class Examples extends React.Component {
             valueKeys={ ['mentions_total', 'sentiment_positive', 'sentiment_negative'] }
           />
           <CodeViewer filename="FancyLineChart.js" code={ FancyLineChartCode.toString() } />
+        </section>
+        <section className="visualizations">
+          <h1>Scatter Line Chart</h1>
+          <ScatterLineChart
+            data={ MockSeriesData }
+            valueKeys={ ['mentions_total'] }
+            titleKeys={ ['Mentions'] }
+          />
+          <CodeViewer filename="ScatterLineChart.js" code={ FancyLineChartCode.toString() } />
         </section>
       </div>
     );

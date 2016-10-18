@@ -27,7 +27,7 @@ export default class ChoroplethMap extends Component {
   };
 
   componentDidMount () {
-    this.tooltipRenderer = new TooltipRenderer();
+    this.tooltipRenderer = new TooltipRenderer(this);
     if (this.hasTooltip()) {
       this.tooltipRenderer.update(React.Children.only(this.props.children));
     }
@@ -99,11 +99,11 @@ export default class ChoroplethMap extends Component {
     const features = group.selectAll('.choropleth-map__feature');
     if (this.hasTooltip()) {
       group.call(this.tooltipRenderer.bind);
-      features.on('mouseover', this.tooltipRenderer.onShow);
-      features.on('mouseout', this.tooltipRenderer.onHide);
+      features.on('mouseover.ChoroplethMap', this.tooltipRenderer.onShow);
+      features.on('mouseout.ChoroplethMap', this.tooltipRenderer.onHide);
     } else {
-      features.on('mouseover', null);
-      features.on('mouseout', null);
+      features.off('mouseover.ChoroplethMap');
+      features.off('mouseout.ChoroplethMap');
     }
   }
 

@@ -14,5 +14,6 @@ export TooltipPositions from './helpers/TooltipPositions';
 export tooltipPositioner from './helpers/tooltipPositioner';
 export HorizontalHoverBar from './axes/HorizontalHoverBar';
 export VerticalHoverBar from './axes/VerticalHoverBar';
+export Scatterplot from './charts/Scatterplot';
 
 export PadDataBetweenDates from './manipulators/PadDataBetweenDates';

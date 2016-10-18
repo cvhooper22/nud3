@@ -1,9 +1,11 @@
 import React, { Component, PropTypes } from 'react';
 import * as d3 from 'd3';
 import _ from 'lodash';
+import curryThisElement from '../helpers/curryThisElement';
 import { stringOrArrayOfStrings, stringOrFunc } from '../propTypes/customPropTypes';
+import TooltipRenderer from '../helpers/TooltipRenderer';
 
-export default class BarChart extends Component {
+export default class Scatterplot extends Component {
 
   static propTypes = {
     chartData: PropTypes.array,
@@ -11,44 +13,49 @@ export default class BarChart extends Component {
     classNamePrefix: PropTypes.string,
     colorPalette: PropTypes.any,
     filter: stringOrArrayOfStrings,
-    paddingBottom: PropTypes.number,
     paddingLeft: PropTypes.number,
-    paddingRight: PropTypes.number,
     paddingTop: PropTypes.number,
     valueKeys: PropTypes.array,
     xScale: PropTypes.func,
     yScale: PropTypes.func,
     clipPath: PropTypes.string,
-    areaWidth: PropTypes.number,
-    areaHeight: PropTypes.number,
-    groupPadding: PropTypes.number,
-    barPadding: PropTypes.number,
     transitionDuration: PropTypes.number,
     transitionDelay: PropTypes.number,
     transitionEase: stringOrFunc,
+    dotRadius: PropTypes.any,
+    children: PropTypes.node,
   };
 
   static defaultProps = {
-    groupPadding: 12,
-    barPadding: 2,
     transitionDelay: 0,
     transitionDuration: 0,
     transitionEase: d3.easePolyInOut,
+    dotRadius: 5,
   };
 
-  constructor (...args) {
-    super(...args);
+  constructor (props, ...args) {
+    super(props, ...args);
     this.getUniqueDataKey = ::this.getUniqueDataKey;
     this.getFillColor = ::this.getFillColor;
     this.getPathFilter = ::this.getPathFilter;
+    this.onMouseOver = curryThisElement(this.onMouseOver, this);
+    this.onMouseOut = curryThisElement(this.onMouseOut, this);
   }
 
   componentDidMount () {
+    this.tooltipRenderer = new TooltipRenderer(this);
+    this.group.call(this.tooltipRenderer.bind);
+    if (this.hasTooltip()) {
+      this.tooltipRenderer.update(React.Children.only(this.props.children));
+    }
     this.renderChart();
   }
 
   componentDidUpdate () {
     this.renderChart();
+    if (this.hasTooltip()) {
+      this.tooltipRenderer.update(React.Children.only(this.props.children));
+    }
   }
 
   getFillColor (d, i) {
@@ -74,23 +81,12 @@ export default class BarChart extends Component {
     return `url(#${filter})`;
   }
 
-  getBarAreaWidth () {
-    const sections = this.props.chartData.length;
-    const bars = (this.props.chartData[0] || []).length;
-    const totalBarCount = sections * bars;
-    let barWidth = 0;
-    if (totalBarCount) {
-      barWidth = (this.props.areaWidth - (sections * this.props.groupPadding)) / totalBarCount;
-    }
-    return barWidth;
-  }
-
   render () {
     const className = [
-      'bar-chart',
+      'scatterplot',
     ];
     if (this.props.classNamePrefix) {
-      className.push(`${this.props.classNamePrefix}__bar-chart`);
+      className.push(`${this.props.classNamePrefix}__scatterplot`);
     }
     if (this.props.className) {
       className.push(this.props.className);
@@ -98,58 +94,70 @@ export default class BarChart extends Component {
     return (
       <g
         className={ className.join(' ') }
-        ref={ n => this.node = n }
         transform={ `translate(${this.props.paddingLeft},${this.props.paddingTop})` }
         clipPath={ this.props.clipPath }
+        ref={ n => this.group = d3.select(n) }
       />
     );
   }
 
   renderChart () {
-    this.group = d3.select(this.node);
-    const barAreaWidth = this.getBarAreaWidth();
-    const groups = this.group.selectAll('.bar-chart__group')
+    this.renderDotsContainer();
+    this.renderDots();
+  }
+
+  renderDotsContainer () {
+    this.group.selectAll('.scatterplot__dots')
       .data(this.props.chartData, this.getUniqueDataKey)
       .enter()
       .append('g')
-      .attr('class', 'bar-chart__group')
-      .attr('transform', (d, i) => `translate(${i * barAreaWidth},0)`)
-      .style('fill', this.getFillColor);
-    if (this.props.filter) {
-      groups.style('filter', this.getPathFilter);
-    }
-    this.renderGroupedBars(barAreaWidth - this.props.barPadding);
+      .attr('class', 'scatterplot__dots');
   }
 
-  renderGroupedBars (barWidth) {
-    const groups = this.group.selectAll('.bar-chart__group');
+  renderDots () {
     const bottomY = this.props.yScale(this.props.yScale.domain()[0]);
-    groups.selectAll('.bar-chart__group__bar')
+    const dots = this.group.selectAll('.scatterplot__dots');
+    dots
+      .selectAll('.scatterplot__dots__dot')
       .data(d => d)
       .enter()
-      .append('rect')
-      .attr('y', bottomY)
-      .attr('height', 0)
-      .attr('width', barWidth)
-      .attr('x', d => this.props.xScale(d.xValue))
-      .attr('class', 'bar-chart__group__bar');
+      .append('circle')
+      .attr('cy', bottomY)
+      .attr('cx', d => this.props.xScale(d.xValue))
+      .attr('r', 1)
+      .attr('class', 'scatterplot__dots__dot');
 
+    // update
     const ease = _.isFunction(this.props.transitionEase) ? this.props.transitionEase : d3[this.props.transitionEase];
-    const rects = groups
-      .selectAll('.bar-chart__group__bar')
+    const dot = dots.selectAll('.scatterplot__dots__dot');
+    const dotTransition = dot
       .transition()
       .duration(this.props.transitionDuration)
       .delay(this.props.transitionDelay)
       .ease(ease)
-      .attr('width', barWidth)
-      .attr('y', d => this.props.yScale(d.yValue || 0))
-      .attr('x', d => this.props.xScale(d.xValue))
-      .attr('height', d => (this.props.areaHeight - this.props.yScale(d.yValue || 0)) || 1);
+      .attr('r', this.props.dotRadius)
+      .attr('cy', d => this.props.yScale(d.yValue || 0))
+      .attr('cx', d => this.props.xScale(d.xValue));
     if (this.props.filter) {
-      rects.style('filter', this.getPathFilter);
+      dotTransition.style('filter', this.getPathFilter);
     } else {
-      rects.style('filter', null);
+      dotTransition.style('filter', null);
+    }
+    if (this.hasTooltip()) {
+      dot.on('mouseover.Scatterplot', this.tooltipRenderer.onShow);
+      dot.on('mouseout.Scatterplot', this.tooltipRenderer.onHide);
+    } else {
+      dot.off('mouseover.Scatterplot');
+      dot.off('mouseout.Scatterplot');
+    }
+    if (this.props.colorPalette) {
+      dot.style('fill', this.getFillColor);
+    } else {
+      dot.style('fill', null);
     }
   }
 
+  hasTooltip () {
+    return React.Children.count(this.props.children) === 1;
+  }
 }
