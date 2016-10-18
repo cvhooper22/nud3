@@ -4,11 +4,23 @@ import numeral from 'numeral';
 
 export default function LineTooltip (props) {
   const name = _.get(props, 'data.original.date') || 'no date';
-  const number = _.get(props, 'data.original.mentions_total') || 0;
+  function renderValue (title, i) {
+    const number = _.get(props, `data.original.${props.valueKeys[i]}`) || 0;
+    return (
+      <div key={ title } className="line-tooltip__mentions">
+        { numeral(number).format('0,0') } { title }
+      </div>
+    );
+  }
   return (
     <div className="line-tooltip">
       <div className="line-tooltip__name">{ name }</div>
-      <div className="line-tooltip__mentions">{ numeral(number).format('0,0') } Mentions</div>
+      { (props.titleKeys || []).map(renderValue) }
     </div>
   );
+}
+
+LineTooltip.propTypes = {
+  titleKeys: React.PropTypes.array,
+  valueKeys: React.PropTypes.array,
 };

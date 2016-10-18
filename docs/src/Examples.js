@@ -38,7 +38,8 @@ export default class Examples extends React.Component {
           <h1>Basic Line Chart</h1>
           <BasicLineChart
             data={ MockSeriesData }
-            valueKeys={ ['mentions_total'] }
+            valueKeys={ ['mentions_total', 'sentiment_negative', 'sentiment_positive'] }
+            titleKeys={ ['Mentions', 'Negative Sentiment', 'Positive Sentiment'] }
           />
           <CodeViewer filename="BasicLineChart.js" code={ BasicLineChartCode.toString() } />
         </section>

@@ -11,11 +11,13 @@ import {
   VerticalHoverBar,
   TooltipPositions,
 } from 'nud3';
+import * as d3 from 'd3';
 import LineTooltip from '../tooltips/LineTooltip';
 
 export default function BasicLineChart (props) {
   const startDate = moment(_.first(props.data).date).toDate();
   const endDate = moment(_.last(props.data).date).toDate();
+  const colorPalette = d3.scaleOrdinal(d3.schemeCategory10);
   return (
     <Chart
       className="basic-line-chart"
@@ -29,7 +31,11 @@ export default function BasicLineChart (props) {
       <AxisLeft />
       <PadDataBetweenDates startDate={ startDate } endDate={ endDate }>
         <AxisBottom textTransform="rotate(-45)" textDy="-0.25em" textDx="-0.75em" />
-        <LineChart transitionDuration={ 400 } transitionDelay={ 100 } />
+        <LineChart
+          colorPalette={ colorPalette }
+          transitionDuration={ 400 }
+          transitionDelay={ 100 }
+        />
         <HorizontalHoverBar barWidth={ 2 } />
         <VerticalHoverBar barWidth={ 2 }>
           <LineTooltip position={ TooltipPositions.topRight } titleKeys={ props.titleKeys } />
