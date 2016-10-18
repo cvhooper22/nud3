@@ -102,7 +102,7 @@ export default class Examples extends React.Component {
             valueKeys={ ['mentions_total'] }
             titleKeys={ ['Mentions'] }
           />
-          <CodeViewer filename="ScatterLineChart.js" code={ FancyLineChartCode.toString() } />
+          <CodeViewer filename="ScatterLineChart.js" code={ ScatterLineChartCode.toString() } />
         </section>
       </div>
     );
