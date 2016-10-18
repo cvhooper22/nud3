@@ -27,12 +27,18 @@ module.exports = {
       },
       {
         loader: 'json-loader',
-        test: /\.(json)$/,
-        include: path.join(__dirname),
+        test: /\.json$/,
       },
       {
         test: /\.js$/,
         loaders: ['babel'],
+        include: path.join(__dirname),
+      },
+    ],
+    postLoaders: [
+      {
+        loader: 'transform?brfs',
+        test: /\.js$/,
         include: path.join(__dirname),
       },
     ],

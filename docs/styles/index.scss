@@ -1,3 +1,5 @@
+@import "~prismjs/themes/prism-okaidia";
+
 html,body {
   margin: 0;
   padding: 0;
@@ -113,5 +115,23 @@ div#content {
 .map-tooltip {
   &__name {
     font-size: 1.4em;
+  }
+}
+.code-viewer {
+  background-color: #DFDFDF;
+  font-size: 13px;
+  h4 {
+    line-height: 2em;
+    font-size: 20px;
+    letter-spacing: 1px;
+    color: #333;
+    padding: 0 10px;
+    margin: 0px;
+  }
+  &__syntax {
+    display: block;
+    padding: 10px !important;
+    border-radius: 1px !important;
+    white-space: pre-wrap !important;
   }
 }
