@@ -10,6 +10,8 @@ import {
   HorizontalHoverBar,
   VerticalHoverBar,
   TooltipPositions,
+  VerticalGrid,
+  HorizontalGrid,
 } from 'nud3';
 import * as d3 from 'd3';
 import LineTooltip from '../tooltips/LineTooltip';
@@ -40,6 +42,8 @@ export default function BasicLineChart (props) {
         <VerticalHoverBar barWidth={ 2 }>
           <LineTooltip position={ TooltipPositions.topRight } titleKeys={ props.titleKeys } />
         </VerticalHoverBar>
+        <VerticalGrid />
+        <HorizontalGrid />
       </PadDataBetweenDates>
     </Chart>
   );
