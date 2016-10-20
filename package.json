@@ -13,6 +13,7 @@
     "build-examples": "webpack --config docs/webpack.config.js ",
     "lint": "eslint src/",
     "jest": "jest",
+    "jest-watch": "jest --watch",
     "test": "npm run lint && npm run jest"
   },
   "files": [
