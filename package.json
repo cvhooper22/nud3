@@ -11,7 +11,8 @@
     "watch": "babel src/ -d lib -w",
     "start": "node docs/server.js",
     "build-examples": "webpack --config docs/webpack.config.js ",
-    "lint": "eslint src/"
+    "lint": "eslint src/",
+    "test": "npm run lint"
   },
   "files": [
     "lib/",
