@@ -12,7 +12,8 @@
     "start": "node docs/server.js",
     "build-examples": "webpack --config docs/webpack.config.js ",
     "lint": "eslint src/",
-    "test": "npm run lint"
+    "jest": "jest",
+    "test": "npm run lint && npm run jest"
   },
   "files": [
     "lib/",
@@ -39,6 +40,7 @@
     "babel-cli": "^6.16.0",
     "babel-core": "^6.17.0",
     "babel-eslint": "^7.0.0",
+    "babel-jest": "^16.0.0",
     "babel-loader": "^6.2.5",
     "babel-plugin-transform-object-assign": "^6.8.0",
     "babel-plugin-transform-runtime": "^6.15.0",
@@ -54,7 +56,9 @@
     "eslint-plugin-jsx-a11y": "^2.2.2",
     "eslint-plugin-react": "^6.3.0",
     "file-loader": "^0.9.0",
+    "jest": "^16.0.2",
     "json-loader": "^0.5.4",
+    "mocha": "^3.1.2",
     "node-sass": "^3.10.1",
     "numeral": "^1.5.3",
     "prismjs": "^1.5.1",
@@ -62,6 +66,7 @@
     "react-addons-shallow-compare": "^15.3.2",
     "react-dom": "^15.3.2",
     "react-hot-loader": "^3.0.0-beta.5",
+    "react-test-renderer": "^15.3.2",
     "sass-loader": "^4.0.2",
     "style-loader": "^0.13.1",
     "topojson": "^1.6.27",
@@ -69,5 +74,11 @@
     "webpack": "^1.13.2",
     "webpack-dev-middleware": "^1.8.3",
     "webpack-dev-server": "^1.16.2"
+  },
+  "jest": {
+    "verbose": true,
+    "bail": true,
+    "testPathDirs": ["test"],
+    "testRegex": "(/__tests__/.*|\\.?(Test|test|spec))\\.jsx?$"
   }
 }
