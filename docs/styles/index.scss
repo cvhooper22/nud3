@@ -152,3 +152,27 @@ div#content {
 .horizontal-grid {
   opacity: 0.075
 }
+
+.range-selector {
+  margin: 0 auto;
+  display: block;
+  rect {
+    border: 1px solid pink;
+    fill: rgba(0,255,0,0.5);
+
+  }
+  rect:hover {
+    cursor: ew-resize;
+  }
+  .right-bar,
+  .left-bar {
+    fill: rgba(0,255,0,1);
+  }
+  .right-bar {
+    fill: rgba(100,100,0,1); 
+  }
+  .right-bar:hover,
+  .left-bar:hover {
+    cursor: col-resize;
+  }  
+}

@@ -17,5 +17,6 @@ export VerticalHoverBar from './axes/VerticalHoverBar';
 export VerticalGrid from './axes/VerticalGrid';
 export HorizontalGrid from './axes/HorizontalGrid';
 export Scatterplot from './charts/Scatterplot';
+export RangeSelector from './charts/RangeSelector';
 
 export PadDataBetweenDates from './manipulators/PadDataBetweenDates';

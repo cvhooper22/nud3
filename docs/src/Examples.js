@@ -11,6 +11,7 @@ import FancyLineChart from './visualizations/FancyLineChart';
 import ScatterLineChart from './visualizations/ScatterLineChart';
 import MockSeriesData from './data/MockSeriesData.json';
 import MockStatesData from './data/MockStatesData.json';
+import RangeSelectorChart from './visualizations/RangeSelectorChart';
 
 const fs = require('fs');
 const path = require('path');
@@ -35,6 +36,14 @@ export default class Examples extends React.Component {
           <p>Nud3 is a composable d3 library for react.</p>
           <p>These examples will show you how we create and use NUD3.</p>
           <p>NUD3 is pronounced &quot;new dee three&quot; or nude.</p>
+        </section>
+        <section className="visualizations">
+          <h1>Clip Chart</h1>
+          <RangeSelectorChart
+            data={ MockSeriesData }
+            valueKeys={ ['mentions_total', 'sentiment_negative', 'sentiment_positive'] }
+            titleKeys={ ['Mentions', 'Negative Sentiment', 'Positive Sentiment'] }
+          />
         </section>
         <section className="visualizations">
           <h1>Basic Line Chart</h1>
