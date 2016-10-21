@@ -25,6 +25,7 @@ const BasicPieChartCode = fs.readFileSync(path.join(__dirname, './visualizations
 const BasicStatesMapCode = fs.readFileSync(path.join(__dirname, './visualizations', 'BasicStatesMap.js'));
 const FancyLineChartCode = fs.readFileSync(path.join(__dirname, './visualizations', 'FancyLineChart.js'));
 const ScatterLineChartCode = fs.readFileSync(path.join(__dirname, './visualizations', 'ScatterLineChart.js'));
+const RangeSelectorChartCode =  fs.readFileSync(path.join(__dirname, './visualizations', 'RangeSelectorChart.js'));
 
 export default class Examples extends React.Component {
   render () {
@@ -44,6 +45,7 @@ export default class Examples extends React.Component {
             valueKeys={ ['mentions_total', 'sentiment_negative', 'sentiment_positive'] }
             titleKeys={ ['Mentions', 'Negative Sentiment', 'Positive Sentiment'] }
           />
+          <CodeViewer filename="ScatterLineChart.js" code={ RangeSelectorChartCode.toString() } />
         </section>
         <section className="visualizations">
           <h1>Basic Line Chart</h1>

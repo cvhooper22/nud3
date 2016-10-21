@@ -87,8 +87,8 @@ export default class RangeSelectorChart extends Component {
             <RangeSelector
               onRangeChange={ this.onRangeChange }
               handleWidth={ 5 }
-              minClipWidth={ 60 }
-              maxClipWidth={ (60 * 24 * 7) }
+              minClipWidth={ 1000 * 60 * 60 }
+              maxClipWidth={ 1000 * 60 * 60 * 24 * 7 }
               start={ this.state.rangeStart }
               end={ this.state.rangeEnd }
             />
