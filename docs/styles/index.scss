@@ -164,15 +164,15 @@ div#content {
   rect:hover {
     cursor: ew-resize;
   }
-  .right-bar,
-  .left-bar {
+  .right-handle,
+  .left-handle {
     fill: rgba(0,255,0,1);
   }
-  .right-bar {
+  .right-handle {
     fill: rgba(100,100,0,1); 
   }
-  .right-bar:hover,
-  .left-bar:hover {
+  .right-handle:hover,
+  .left-handle:hover {
     cursor: col-resize;
   }  
 }

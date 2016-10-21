@@ -24,8 +24,18 @@ export default class RangeSelectorChart extends Component {
     super(props, ...args);
     this.state = {
       filteredData: props.data,
+      rangeStart: moment(_.first(this.props.data).date).add(10, 'days').toDate(),
+      rangeEnd: moment(_.last(this.props.data).date).subtract(5, 'days').toDate(),
     };
-    this.onRangeMove = this.onRangeMove.bind(this);
+
+    this.onRangeChange = this.onRangeChange.bind(this);
+  }
+
+  onRangeChange (rangeStart, rangeEnd) {
+    this.setState({
+      rangeStart,
+      rangeEnd,
+    });
   }
 
   render () {
@@ -33,10 +43,8 @@ export default class RangeSelectorChart extends Component {
     const endDate = moment(_.last(this.props.data).date).toDate();
     const colorPalette = d3.scaleOrdinal(d3.schemeCategory10);
 
-    const start = this.state.rangeStart || startDate;
-    const end = this.state.rangeEnd || endDate;
-
-    return (<g className="range-band-chart">
+    return (
+      <g className="range-band-chart">
         <Chart
           className="basic-line-chart"
           data={ this.state.filteredData }
@@ -47,7 +55,7 @@ export default class RangeSelectorChart extends Component {
           paddingBottom={ 50 }
         >
           <AxisLeft />
-          <PadDataBetweenDates startDate={ startDate } endDate={ endDate }>
+          <PadDataBetweenDates startDate={ this.state.rangeStart } endDate={ this.state.rangeEnd }>
             <AxisBottom textTransform="rotate(-45)" textDy="-0.25em" textDx="-0.75em" />
             <LineChart
               colorPalette={ colorPalette }
@@ -68,28 +76,26 @@ export default class RangeSelectorChart extends Component {
           xKey="date"
           valueKeys={ this.props.valueKeys }
           height={ 100 }
-          width= { 500 }
+          width={ 500 }
           paddingLeft={ 30 }
           paddingBottom={ 50 }
         >
           <PadDataBetweenDates startDate={ startDate } endDate={ endDate }>
             <AxisBottom textTransform="rotate(-45)" textDy="-0.25em" textDx="-0.75em" />
-            <AreaChart transitionDuration={ 400 } transitionDelay={ 100 } />        
+            <AreaChart transitionDuration={ 400 } transitionDelay={ 100 } />
             <VerticalGrid />
-            <RangeSelector onRangeMove={ this.onRangeMove }
-                  range={ [start, end] }/>
+            <RangeSelector
+              onRangeChange={ this.onRangeChange }
+              handleWidth={ 5 }
+              minClipWidth={ [moment(), moment().add('1', 'day')] }
+              maxClipWidth={ [moment(), moment().add('5', 'day')] }
+              start={ this.state.rangeStart }
+              end={ this.state.rangeEnd }
+            />
           </PadDataBetweenDates>
         </Chart>
       </g>
     );
-  }// end:render
-
-  onRangeMove (start, end) {
-    this.filterDataByDate(start, end);
-  }
-
-  filterDataByDate (start, end) {
-    this.props.data
   }
 }
 RangeSelectorChart.propTypes = {
