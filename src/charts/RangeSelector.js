@@ -26,51 +26,44 @@ export default class RangeSelector extends Component {
     this.setupListeners();
   }
 
-  componentDidUpdate () {
-    // this.renderClip();
-  }
-
   componentWillUnmount () {
     this.teardownListeners();
   }
 
   onDrag () {
-    const newStart = this.boundedXPosition(event.movementX);
-    const newEnd = newStart + parseFloat(this.clip.attr('width'));
+    let newX = parseFloat(this.clip.attr('x')) + event.movementX;
+    newX = Math.min(newX, this.maxAreaBoundary());
+    newX = Math.max(this.minAreaBoundary(), newX);
 
-    const newStartDomain = this.props.xScale.invert(newStart);
+    const newEnd = newX + parseFloat(this.clip.attr('width'));
+    const newStartDomain = this.props.xScale.invert(newX);
     const newEndDomain = this.props.xScale.invert(newEnd);
 
     this.props.onRangeChange(newStartDomain, newEndDomain);
   }
 
   onLeftHandleDrag () {
-    let newStart = this.boundedXPosition(event.movementX);
+    let newX = parseFloat(this.leftHandle.attr('x')) + event.movementX;
 
-    // This if prevents handles from crossing
-    if (newStart > parseFloat(this.rightHandle.attr('x')) - this.props.minClipWidth) {
-      newStart = parseFloat(this.rightHandle.attr('x')) - this.props.minClipWidth;
-    }
+    newX = Math.min(newX, this.maxAreaBoundary()); // right areaWidth boundary
+    newX = Math.max(this.minAreaBoundary(), newX); // left areaWidth boundary
+    newX = Math.min(newX, this.minWidthRightBoundary()); // rightHandle boundary
+    newX = Math.max(this.maxWidthRightBoundary(), newX); // max Width boundary
 
-    const newStartDomain = this.props.xScale.invert(newStart);
-    const sameEndDomain = this.props.end;
-    this.props.onRangeChange(newStartDomain, sameEndDomain);
+    const newStartDomain = this.props.xScale.invert(newX);
+    this.props.onRangeChange(newStartDomain, this.props.end);
   }
 
   onRightHandleDrag () {
-    const start = parseFloat(this.clip.attr('x'));
-    let newWidth = parseFloat(this.clip.attr('width')) + event.movementX;
+    let newX = parseFloat(this.rightHandle.attr('x')) + event.movementX;
 
-    // This if prevents handles from crossing
-    if (newWidth < this.props.minClipWidth) {
-      newWidth = this.props.minClipWidth;
-    }
+    newX = Math.min(newX, this.maxAreaBoundary()); // right areaWidth boundary
+    newX = Math.max(this.minAreaBoundary(), newX); // left areaWidth boundary
+    newX = Math.max(newX, this.minWidthLeftBoundary()); // LeftHandle boundary
+    newX = Math.min(this.maxWidthLeftBoundary(), newX); // max Width boundary
 
-    const maxRightPosition = this.props.paddingLeft + this.props.areaWidth;
-    const newEnd = Math.min(start + newWidth, maxRightPosition);
-    const newEndDomain = this.props.xScale.invert(newEnd);
-    const sameStartDomain = this.props.start;
-    this.props.onRangeChange(sameStartDomain, newEndDomain);
+    const newEndDomain = this.props.xScale.invert(newX);
+    this.props.onRangeChange(this.props.start, newEndDomain);
   }
 
   setupListeners () {
@@ -95,18 +88,11 @@ export default class RangeSelector extends Component {
   render () {
     const y = this.props.paddingTop;
     const height = this.props.areaHeight;
+
     const start = this.props.xScale(this.props.start);
     const end = this.props.xScale(this.props.end);
-//     const convertedMin = this.props.xScale(this.props.minClipWidth);
-//     const convertedMax = this.props.xScale(this.props.maxClipWidth);
+    const width = Math.abs(start - end);
 
-//     const minWidth = Math.max(convertedMin, end - start);
-//     const width = Math.min(minWidth, convertedMax);
-    const a = moment();
-    const b = moment().subtract(1, 'day');
-    const width = 25;
-    console.log(a);
-    console.log(b);
     return (
       <g
         className={ this.getClassNames() }
@@ -139,28 +125,49 @@ export default class RangeSelector extends Component {
       </g>);
   }
 
-  calculatedClipWidth (movementX) {
-    const potentialWidth = parseFloat(this.clip.attr('width')) - movementX;
-    const minWidth = Math.max(1, potentialWidth);
-    const boundedWidth = Math.min(minWidth, this.props.areaWidth);
-    const xPosition = this.clip.attr('x');
+  minClipWidthPixels () { // returns min width range in px
+    let boundary;
+    if (this.props.start instanceof Date) {
+      boundary = moment(this.props.start).add(this.props.minClipWidth, 'minutes');
+    } else {
+      boundary = this.props.start + this.props.minClipWidth;
+    }
 
-    return xPosition === this.minLeftPosition() ? parseFloat(this.clip.attr('width')) : boundedWidth;
+    return Math.abs(this.props.xScale(this.props.start) - this.props.xScale(boundary));
   }
 
-  boundedXPosition (movementX) {
-    const potentialXPosition = parseFloat(this.clip.attr('x')) + movementX;
-    const max = Math.min(potentialXPosition, this.maxRightXPosition());
-
-    return Math.max(this.minLeftPosition(), max);
+  maxClipWidthPixels () { // returns max width range in px
+    let boundary;
+    if (this.props.start instanceof Date) {
+      boundary = moment(this.props.start).add(this.props.maxClipWidth, 'minutes');
+    } else {
+      boundary = this.props.start + this.props.maxClipWidth;
+    }
+    return Math.abs(this.props.xScale(this.props.start) - this.props.xScale(boundary));
   }
 
-  maxRightXPosition () {
+  minWidthRightBoundary () {
+    return Math.abs(parseFloat(this.rightHandle.attr('x')) - this.minClipWidthPixels());
+  }
+
+  maxWidthRightBoundary () {
+    return Math.abs(parseFloat(this.rightHandle.attr('x')) - this.maxClipWidthPixels());
+  }
+
+  minWidthLeftBoundary () {
+    return Math.abs(parseFloat(this.leftHandle.attr('x')) + this.minClipWidthPixels());
+  }
+
+  maxWidthLeftBoundary () {
+    return Math.abs(parseFloat(this.leftHandle.attr('x')) + this.maxClipWidthPixels());
+  }
+
+  maxAreaBoundary () {
     const maxRight = this.props.paddingLeft + this.props.areaWidth;
     return maxRight - parseFloat(this.clip.attr('width'));
   }
 
-  minLeftPosition () {
+  minAreaBoundary () {
     return this.props.paddingLeft;
   }
 

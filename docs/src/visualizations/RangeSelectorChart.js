@@ -24,8 +24,8 @@ export default class RangeSelectorChart extends Component {
     super(props, ...args);
     this.state = {
       filteredData: props.data,
-      rangeStart: moment(_.first(this.props.data).date).add(10, 'days').toDate(),
-      rangeEnd: moment(_.last(this.props.data).date).subtract(5, 'days').toDate(),
+      rangeStart: moment(_.last(this.props.data).date).subtract(3, 'days').toDate(),
+      rangeEnd: moment(_.last(this.props.data).date).toDate(),
     };
 
     this.onRangeChange = this.onRangeChange.bind(this);
@@ -87,8 +87,8 @@ export default class RangeSelectorChart extends Component {
             <RangeSelector
               onRangeChange={ this.onRangeChange }
               handleWidth={ 5 }
-              minClipWidth={ [moment(), moment().add('1', 'day')] }
-              maxClipWidth={ [moment(), moment().add('5', 'day')] }
+              minClipWidth={ 60 }
+              maxClipWidth={ (60 * 24 * 7) }
               start={ this.state.rangeStart }
               end={ this.state.rangeEnd }
             />
