@@ -76,7 +76,6 @@ export default class RangeSelectorChart extends Component {
           xKey="date"
           valueKeys={ this.props.valueKeys }
           height={ 100 }
-          width={ 500 }
           paddingLeft={ 30 }
           paddingBottom={ 50 }
         >
@@ -87,8 +86,8 @@ export default class RangeSelectorChart extends Component {
             <RangeSelector
               onRangeChange={ this.onRangeChange }
               handleWidth={ 5 }
-              minClipWidth={ 1000 * 60 * 60 }
-              maxClipWidth={ 1000 * 60 * 60 * 24 * 7 }
+              minClipSize={ 1000 * 60 * 60 }
+              maxClipSize={ 1000 * 60 * 60 * 24 * 7 }
               start={ this.state.rangeStart }
               end={ this.state.rangeEnd }
             />
