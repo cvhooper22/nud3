@@ -39,7 +39,7 @@ export default class RangeSelector extends Component {
   }
 
   onDrag () {
-    let newX = parseFloat(this.clip.attr('x')) + event.movementX;
+    let newX = parseFloat(this.clip.attr('x')) + event.movementX; // eslint-disable-line no-undef
     newX = this.maxAreaBoundary(newX);
     newX = this.minAreaBoundary(newX);
 
@@ -51,7 +51,7 @@ export default class RangeSelector extends Component {
   }
 
   onLeftHandleDrag () {
-    let newX = parseFloat(this.leftHandle.attr('x')) + event.movementX;
+    let newX = parseFloat(this.leftHandle.attr('x')) + event.movementX; // eslint-disable-line no-undef
 
     newX = this.maxAreaBoundary(newX); // right areaWidth boundary
     newX = this.minAreaBoundary(newX); // left areaWidth boundary
@@ -63,7 +63,7 @@ export default class RangeSelector extends Component {
   }
 
   onRightHandleDrag () {
-    let newX = parseFloat(this.rightHandle.attr('x')) + event.movementX;
+    let newX = parseFloat(this.rightHandle.attr('x')) + event.movementX; // eslint-disable-line no-undef
 
     newX = this.maxAreaBoundary(newX); // right areaWidth boundary
     newX = this.minAreaBoundary(newX); // left areaWidth boundary
