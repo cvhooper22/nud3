@@ -22,6 +22,10 @@ export default class RangeSelector extends Component {
     end: PropTypes.object,
   }
 
+  static defaultProps = {
+    handleWidth: 5,
+  };
+
   constructor (...args) {
     super(...args);
 
@@ -107,7 +111,7 @@ export default class RangeSelector extends Component {
         ref={ n => this.node = d3.select(n) }
       >
         <rect
-          className={ 'clip' }
+          className="range-selector__handle range-selector__handle--middle"
           height={ height }
           width={ width }
           x={ start }
@@ -115,7 +119,7 @@ export default class RangeSelector extends Component {
           ref={ n => this.clip = d3.select(n) }
         />
         <rect
-          className={ 'left-handle' }
+          className="range-selector__handle range-selector__handle--right"
           height={ height }
           width={ this.props.handleWidth }
           x={ start }
@@ -123,7 +127,7 @@ export default class RangeSelector extends Component {
           ref={ n => this.leftHandle = d3.select(n) }
         />
         <rect
-          className={ 'right-handle' }
+          className="range-selector__handle range-selector__handle--right"
           height={ height }
           width={ this.props.handleWidth }
           x={ end }

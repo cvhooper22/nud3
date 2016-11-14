@@ -1,0 +1,23 @@
+$tooltipClassName: 'tooltip' !default;
+
+.line-chart {
+  &__line {
+    fill: transparent;
+  }
+}
+.area-chart {
+  &__area {
+    stroke: none;
+  }
+}
+
+.range-selector {
+  &__handle {
+    opacity: 0.75;
+    cursor: col-resize;
+    &--middle {
+      opacity: 0.4;
+      cursor: ew-resize;
+    }
+  }
+}

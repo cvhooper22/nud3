@@ -25,15 +25,6 @@ export default class Examples extends React.Component {
           <p>NUD3 is pronounced &quot;new dee three&quot; or nude.</p>
         </section>
         <section className="visualizations">
-          <h1>Clip Chart</h1>
-          <RangeSelectorChart
-            data={ MockSeriesData }
-            valueKeys={ ['mentions_total', 'sentiment_negative', 'sentiment_positive'] }
-            titleKeys={ ['Mentions', 'Negative Sentiment', 'Positive Sentiment'] }
-          />
-          <CodeViewer filename="ScatterLineChart.js" />
-        </section>
-        <section className="visualizations">
           <h1>Basic Line Chart</h1>
           <BasicLineChart
             data={ MockSeriesData }
@@ -98,6 +89,15 @@ export default class Examples extends React.Component {
             data={ MockSeriesData }
             valueKeys={ ['mentions_total'] }
             titleKeys={ ['Mentions'] }
+          />
+          <CodeViewer filename="ScatterLineChart.js" />
+        </section>
+        <section className="visualizations">
+          <h1>Clip Chart</h1>
+          <RangeSelectorChart
+            data={ MockSeriesData }
+            valueKeys={ ['mentions_total', 'sentiment_negative', 'sentiment_positive'] }
+            titleKeys={ ['Mentions', 'Negative Sentiment', 'Positive Sentiment'] }
           />
           <CodeViewer filename="ScatterLineChart.js" />
         </section>

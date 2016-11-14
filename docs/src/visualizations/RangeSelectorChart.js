@@ -62,10 +62,6 @@ export default class RangeSelectorChart extends Component {
               transitionDuration={ 400 }
               transitionDelay={ 100 }
             />
-            <HorizontalHoverBar barWidth={ 2 } />
-            <VerticalHoverBar barWidth={ 2 }>
-              <LineTooltip position={ TooltipPositions.topRight } titleKeys={ this.props.titleKeys } />
-            </VerticalHoverBar>
             <VerticalGrid />
             <HorizontalGrid />
           </PadDataBetweenDates>

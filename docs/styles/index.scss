@@ -1,6 +1,7 @@
 @import "~prismjs/themes/prism-okaidia";
 @import "~prismjs/plugins/line-numbers/prism-line-numbers";
 @import "~basicgrid/src/styles/main";
+@import "~nud3/stylesheets/index";
 
 html,body {
   margin: 0;
@@ -43,7 +44,6 @@ div#content {
 }
 .line-chart {
   &__line {
-    fill: transparent;
     stroke: red;
   }
 }
@@ -154,25 +154,7 @@ div#content {
 }
 
 .range-selector {
-  margin: 0 auto;
-  display: block;
   rect {
-    border: 1px solid pink;
-    fill: rgba(0,255,0,0.5);
-
+    fill: darkGray;
   }
-  rect:hover {
-    cursor: ew-resize;
-  }
-  .right-handle,
-  .left-handle {
-    fill: rgba(0,255,0,1);
-  }
-  .right-handle {
-    fill: rgba(100,100,0,1); 
-  }
-  .right-handle:hover,
-  .left-handle:hover {
-    cursor: col-resize;
-  }  
 }
