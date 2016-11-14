@@ -13,20 +13,6 @@ import MockSeriesData from './data/MockSeriesData.json';
 import MockStatesData from './data/MockStatesData.json';
 import RangeSelectorChart from './visualizations/RangeSelectorChart';
 
-const fs = require('fs');
-const path = require('path');
-
-
-const BasicAreaChartCode = fs.readFileSync(path.join(__dirname, './visualizations', 'BasicAreaChart.js'));
-const BasicBarChartCode = fs.readFileSync(path.join(__dirname, './visualizations', 'BasicBarChart.js'));
-const BasicBubbleChartCode = fs.readFileSync(path.join(__dirname, './visualizations', 'BasicBubbleChart.js'));
-const BasicLineChartCode = fs.readFileSync(path.join(__dirname, './visualizations', 'BasicLineChart.js'));
-const BasicPieChartCode = fs.readFileSync(path.join(__dirname, './visualizations', 'BasicPieChart.js'));
-const BasicStatesMapCode = fs.readFileSync(path.join(__dirname, './visualizations', 'BasicStatesMap.js'));
-const FancyLineChartCode = fs.readFileSync(path.join(__dirname, './visualizations', 'FancyLineChart.js'));
-const ScatterLineChartCode = fs.readFileSync(path.join(__dirname, './visualizations', 'ScatterLineChart.js'));
-const RangeSelectorChartCode =  fs.readFileSync(path.join(__dirname, './visualizations', 'RangeSelectorChart.js'));
-
 export default class Examples extends React.Component {
   render () {
     return (
@@ -45,7 +31,7 @@ export default class Examples extends React.Component {
             valueKeys={ ['mentions_total', 'sentiment_negative', 'sentiment_positive'] }
             titleKeys={ ['Mentions', 'Negative Sentiment', 'Positive Sentiment'] }
           />
-          <CodeViewer filename="ScatterLineChart.js" code={ RangeSelectorChartCode.toString() } />
+          <CodeViewer filename="ScatterLineChart.js" />
         </section>
         <section className="visualizations">
           <h1>Basic Line Chart</h1>
@@ -54,7 +40,7 @@ export default class Examples extends React.Component {
             valueKeys={ ['mentions_total', 'sentiment_negative', 'sentiment_positive'] }
             titleKeys={ ['Mentions', 'Negative Sentiment', 'Positive Sentiment'] }
           />
-          <CodeViewer filename="BasicLineChart.js" code={ BasicLineChartCode.toString() } />
+          <CodeViewer filename="BasicLineChart.js" />
         </section>
         <section className="visualizations">
           <h1>Basic Area Chart</h1>
@@ -62,7 +48,7 @@ export default class Examples extends React.Component {
             data={ MockSeriesData }
             valueKeys={ ['mentions_total'] }
           />
-          <CodeViewer filename="BasicAreaChart.js" code={ BasicAreaChartCode.toString() } />
+          <CodeViewer filename="BasicAreaChart.js" />
         </section>
         <section className="visualizations">
           <h1>Basic Pie Chart</h1>
@@ -71,7 +57,7 @@ export default class Examples extends React.Component {
             valueKeys={ ['sentiment_positive'] }
             height={ 500 }
           />
-          <CodeViewer filename="BasicPieChart.js" code={ BasicPieChartCode.toString() } />
+          <CodeViewer filename="BasicPieChart.js" />
         </section>
         <section className="visualizations">
           <h1>Basic Bar Chart</h1>
@@ -79,7 +65,7 @@ export default class Examples extends React.Component {
             data={ MockSeriesData }
             valueKeys={ ['mentions_total'] }
           />
-          <CodeViewer filename="BasicBarChart.js" code={ BasicBarChartCode.toString() } />
+          <CodeViewer filename="BasicBarChart.js" />
         </section>
         <section className="visualizations">
           <h1>Basic Bubble Chart</h1>
@@ -87,7 +73,7 @@ export default class Examples extends React.Component {
             data={ MockSeriesData }
             valueKeys={ ['mentions_total'] }
           />
-          <CodeViewer filename="BasicBubbleChart.js" code={ BasicBubbleChartCode.toString() } />
+          <CodeViewer filename="BasicBubbleChart.js" />
         </section>
         <section className="visualizations">
           <h1>Basic United States Map</h1>
@@ -96,7 +82,7 @@ export default class Examples extends React.Component {
             valueKeys={ ['population'] }
             xKey="state"
           />
-          <CodeViewer filename="BasicStatesMap.js" code={ BasicStatesMapCode.toString() } />
+          <CodeViewer filename="BasicStatesMap.js" />
         </section>
         <section className="visualizations">
           <h1>Fancy Line Chart</h1>
@@ -104,7 +90,7 @@ export default class Examples extends React.Component {
             data={ MockSeriesData }
             valueKeys={ ['mentions_total', 'sentiment_positive', 'sentiment_negative'] }
           />
-          <CodeViewer filename="FancyLineChart.js" code={ FancyLineChartCode.toString() } />
+          <CodeViewer filename="FancyLineChart.js" />
         </section>
         <section className="visualizations">
           <h1>Scatter Line Chart</h1>
@@ -113,7 +99,7 @@ export default class Examples extends React.Component {
             valueKeys={ ['mentions_total'] }
             titleKeys={ ['Mentions'] }
           />
-          <CodeViewer filename="ScatterLineChart.js" code={ ScatterLineChartCode.toString() } />
+          <CodeViewer filename="ScatterLineChart.js" />
         </section>
       </div>
     );
