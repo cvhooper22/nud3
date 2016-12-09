@@ -10,15 +10,19 @@ export default class PadDataBetweenDates extends Component {
     className: PropTypes.string,
     classNamePrefix: PropTypes.string,
     dateInterval: PropTypes.string,
+    domain: PropTypes.bool,
     endDate: PropTypes.instanceOf(Date),
     startDate: PropTypes.instanceOf(Date),
     xScale: PropTypes.func,
     xScaleDomain: PropTypes.any,
     padWith: PropTypes.any,
+    normalize: PropTypes.bool,
+    DEBUG: PropTypes.bool,
   };
 
   static defaultProps = {
     dateInterval: 'day',
+    normalize: true,
   };
 
   constructor (...args) {
@@ -32,12 +36,19 @@ export default class PadDataBetweenDates extends Component {
     if (!startMoment.isBefore(endMoment)) {
       return;
     }
+    if (this.props.DEBUG) {
+      /* eslint-disable no-console */
+      console.debug(`PadDataBetweenDates performing pad between
+                    ${this.props.startDate} and ${this.props.endDate}
+                    with the pad interval of ${this.props.dateInterval},
+                    with normalizing to start of ${this.props.dateInterval} ${this.props.normalize ? 'enabled' : 'disabled'}.`);
+    }
     this.chartData = this.props.chartData.map((datum) => {
       const first = _.first(datum) || {};
       return padDataBetweenDates(datum,
                                  this.props.startDate,
                                  this.props.endDate,
-                                 this.props.dateInterval,
+                                 this.props,
                                  this.props.padWith || {
                                    ...first,
                                    yValue: undefined,
@@ -78,14 +89,28 @@ export default class PadDataBetweenDates extends Component {
   }
 
   updateXScaleDomain () {
+    let domain;
     if (this.props.xScaleDomain) {
       if (_.isFunction(this.props.xScaleDomain)) {
-        this.xScale.domain(this.props.xScaleDomain(this.chartData));
+        domain = this.props.xScaleDomain(this.chartData);
       } else {
-        this.xScale.domain(this.props.xScaleDomain);
+        domain = this.props.xScaleDomain;
       }
+    } else if (this.props.normalize) {
+      domain = [
+        moment(this.props.startDate).startOf(this.props.dateInterval).toDate(),
+        moment(this.props.endDate).startOf(this.props.dateInterval).toDate(),
+      ];
     } else {
-      this.xScale.domain([this.props.startDate, this.props.endDate]);
+      domain = [this.props.startDate, this.props.endDate];
+    }
+    if (domain) {
+      this.xScale.domain(domain);
+      if (this.props.DEBUG) {
+        /* eslint-disable no-console */
+        console.debug('PadDataBetweenDates:xScale domain', domain);
+        console.debug('PadDataBetweenDates:xScale range', this.xScale.range());
+      }
     }
   }
 }

@@ -11,6 +11,7 @@ export default class Chart extends Component {
     children: PropTypes.node,
     className: PropTypes.string,
     data: PropTypes.array,
+    DEBUG: PropTypes.bool,
     xKey: PropTypes.string,
     height: PropTypes.number,
     id: PropTypes.string,
@@ -131,6 +132,7 @@ export default class Chart extends Component {
       ...this.state,
       ...child.props,
       children: child.props.children,
+      DEBUG: this.props.DEBUG,
     });
   }
 
@@ -166,21 +168,33 @@ export default class Chart extends Component {
         valueExtent[1] = this.props.yScaleMaximum;
       }
       this.yScale.domain(valueExtent);
+      if (this.props.DEBUG) {
+        /* eslint-disable no-console */
+        console.debug('yScale domain', valueExtent);
+      }
     }
   }
 
   updateXScaleDomain (data) {
+    let domain;
     if (this.props.xScaleDomain) {
       if (_.isFunction(this.props.xScaleDomain)) {
-        this.xScale.domain(this.props.xScaleDomain(data));
+        domain = this.props.xScaleDomain(data);
       } else {
-        this.xScale.domain(this.props.xScaleDomain);
+        domain = this.props.xScaleDomain;
       }
     } else {
       const first = _.first(this.props.data);
       const last = _.last(this.props.data);
       if (first && last) {
-        this.xScale.domain([first[this.props.xKey], last[this.props.xKey]]);
+        domain = [first[this.props.xKey], last[this.props.xKey]];
+      }
+    }
+    if (domain) {
+      this.xScale.domain(domain);
+      if (this.props.DEBUG) {
+        /* eslint-disable no-console */
+        console.debug('xScale domain', domain);
       }
     }
   }
@@ -202,5 +216,11 @@ export default class Chart extends Component {
       areaHeight,
       areaWidth,
     });
+    if (this.props.DEBUG) {
+      /* eslint-disable no-console */
+      console.debug('xScale range:', [0, areaWidth]);
+      console.debug('yScale range:', [areaHeight, 0]);
+      console.debug(`settingSize: height:${height}, width:${width}, areaHeight:${areaHeight}, areaWidth:${areaWidth}`);
+    }
   }
 }

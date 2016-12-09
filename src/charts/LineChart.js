@@ -22,6 +22,7 @@ export default class LineChart extends Component {
     transitionDuration: PropTypes.number,
     transitionDelay: PropTypes.number,
     transitionEase: stringOrFunc,
+    DEBUG: PropTypes.bool,
   };
 
   static defaultProps = {
@@ -89,6 +90,10 @@ export default class LineChart extends Component {
   }
 
   renderChart () {
+    if (this.props.DEBUG) {
+      /* eslint-disable no-console */
+      console.debug('LineChart render chartData', this.props.chartData);
+    }
     const enterLineGenerator = d3.line()
       .x(d => this.props.xScale(d.xValue))
       .y(() => this.props.yScale(this.props.yScale.domain()[0]));

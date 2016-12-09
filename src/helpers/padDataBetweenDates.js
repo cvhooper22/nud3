@@ -13,28 +13,37 @@ function momentDateFormatForInterval (interval) {
   return formatIntervals[interval];
 }
 
-function buildDatesHash (data, interval, formatKey) {
+function buildDatesHash (data, interval, formatKey, normalize) {
   const datesHash = {};
   (data || []).forEach((d) => {
-    const momentDate = moment(d.xValue).startOf(interval);
+    let momentDate = moment(d.xValue);
+    if (normalize) {
+      momentDate = momentDate.startOf(interval);
+    }
     const key = momentDate.format(formatKey);
     datesHash[key] = d;
   });
   return datesHash;
 }
 
-export default function padDataBetweenDates (data, startDate, endDate, interval = 'day', padWith = {}) {
+export default function padDataBetweenDates (data, startDate, endDate, options = {}, padWith = {}) {
+  const interval = options.dateInterval || 'day';
+  const normalize = options.normalize;
   const startMoment = moment(startDate);
   const endMoment = moment(endDate);
   if (!startMoment.isBefore(endMoment)) {
     return false;
   }
   const formatKey = momentDateFormatForInterval(interval);
-  const datesHash = buildDatesHash(data, interval, formatKey);
+  const datesHash = buildDatesHash(data, interval, formatKey, normalize);
   const paddedData = [];
-  let currentMoment = startMoment.startOf(interval);
+
+  let currentMoment = startMoment;
   let lastFound;
   while (!currentMoment.isAfter(endMoment)) {
+    if (normalize) {
+      currentMoment = currentMoment.startOf(interval);
+    }
     const key = currentMoment.format(formatKey);
     let foundData = datesHash[key];
     if (!foundData) {
