@@ -18,7 +18,10 @@ export default class Examples extends React.Component {
     return (
       <div className="examples">
         <DocumentTitle title="Nud3 Examples" />
-        <h1>Nud3 Examples</h1>
+        <h1>
+          Nud3 Examples
+          <img src="https://travis-ci.org/inlineblock/nud3.svg?branch=master" role="presentation" />
+        </h1>
         <section className="description">
           <p>Nud3 is a composable d3 library for react.</p>
           <p>These examples will show you how we create and use NUD3.</p>

@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/inlineblock/nud3.svg?branch=master)](https://travis-ci.org/inlineblock/nud3)
+
 NUD3
 ====
 
