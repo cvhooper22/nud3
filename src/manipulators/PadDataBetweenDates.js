@@ -78,6 +78,9 @@ export default class PadDataBetweenDates extends Component {
   }
 
   renderChild (child, i = 0) {
+    if (typeof child.type === 'string') {
+      return child;
+    }
     return React.cloneElement(child, {
       ...this.props,
       ...child.props,

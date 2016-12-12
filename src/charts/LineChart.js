@@ -11,6 +11,7 @@ export default class LineChart extends Component {
     classNamePrefix: PropTypes.string,
     colorPalette: PropTypes.any,
     filter: stringOrArrayOfStrings,
+    mask: stringOrArrayOfStrings,
     paddingBottom: PropTypes.number,
     paddingLeft: PropTypes.number,
     paddingRight: PropTypes.number,
@@ -36,6 +37,7 @@ export default class LineChart extends Component {
     this.getUniqueDataKey = ::this.getUniqueDataKey;
     this.getStrokeColor = ::this.getStrokeColor;
     this.getPathFilter = ::this.getPathFilter;
+    this.getPathMask = ::this.getPathMask;
   }
 
   componentDidMount () {
@@ -66,7 +68,21 @@ export default class LineChart extends Component {
     if (_.isArray(filter)) {
       filter = filter[i];
     }
-    return `url(#${filter})`;
+    if (filter) {
+      return `url(#${filter})`;
+    }
+    return null;
+  }
+
+  getPathMask (d, i) {
+    let mask = this.props.mask;
+    if (_.isArray(mask)) {
+      mask = mask[i];
+    }
+    if (mask) {
+      return `url(#${mask})`;
+    }
+    return null;
   }
 
   render () {
@@ -112,9 +128,8 @@ export default class LineChart extends Component {
     if (this.props.colorPalette) {
       paths.style('stroke', this.getStrokeColor);
     }
-    if (this.props.filter) {
-      paths.style('filter', this.getPathFilter);
-    }
+    paths.style('filter', this.getPathFilter);
+    paths.attr('mask', this.getPathMask);
 
     const ease = _.isFunction(this.props.transitionEase) ? this.props.transitionEase : d3[this.props.transitionEase];
 

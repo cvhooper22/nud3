@@ -20,4 +20,15 @@ const arrayOrFunc = PropTypes.oneOfType([
   PropTypes.func,
 ]);
 
-export { numberOrFunc, stringOrFunc, stringOrArrayOfStrings, arrayOrFunc };
+const stringOrNumber = PropTypes.oneOfType([
+  PropTypes.string,
+  PropTypes.number,
+]);
+
+export {
+  arrayOrFunc,
+  numberOrFunc,
+  stringOrArrayOfStrings,
+  stringOrFunc,
+  stringOrNumber,
+};

@@ -1,0 +1,31 @@
+exports[`Chart.js should convert width and height percentages when strings 1`] = `
+<svg
+  style={
+    Object {
+      "backgroundColor": "red",
+      "height": "55%",
+      "width": "100%",
+    }
+  } />
+`;
+
+exports[`Chart.js should convert width and height to styles 1`] = `
+<svg
+  style={
+    Object {
+      "backgroundColor": "red",
+      "height": "555px",
+      "width": "999px",
+    }
+  } />
+`;
+
+exports[`Chart.js should take proper html items and render them out 1`] = `
+<svg
+  className="my-class"
+  style={
+    Object {
+      "backgroundColor": "red",
+    }
+  } />
+`;

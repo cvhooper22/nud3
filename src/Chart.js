@@ -3,32 +3,37 @@ import shallowCompare from 'react-addons-shallow-compare';
 import _ from 'lodash';
 import * as d3 from 'd3';
 import dataDenormalizer from './helpers/dataDenormalizer';
-import { stringOrFunc, arrayOrFunc } from './propTypes/customPropTypes';
+import {
+  stringOrFunc,
+  arrayOrFunc,
+  stringOrNumber,
+} from './propTypes/customPropTypes';
+import splitHTMLElementProps from './helpers/splitHTMLElementProps';
 
 export default class Chart extends Component {
 
   static propTypes = {
+    DEBUG: PropTypes.bool,
     children: PropTypes.node,
     className: PropTypes.string,
     data: PropTypes.array,
-    DEBUG: PropTypes.bool,
-    xKey: PropTypes.string,
-    height: PropTypes.number,
+    height: stringOrNumber,
     id: PropTypes.string,
     paddingBottom: PropTypes.number,
     paddingLeft: PropTypes.number,
     paddingRight: PropTypes.number,
     paddingTop: PropTypes.number,
-    tagName: PropTypes.string,
+    resizeDebounce: PropTypes.number,
     valueKeys: PropTypes.array,
-    width: PropTypes.number,
+    width: stringOrNumber,
+    xKey: PropTypes.string,
     xScale: stringOrFunc,
+    xScaleDomain: arrayOrFunc,
+    xmlns: PropTypes.string.isRequired,
     yScale: stringOrFunc,
     yScaleDomain: arrayOrFunc,
-    xScaleDomain: arrayOrFunc,
-    yScaleMinimum: PropTypes.number,
     yScaleMaximum: PropTypes.number,
-    resizeDebounce: PropTypes.number,
+    yScaleMinimum: PropTypes.number,
   };
 
   static defaultProps = {
@@ -36,11 +41,11 @@ export default class Chart extends Component {
     paddingLeft: 10,
     paddingRight: 10,
     paddingTop: 10,
-    tagName: 'svg',
+    resizeDebounce: 50,
     valueKeys: ['value'],
     xScale: 'scaleTime',
+    xmlns: 'http://www.w3.org/2000/svg',
     yScale: 'scaleLinear',
-    resizeDebounce: 50,
   };
 
   constructor (props, ...args) {
@@ -86,24 +91,26 @@ export default class Chart extends Component {
   }
 
   render () {
-    const Tag = this.props.tagName;
-    const style = {};
+    const [elementProps] = splitHTMLElementProps(this.props);
+    const style = { ...(elementProps.style || {}) };
     if (this.props.height) {
-      style.height = `${this.props.height}px`;
+      style.height = this.sizeToStyle(this.props.height);
     }
     if (this.props.width) {
-      style.width = `${this.props.width}px`;
+      style.width = this.sizeToStyle(this.props.width);
     }
+    delete elementProps.data;
+    delete elementProps.height;
+    delete elementProps.width;
+    delete elementProps.style;
     return (
-      <Tag
-        id={ this.props.id }
-        className={ this.props.className }
+      <svg
+        { ...elementProps }
         style={ style }
-        xmlns="http://www.w3.org/2000/svg"
         ref={ n => this.node = n }
       >
         { this.renderChildren() }
-      </Tag>
+      </svg>
     );
   }
 
@@ -115,6 +122,9 @@ export default class Chart extends Component {
   }
 
   renderChild (child, i = 0) {
+    if (typeof child.type === 'string') {
+      return child;
+    }
     return React.cloneElement(child, {
       key: i,
       originalData: this.props.data,
@@ -222,5 +232,12 @@ export default class Chart extends Component {
       console.debug('yScale range:', [areaHeight, 0]);
       console.debug(`settingSize: height:${height}, width:${width}, areaHeight:${areaHeight}, areaWidth:${areaWidth}`);
     }
+  }
+
+  sizeToStyle (size) {
+    if (_.isString(size) && _.endsWith(size, '%')) {
+      return size;
+    }
+    return `${size}px`;
   }
 }

@@ -1,4 +1,5 @@
 export Chart from './Chart';
+export G from './G';
 export AreaChart from './charts/AreaChart';
 export AxisTop from './axes/AxisTop';
 export AxisBottom from './axes/AxisBottom';

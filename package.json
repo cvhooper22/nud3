@@ -28,9 +28,9 @@
   "author": "dennis@inlineblock.com",
   "license": "MIT",
   "peerDependencies": {
-    "react": "^15.3.2",
-    "react-dom": "^15.3.2",
-    "react-addons-shallow-compare": "^15.3.2"
+    "react": "^15.4.0",
+    "react-dom": "^15.4.0",
+    "react-addons-shallow-compare": "^15.4.0"
   },
   "dependencies": {
     "d3": "^4.2.6",
@@ -63,11 +63,11 @@
     "numeral": "^1.5.3",
     "prismjs": "^1.5.1",
     "raw-loader": "^0.5.1",
-    "react": "^15.3.2",
-    "react-addons-shallow-compare": "^15.3.2",
-    "react-dom": "^15.3.2",
+    "react": "^15.4.0",
+    "react-addons-shallow-compare": "^15.4.0",
+    "react-dom": "^15.4.0",
     "react-hot-loader": "^3.0.0-beta.5",
-    "react-test-renderer": "^15.3.2",
+    "react-test-renderer": "^15.4.0",
     "sass-loader": "^4.0.2",
     "style-loader": "^0.13.1",
     "topojson": "^1.6.27",

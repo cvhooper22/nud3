@@ -1,0 +1,7 @@
+exports[`G.js should take proper SVG items and pass 1`] = `
+<g
+  mask="123">
+  <path
+    mask={436} />
+</g>
+`;
