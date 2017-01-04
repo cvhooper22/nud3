@@ -155,8 +155,8 @@ export default class Scatterplot extends Component {
       dot.on('mouseover.Scatterplot', this.tooltipRenderer.onShow);
       dot.on('mouseout.Scatterplot', this.tooltipRenderer.onHide);
     } else {
-      dot.off('mouseover.Scatterplot');
-      dot.off('mouseout.Scatterplot');
+      dot.on('mouseover.Scatterplot', null);
+      dot.on('mouseout.Scatterplot', null);
     }
     if (this.props.fillColor) {
       dot.style('fill', this.props.fillColor);

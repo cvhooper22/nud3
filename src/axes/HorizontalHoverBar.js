@@ -49,9 +49,9 @@ export default class HorizontalHoverBar extends Component {
   componentWillUnmount () {
     this.hideTooltip();
     const ownerSVGElement = d3.select(this.bar.node().ownerSVGElement);
-    ownerSVGElement.off('mouseover.HorizontalHoverBar', null);
-    ownerSVGElement.off('mousemove.HorizontalHoverBar', null);
-    ownerSVGElement.off('mouseout.HorizontalHoverBar', null);
+    ownerSVGElement.on('mouseover.HorizontalHoverBar', null);
+    ownerSVGElement.on('mousemove.HorizontalHoverBar', null);
+    ownerSVGElement.on('mouseout.HorizontalHoverBar', null);
   }
 
   onMouseOver (element) {

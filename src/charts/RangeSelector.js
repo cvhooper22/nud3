@@ -188,8 +188,8 @@ export default class RangeSelector extends Component {
   }
 
   teardownListeners () {
-    this.clip.off('drag');
-    this.leftHandle.off('drag');
-    this.rightHandle.off('drag');
+    this.clip.on('drag', null);
+    this.leftHandle.on('drag', null);
+    this.rightHandle.on('drag', null);
   }
 }

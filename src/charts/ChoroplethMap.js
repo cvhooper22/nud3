@@ -102,8 +102,8 @@ export default class ChoroplethMap extends Component {
       features.on('mouseover.ChoroplethMap', this.tooltipRenderer.onShow);
       features.on('mouseout.ChoroplethMap', this.tooltipRenderer.onHide);
     } else {
-      features.off('mouseover.ChoroplethMap');
-      features.off('mouseout.ChoroplethMap');
+      features.on('mouseover.ChoroplethMap', null);
+      features.on('mouseout.ChoroplethMap', null);
     }
   }
 
