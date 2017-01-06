@@ -57,13 +57,13 @@ export default class Chart extends Component {
   }
 
   componentDidMount () {
-    this.resize();
+    this.resize(this.props);
     window.addEventListener('resize', this.onWindowResize);
   }
 
   componentWillReceiveProps (nextProps) {
     this.setupData(nextProps);
-    this.resize();
+    this.resize(nextProps);
   }
 
   shouldComponentUpdate (...args) {
@@ -75,13 +75,13 @@ export default class Chart extends Component {
   }
 
   onWindowResize () {
-    this.resize();
+    this.resize(this.props);
   }
 
-  setupData () {
-    const data = this.calculateData();
-    this.xScale = this.setupScale(this.props.xScale);
-    this.yScale = this.setupScale(this.props.yScale);
+  setupData (props) {
+    const data = this.calculateData(props);
+    this.xScale = this.setupScale(props.xScale);
+    this.yScale = this.setupScale(props.yScale);
     this.updateScalesFromData(data);
     this.chartData = data;
   }
@@ -146,8 +146,8 @@ export default class Chart extends Component {
     });
   }
 
-  calculateData () {
-    return this.calculateDenormalizedData(this.props.data || []);
+  calculateData (props) {
+    return this.calculateDenormalizedData(props.data || []);
   }
 
   calculateDenormalizedData (data) {
@@ -209,15 +209,15 @@ export default class Chart extends Component {
     }
   }
 
-  resize () {
+  resize (props) {
     if (!this.node) {
       return; // its debounced so its possible that its unmounted.
     }
     const rect = this.node.getBoundingClientRect();
-    const height = this.props.height || rect.height;
-    const width = this.props.width || rect.width;
-    const areaWidth = width - (this.props.paddingLeft + this.props.paddingRight);
-    const areaHeight = height - (this.props.paddingTop + this.props.paddingBottom);
+    const height = props.height || rect.height;
+    const width = props.width || rect.width;
+    const areaWidth = width - (props.paddingLeft + props.paddingRight);
+    const areaHeight = height - (props.paddingTop + props.paddingBottom);
     this.xScale.range([0, areaWidth]);
     this.yScale.range([areaHeight, 0]);
     this.setState({
@@ -226,7 +226,7 @@ export default class Chart extends Component {
       areaHeight,
       areaWidth,
     });
-    if (this.props.DEBUG) {
+    if (props.DEBUG) {
       /* eslint-disable no-console */
       console.debug('xScale range:', [0, areaWidth]);
       console.debug('yScale range:', [areaHeight, 0]);
