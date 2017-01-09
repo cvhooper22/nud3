@@ -2,7 +2,7 @@ import React from 'react';
 
 export default function DocumentTitle (props) {
   window.document.title = props.title;
-  return <div style={{ display: 'none' }} />;
+  return null;
 }
 
 DocumentTitle.propTypes = {

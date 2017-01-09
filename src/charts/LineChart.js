@@ -32,14 +32,6 @@ export default class LineChart extends Component {
     transitionEase: d3.easePolyInOut,
   };
 
-  constructor (props, ...args) {
-    super(props, ...args);
-    this.getUniqueDataKey = ::this.getUniqueDataKey;
-    this.getStrokeColor = ::this.getStrokeColor;
-    this.getPathFilter = ::this.getPathFilter;
-    this.getPathMask = ::this.getPathMask;
-  }
-
   componentDidMount () {
     this.renderChart();
   }
@@ -48,7 +40,7 @@ export default class LineChart extends Component {
     this.renderChart();
   }
 
-  getStrokeColor (d, i) {
+  getStrokeColor = (d, i) => {
     if (this.props.colorPalette) {
       if (_.isFunction(this.props.colorPalette)) {
         return this.props.colorPalette(i);
@@ -59,11 +51,11 @@ export default class LineChart extends Component {
     return '';
   }
 
-  getUniqueDataKey (dataSet, i) {
+  getUniqueDataKey = (dataSet, i) => {
     return this.props.valueKeys[i];
   }
 
-  getPathFilter (d, i) {
+  getPathFilter = (d, i) => {
     let filter = this.props.filter;
     if (_.isArray(filter)) {
       filter = filter[i];
@@ -74,7 +66,7 @@ export default class LineChart extends Component {
     return null;
   }
 
-  getPathMask (d, i) {
+  getPathMask = (d, i) => {
     let mask = this.props.mask;
     if (_.isArray(mask)) {
       mask = mask[i];

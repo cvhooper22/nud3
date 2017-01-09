@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { AppContainer } from 'react-hot-loader';
-import Examples from './src/Examples';
+import routes from './src/routes';
 
 /* eslint-disable import/no-unresolved */
 require('./styles/index.scss');
@@ -9,18 +9,18 @@ require('./styles/index.scss');
 const el = window.document.getElementById('content');
 ReactDOM.render((
   <AppContainer>
-    <Examples />
+    { routes() }
   </AppContainer>
 ), el);
 
 if (module.hot) {
-  module.hot.accept('./src/Examples', () => {
+  module.hot.accept('./src/routes', () => {
     /* eslint-disable global-require */
-    const NextExamples = require('./src/Examples.js').default;
+    const nextRoutes = require('./src/routes.js').default;
 
     ReactDOM.render((
       <AppContainer>
-        <NextExamples />
+        { nextRoutes() }
       </AppContainer>
     ), el);
   });

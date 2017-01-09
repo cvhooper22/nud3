@@ -5,6 +5,7 @@ import { stringOrFunc } from '../propTypes/customPropTypes';
 export default class AxisBottom extends Component {
 
   static propTypes = {
+    chartData: PropTypes.array,
     className: PropTypes.string,
     classNamePrefix: PropTypes.string,
     xScale: PropTypes.func,
@@ -18,6 +19,7 @@ export default class AxisBottom extends Component {
     textDy: stringOrFunc,
     textDx: stringOrFunc,
     tickFormat: stringOrFunc,
+    DEBUG: PropTypes.bool,
   };
 
   static defaultProps = {
@@ -52,22 +54,31 @@ export default class AxisBottom extends Component {
   }
 
   renderAxis () {
+    if (this.props.DEBUG) {
+      /* eslint-disable no-console */
+      console.log('AxisBottom::renderAxis', this.props);
+    }
+    this.group = d3.select(this.node);
+    if (!this.props.chartData) {
+      this.group.selectAll('.tick').remove();
+      return;
+    }
     const axis = d3.axisBottom(this.props.xScale);
     if (this.props.tickFormat) {
       axis.tickFormat(this.props.tickFormat);
     }
-    this.group = d3.select(this.node);
-    this.group.call(axis);
-    const texts = this.group
-      .selectAll('text');
-    if (this.props.textTransform) {
-      texts.attr('transform', this.props.textTransform);
-    }
-    if (this.props.textDy) {
-      texts.attr('dy', this.props.textDy);
-    }
-    if (this.props.textDx) {
-      texts.attr('dx', this.props.textDx);
+    if (this.props.chartData.length && this.node) {
+      this.group.call(axis);
+      const texts = this.group.selectAll('text');
+      if (this.props.textTransform) {
+        texts.attr('transform', this.props.textTransform);
+      }
+      if (this.props.textDy) {
+        texts.attr('dy', this.props.textDy);
+      }
+      if (this.props.textDx) {
+        texts.attr('dx', this.props.textDx);
+      }
     }
   }
 }

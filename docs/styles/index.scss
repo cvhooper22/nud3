@@ -15,10 +15,48 @@ svg {
   box-sizing: border-box;
   width: 100%;
 }
-div#content {
-  margin: 0 auto;
-  max-width: 1080px;
-  padding: 20px;
+.documentation-layout {
+  display: flex;
+  min-height: 100vh;
+  &__sidebar {
+    background: #054041;
+    h1 {
+      color: #E0D7CA;
+    }
+    flex-shrink: 1;
+    padding: 0 20px;
+    border-right: 5px solid #02AA99;
+    ul {
+      list-style: none;
+      padding: 0;
+      li {
+        line-height: 2rem;
+      }
+    }
+    a {
+      color: #F0F0F0;
+      text-decoration: none;
+      &:hover {
+        opacity: 0.8;
+      }
+    }
+    .social-links {
+      margin-top: 1rem;
+      font-size: 2rem;
+      text-align: center;
+      i {
+        padding: 0 0.25em;
+      }
+    }
+  }
+  &__content {
+    padding: 10px 25px;
+    max-width: 1000px;
+    flex-grow: 1;
+  }
+}
+h1,h2,h3,h4,h5 {
+  color: #054041;
 }
 .tooltip {
   position: absolute;
@@ -130,22 +168,16 @@ div#content {
     font-size: 1.4em;
   }
 }
-.code-viewer {
-  background-color: #DFDFDF;
-  font-size: 13px;
+.code-viewer,.code-viewer__syntax,code[class*="language-"] {
   h4 {
+    background-color: #DFDFDF;
     line-height: 2em;
     font-size: 20px;
     letter-spacing: 1px;
     color: #333;
     padding: 0 10px;
     margin: 0px;
-  }
-  &__syntax {
-    display: block;
-    padding: 10px !important;
-    border-radius: 1px !important;
-    white-space: pre-wrap !important;
+    margin-top: 50px;
   }
 }
 .vertical-grid,

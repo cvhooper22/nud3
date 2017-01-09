@@ -10,7 +10,9 @@ export default class BarChart extends Component {
     className: PropTypes.string,
     classNamePrefix: PropTypes.string,
     colorPalette: PropTypes.any,
+    fill: PropTypes.bool,
     filter: stringOrArrayOfStrings,
+    mask: stringOrArrayOfStrings,
     paddingBottom: PropTypes.number,
     paddingLeft: PropTypes.number,
     paddingRight: PropTypes.number,
@@ -29,19 +31,13 @@ export default class BarChart extends Component {
   };
 
   static defaultProps = {
-    groupPadding: 12,
     barPadding: 2,
+    fill: true,
+    groupPadding: 12,
     transitionDelay: 0,
     transitionDuration: 0,
     transitionEase: d3.easePolyInOut,
   };
-
-  constructor (...args) {
-    super(...args);
-    this.getUniqueDataKey = ::this.getUniqueDataKey;
-    this.getFillFromColorPalette = ::this.getFillFromColorPalette;
-    this.getPathFilter = ::this.getPathFilter;
-  }
 
   componentDidMount () {
     this.renderChart();
@@ -51,30 +47,35 @@ export default class BarChart extends Component {
     this.renderChart();
   }
 
-  getFillFromColorPalette (d, i) {
+  getFillFromColorPalette = (d, i) => {
     if (this.props.colorPalette) {
       if (_.isFunction(this.props.colorPalette)) {
         return this.props.colorPalette(i);
-      } else {
+      } else if (_.isArray(this.props.colorPalette)) {
         return this.props.colorPalette[i];
+      } else {
+        return this.props.colorPalette;
       }
     }
-    return '';
+    return null;
   }
 
-  getUniqueDataKey (dataSet, i) {
+  getUniqueDataKey = (dataSet, i) => {
     return this.props.valueKeys[i];
   }
 
-  getPathFilter (d, i) {
+  getPathFilter = (d, i) => {
     let filter = this.props.filter;
     if (_.isArray(filter)) {
       filter = filter[i];
     }
-    return `url(#${filter})`;
+    if (filter) {
+      return `url(#${filter})`;
+    }
+    return null;
   }
 
-  getBarAreaWidth () {
+  getBarAreaWidth = () => {
     const sections = this.props.chartData.length;
     const bars = (this.props.chartData[0] || []).length;
     const totalBarCount = sections * bars;
@@ -83,6 +84,17 @@ export default class BarChart extends Component {
       barWidth = (this.props.areaWidth - (sections * this.props.groupPadding)) / totalBarCount;
     }
     return barWidth;
+  }
+
+  getPathMask = (d, i) => {
+    let mask = this.props.mask;
+    if (_.isArray(mask)) {
+      mask = mask[i];
+    }
+    if (mask) {
+      return `url(#${mask})`;
+    }
+    return null;
   }
 
   render () {
@@ -108,16 +120,15 @@ export default class BarChart extends Component {
   renderChart () {
     this.group = d3.select(this.node);
     const barAreaWidth = this.getBarAreaWidth();
-    const groups = this.group.selectAll('.bar-chart__group')
+    this.group.selectAll('.bar-chart__group')
       .data(this.props.chartData, this.getUniqueDataKey)
       .enter()
       .append('g')
       .attr('class', 'bar-chart__group')
       .attr('transform', (d, i) => `translate(${i * barAreaWidth},0)`)
-      .style('fill', this.getFillFromColorPalette);
-    if (this.props.filter) {
-      groups.style('filter', this.getPathFilter);
-    }
+      .style('fill', this.getFillFromColorPalette)
+      .style('filter', this.getPathFilter)
+      .attr('mask', this.getPathMask);
     this.renderGroupedBars(barAreaWidth - this.props.barPadding);
   }
 
