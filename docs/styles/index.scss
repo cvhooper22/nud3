@@ -168,7 +168,10 @@ h1,h2,h3,h4,h5 {
     font-size: 1.4em;
   }
 }
-.code-viewer,.code-viewer__syntax,code[class*="language-"] {
+.code-viewer {
+  .code-viewer__syntax,code[class*="language-"] {
+    background-color: #272822;
+  }
   h4 {
     background-color: #DFDFDF;
     line-height: 2em;
