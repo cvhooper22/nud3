@@ -26,7 +26,7 @@ export default class CodeViewer extends React.Component {
   renderCode () {
     return (
       <code
-        className="language-jsx code-viewer__syntax line-numbers"
+        className="language-jsx line-numbers"
         dangerouslySetInnerHTML={{ __html: this.getSource() }}
         ref={ n => n && Prism.highlightElement(n) }
       />
