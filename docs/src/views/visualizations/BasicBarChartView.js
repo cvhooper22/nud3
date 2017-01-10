@@ -6,7 +6,7 @@ export default function BasicBarChartView () {
   return (
     <BasicBarChart
       data={ MockSeriesData }
-      valueKeys={ ['mentions_total'] }
+      valueKeys={ ['mentions_total', 'spread_total'] }
     />
   );
 }

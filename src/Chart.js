@@ -34,6 +34,7 @@ export default class Chart extends Component {
     yScaleDomain: arrayOrFunc,
     yScaleMaximum: PropTypes.number,
     yScaleMinimum: PropTypes.number,
+    rangeRound: PropTypes.bool,
   };
 
   static defaultProps = {
@@ -46,6 +47,7 @@ export default class Chart extends Component {
     xScale: 'scaleTime',
     xmlns: 'http://www.w3.org/2000/svg',
     yScale: 'scaleLinear',
+    rangeRound: false,
   };
 
   constructor (props, ...args) {
@@ -218,8 +220,9 @@ export default class Chart extends Component {
     const width = props.width || rect.width;
     const areaWidth = width - (props.paddingLeft + props.paddingRight);
     const areaHeight = height - (props.paddingTop + props.paddingBottom);
-    this.xScale.range([0, areaWidth]);
-    this.yScale.range([areaHeight, 0]);
+    const rangeMethod = this.props.rangeRound ? 'rangeRound' : 'range';
+    this.xScale[rangeMethod]([0, areaWidth]);
+    this.yScale[rangeMethod]([areaHeight, 0]);
     this.setState({
       height,
       width,

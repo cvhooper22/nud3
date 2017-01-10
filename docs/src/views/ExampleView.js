@@ -10,7 +10,6 @@ function requireAll (requireContext) {
   return source;
 }
 const VisualizationComponents = requireAll(require.context('../views/visualizations', true, /^\.\/.*\.js/));
-console.log(VisualizationComponents);
 
 export default function Example (props) {
   const name = props.params.name;
