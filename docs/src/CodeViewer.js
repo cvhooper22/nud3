@@ -18,17 +18,21 @@ export default class CodeViewer extends React.Component {
     return (
       <div className="code-viewer">
         <h4>{ this.props.filename }</h4>
-        <pre>{ this.renderCode() }</pre>
+        <pre
+          className="language-jsx line-numbers"
+        >
+          { this.renderCode() }
+        </pre>
       </div>
     );
   }
 
   renderCode () {
+    const source = this.getSource();
     return (
       <code
-        className="language-jsx line-numbers"
-        dangerouslySetInnerHTML={{ __html: this.getSource() }}
-        ref={ n => n && Prism.highlightElement(n) }
+        className="line-numbers"
+        ref={ n => n && (n.innerHTML = Prism.highlight(source, Prism.languages.jsx)) }
       />
     );
   }
