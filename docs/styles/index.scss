@@ -169,7 +169,7 @@ h1,h2,h3,h4,h5 {
   }
 }
 .code-viewer {
-  .code-viewer__syntax,code[class*="language-"] {
+  pre {
     background-color: #272822;
   }
   h4 {
