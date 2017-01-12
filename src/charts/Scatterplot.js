@@ -24,7 +24,7 @@ export default class Scatterplot extends Component {
     transitionEase: stringOrFunc,
     dotRadius: PropTypes.any,
     children: PropTypes.node,
-    fillColor: PropTypes.any,
+    transition: PropTypes.func,
   };
 
   static defaultProps = {
@@ -36,9 +36,6 @@ export default class Scatterplot extends Component {
 
   constructor (props, ...args) {
     super(props, ...args);
-    this.getUniqueDataKey = ::this.getUniqueDataKey;
-    this.getFillFromColorPalette = ::this.getFillFromColorPalette;
-    this.getPathFilter = ::this.getPathFilter;
     this.onMouseOver = curryThisElement(this.onMouseOver, this);
     this.onMouseOut = curryThisElement(this.onMouseOut, this);
   }
@@ -59,27 +56,42 @@ export default class Scatterplot extends Component {
     }
   }
 
-  getFillFromColorPalette (d, i) {
+  getFillColor = (d, i) => {
     if (this.props.colorPalette) {
       if (_.isFunction(this.props.colorPalette)) {
         return this.props.colorPalette(i);
-      } else {
+      } else if (_.isArray(this.props.colorPalette)) {
         return this.props.colorPalette[i];
       }
+      return this.props.colorPalette;
     }
-    return '';
+    return null;
   }
 
-  getUniqueDataKey (dataSet, i) {
-    return this.props.valueKeys[i];
+  getUniqueDataKey = (dataSet, i) => {
+    return `${this.props.valueKeys[i]}`;
   }
 
-  getPathFilter (d, i) {
+  getPathFilter = (d, i) => {
     let filter = this.props.filter;
     if (_.isArray(filter)) {
       filter = filter[i];
     }
-    return `url(#${filter})`;
+    if (filter) {
+      return `url(#${filter})`;
+    }
+    return null;
+  }
+
+  getTransition () {
+    const ease = _.isFunction(this.props.transitionEase) ? this.props.transitionEase : d3[this.props.transitionEase];
+    if (this.props.transition) {
+      return this.props.transition;
+    }
+    return d3.transition()
+      .duration(this.props.transitionDuration)
+      .delay(this.props.transitionDelay)
+      .ease(ease);
   }
 
   render () {
@@ -108,60 +120,48 @@ export default class Scatterplot extends Component {
   }
 
   renderDotsContainer () {
-    this.group.selectAll('.scatterplot__dots')
-      .data(this.props.chartData, this.getUniqueDataKey)
+    const dots = this.group.selectAll('.scatterplot__dots')
+      .data(this.props.chartData, this.getUniqueDataKey);
+
+    dots
+      .exit()
+      .transition(this.getTransition())
+      .style('opacity', 0)
+      .remove();
+    dots
       .enter()
       .append('g')
-      .attr('class', 'scatterplot__dots');
-
-    const dots = this.group.selectAll('.scatterplot__dots');
-    if (this.props.colorPalette) {
-      dots.style('fill', this.getFillFromColorPalette);
-    } else {
-      dots.style('fill', null);
-    }
+      .attr('class', 'scatterplot__dots')
+      .merge(dots)
+      .style('fill', this.getFillColor);
   }
 
   renderDots () {
     const bottomY = this.props.yScale(this.props.yScale.domain()[0]);
     const dots = this.group.selectAll('.scatterplot__dots');
-    dots
+    const dot = dots
       .selectAll('.scatterplot__dots__dot')
-      .data(d => d)
+      .data(d => d);
+
+    dot
       .enter()
       .append('circle')
+      .attr('class', 'scatterplot__dots__dot')
       .attr('cy', bottomY)
       .attr('cx', d => this.props.xScale(d.xValue))
-      .attr('r', 1)
-      .attr('class', 'scatterplot__dots__dot');
-
-    // update
-    const ease = _.isFunction(this.props.transitionEase) ? this.props.transitionEase : d3[this.props.transitionEase];
-    const dot = dots.selectAll('.scatterplot__dots__dot');
-    const dotTransition = dot
-      .transition()
-      .duration(this.props.transitionDuration)
-      .delay(this.props.transitionDelay)
-      .ease(ease)
+    .merge(dot)
+      .style('filter', this.getPathFilter)
+      .transition(this.getTransition())
       .attr('r', this.props.dotRadius)
       .attr('cy', d => this.props.yScale(d.yValue || 0))
       .attr('cx', d => this.props.xScale(d.xValue));
-    if (this.props.filter) {
-      dotTransition.style('filter', this.getPathFilter);
-    } else {
-      dotTransition.style('filter', null);
-    }
+
     if (this.hasTooltip()) {
       dot.on('mouseover.Scatterplot', this.tooltipRenderer.onShow);
       dot.on('mouseout.Scatterplot', this.tooltipRenderer.onHide);
     } else {
       dot.on('mouseover.Scatterplot', null);
       dot.on('mouseout.Scatterplot', null);
-    }
-    if (this.props.fillColor) {
-      dot.style('fill', this.props.fillColor);
-    } else {
-      dot.style('fill', null);
     }
   }
 

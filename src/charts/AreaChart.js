@@ -30,6 +30,7 @@ export default class AreaChart extends Component {
     transitionDuration: PropTypes.number,
     transitionDelay: PropTypes.number,
     transitionEase: stringOrFunc,
+    transition: PropTypes.func,
   };
 
   static defaultProps = {
@@ -37,14 +38,6 @@ export default class AreaChart extends Component {
     transitionDuration: 0,
     transitionEase: d3.easePolyInOut,
   };
-
-  constructor (...args) {
-    super(...args);
-    this.getUniqueDataKey = ::this.getUniqueDataKey;
-    this.getFillColor = ::this.getFillColor;
-    this.getPathFilter = ::this.getPathFilter;
-    this.getPathMask = ::this.getPathMask;
-  }
 
   componentDidMount () {
     this.renderArea();
@@ -54,18 +47,21 @@ export default class AreaChart extends Component {
     this.renderArea();
   }
 
-  getFillColor (d, i) {
-    if (_.isFunction(this.props.colorPalette)) {
-      return this.props.colorPalette(i);
+  getFillColor = (d, i) => {
+    if (this.props.colorPalette) {
+      if (_.isFunction(this.props.colorPalette)) {
+        return this.props.colorPalette(i);
+      }
+      return this.props.colorPalette[i];
     }
-    return this.props.colorPalette[i];
+    return null;
   }
 
-  getUniqueDataKey (dataSet, i) {
-    return this.props.valueKeys[i];
+  getUniqueDataKey = (dataSet, i) => {
+    return `${this.props.valueKeys[i]}`;
   }
 
-  getPathFilter (d, i) {
+  getPathFilter = (d, i) => {
     let filter = this.props.filter;
     if (_.isArray(filter)) {
       filter = filter[i];
@@ -76,7 +72,7 @@ export default class AreaChart extends Component {
     return null;
   }
 
-  getPathMask (d, i) {
+  getPathMask = (d, i) => {
     let mask = this.props.mask;
     if (_.isArray(mask)) {
       mask = mask[i];
@@ -85,6 +81,17 @@ export default class AreaChart extends Component {
       return `url(#${mask})`;
     }
     return null;
+  }
+
+  getTransition () {
+    const ease = _.isFunction(this.props.transitionEase) ? this.props.transitionEase : d3[this.props.transitionEase];
+    if (this.props.transition) {
+      return this.props.transition;
+    }
+    return d3.transition()
+      .duration(this.props.transitionDuration)
+      .delay(this.props.transitionDelay)
+      .ease(ease);
   }
 
   render () {
@@ -102,7 +109,7 @@ export default class AreaChart extends Component {
         className={ className.join(' ') }
         transform={ `translate(${this.props.paddingLeft},${this.props.paddingTop})` }
         clipPath={ this.props.clipPath }
-        ref={ n => this.node = n }
+        ref={ n => this.node = d3.select(n) }
       />
     );
   }
@@ -112,37 +119,32 @@ export default class AreaChart extends Component {
       .x(d => this.props.xScale(d.xValue))
       .y1(() => this.props.yScale(this.props.yScale.domain()[0]))
       .y0(() => this.props.areaHeight);
-
     const areaGenerator = d3.area()
       .x(d => this.props.xScale(d.xValue))
       .y1(d => this.props.yScale(d.yValue || 0))
       .y0(() => this.props.areaHeight);
-    this.group = d3.select(this.node);
-    const paths = this.group.selectAll('.area-chart__area')
-      .data(this.props.chartData, this.getUniqueDataKey)
+
+    const paths = this.node.selectAll('.area-chart__area')
+      .data(this.props.chartData, this.getUniqueDataKey);
+
+    paths
+      .exit()
+      .interrupt()
+      .transition(this.getTransition())
+      .attr('d', enterAreaGenerator)
+      .remove();
+
+    paths
       .enter()
       .append('path')
-      .attr('d', enterAreaGenerator);
-    if (this.props.colorPalette) {
-      paths.style('fill', this.getFillColor);
-    }
-    paths
-      .attr('class', 'area-chart__area');
-
-    const ease = _.isFunction(this.props.transitionEase) ? this.props.transitionEase : d3[this.props.transitionEase];
-    const areas = this.group
-      .selectAll('.area-chart__area')
-      .transition()
-      .duration(this.props.transitionDuration)
-      .delay(this.props.transitionDelay)
-      .ease(ease)
+      .attr('class', 'area-chart__area')
+      .attr('d', enterAreaGenerator)
+    .merge(paths)
+      .style('fill', this.getFillColor)
+      .style('fill', this.getFillColor)
+      .style('filter', this.getPathFilter)
+      .attr('mask', this.getPathMask)
+      .transition(this.getTransition())
       .attr('d', areaGenerator);
-    if (this.props.colorPalette) {
-      areas.style('fill', this.getFillColor);
-    } else {
-      areas.style('fill', null);
-    }
-    areas.style('filter', this.getPathFilter);
-    areas.attr('mask', this.getPathMask);
   }
 }

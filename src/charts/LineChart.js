@@ -23,6 +23,7 @@ export default class LineChart extends Component {
     transitionDuration: PropTypes.number,
     transitionDelay: PropTypes.number,
     transitionEase: stringOrFunc,
+    transition: PropTypes.func,
     DEBUG: PropTypes.bool,
   };
 
@@ -40,6 +41,17 @@ export default class LineChart extends Component {
     this.renderChart();
   }
 
+  getTransition () {
+    const ease = _.isFunction(this.props.transitionEase) ? this.props.transitionEase : d3[this.props.transitionEase];
+    if (this.props.transition) {
+      return this.props.transition;
+    }
+    return d3.transition()
+      .duration(this.props.transitionDuration)
+      .delay(this.props.transitionDelay)
+      .ease(ease);
+  }
+
   getStrokeColor = (d, i) => {
     if (this.props.colorPalette) {
       if (_.isFunction(this.props.colorPalette)) {
@@ -52,7 +64,7 @@ export default class LineChart extends Component {
   }
 
   getUniqueDataKey = (dataSet, i) => {
-    return this.props.valueKeys[i];
+    return `${this.props.valueKeys[i]}`;
   }
 
   getPathFilter = (d, i) => {
@@ -111,26 +123,24 @@ export default class LineChart extends Component {
       .y(d => this.props.yScale(d.yValue || 0));
 
     const paths = this.lines.selectAll('.line-chart__line')
-      .data(this.props.chartData, this.getUniqueDataKey)
+      .data(this.props.chartData, this.getUniqueDataKey);
+
+    paths
+      .exit()
+      .transition(this.getTransition())
+      .attr('d', enterLineGenerator)
+      .remove();
+
+    paths
       .enter()
       .append('path')
-      .attr('d', enterLineGenerator);
-    paths
-      .attr('class', 'line-chart__line');
-    if (this.props.colorPalette) {
-      paths.style('stroke', this.getStrokeColor);
-    }
-    paths.style('filter', this.getPathFilter);
-    paths.attr('mask', this.getPathMask);
-
-    const ease = _.isFunction(this.props.transitionEase) ? this.props.transitionEase : d3[this.props.transitionEase];
-
-    this.lines
-      .selectAll('.line-chart__line')
-      .transition()
-      .duration(this.props.transitionDuration)
-      .delay(this.props.transitionDelay)
-      .ease(ease)
+      .attr('class', 'line-chart__line')
+      .attr('d', enterLineGenerator)
+      .merge(paths)
+      .style('stroke', this.getStrokeColor)
+      .style('filter', this.getPathFilter)
+      .attr('mask', this.getPathMask)
+      .transition(this.getTransition())
       .attr('d', lineGenerator);
   }
 }

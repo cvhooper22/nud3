@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import _ from 'lodash';
 import moment from 'moment';
 import padDataBetweenDates from '../helpers/padDataBetweenDates';
+import { updateYScaleDomain } from '../helpers/scaleHelpers';
 
 export default class PadDataBetweenDates extends Component {
   static propTypes = {
@@ -15,6 +16,8 @@ export default class PadDataBetweenDates extends Component {
     startDate: PropTypes.instanceOf(Date),
     xScale: PropTypes.func,
     xScaleDomain: PropTypes.any,
+    yScale: PropTypes.func,
+    yScaleDomain: PropTypes.any,
     padWith: PropTypes.any,
     normalize: PropTypes.bool,
     DEBUG: PropTypes.bool,
@@ -58,6 +61,8 @@ export default class PadDataBetweenDates extends Component {
     });
     this.xScale = this.props.xScale.copy();
     this.updateXScaleDomain();
+    this.yScale = this.props.yScale.copy();
+    updateYScaleDomain(this.yScale, this.props, this.chartData);
   }
 
   render () {
@@ -86,6 +91,7 @@ export default class PadDataBetweenDates extends Component {
       ...child.props,
       children: child.props.children,
       xScale: this.xScale,
+      yScale: this.yScale,
       chartData: this.chartData,
       key: i,
     });
@@ -116,4 +122,5 @@ export default class PadDataBetweenDates extends Component {
       }
     }
   }
+
 }

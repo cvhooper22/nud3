@@ -17,10 +17,6 @@ export default function ScatterLineChart (props) {
   const startDate = moment(_.first(props.data).date).toDate();
   const endDate = moment(_.last(props.data).date).toDate();
   const colorPalette = d3.scaleOrdinal(d3.schemeCategory10);
-  const individualColorPalette = function (data) {
-    const indexOf = props.valueKeys.indexOf(data.yKey);
-    return colorPalette(indexOf || 0);
-  };
   return (
     <Chart
       className="scatter-line-chart"
@@ -40,9 +36,9 @@ export default function ScatterLineChart (props) {
           transitionDelay={ 100 }
         />
         <Scatterplot
-          fillColor={ individualColorPalette }
-          transitionDuration={ 100 }
-          transitionDelay={ 500 }
+          colorPalette={ colorPalette }
+          transitionDuration={ 400 }
+          transitionDelay={ 100 }
           dotRadius={ 10 }
         >
           <LineTooltip position={ TooltipPositions.topCenter } titleKeys={ props.titleKeys } />

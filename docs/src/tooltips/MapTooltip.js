@@ -8,10 +8,11 @@ export default function MapTooltip (props) {
   return (
     <div className="map-tooltip">
       <div className="map-tooltip__name">{ name }</div>
-      <div className="map-tooltip__mentions">{ numeral(number).format('0,0') } Mentions</div>
+      <div className="map-tooltip__mentions">{ numeral(number).format('0,0') } { props.metricName }</div>
     </div>
   );
 }
 MapTooltip.propTypes = {
   data: PropTypes.any,
+  metricName: PropTypes.string,
 };

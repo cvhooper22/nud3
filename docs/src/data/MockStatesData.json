@@ -1,9 +1,452 @@
 [
-  { "state": "Utah", "population": 29e5 },
-  { "state": "Wyoming", "population": 8e5 },
-  { "state": "California", "population": 388e5 },
-  { "state": "New York", "population": 194e5 },
-  { "state": "Texas", "population": 264e5 },
-  { "state": "Washington", "population": 69e5 },
-  { "state": "Florida", "population": 189e5 }
+  {
+    "state": "California",
+    "population": 38802500,
+    "house seats": 53,
+    "electoral seats": 55,
+    "population per house seat": 717763,
+    "population per electoral vote": 691662,
+    "population per senator": 19401250
+  },
+  {
+    "state": "Texas",
+    "population": 26956958,
+    "house seats": 36,
+    "electoral seats": 38,
+    "population per house seat": 723867,
+    "population per electoral vote": 685769,
+    "population per senator": 13478479
+  },
+  {
+    "state": "Florida",
+    "population": 19893297,
+    "house seats": 27,
+    "electoral seats": 29,
+    "population per house seat": 715465,
+    "population per electoral vote": 666123,
+    "population per senator": 9946649
+  },
+  {
+    "state": "New York",
+    "population": 19746227,
+    "house seats": 27,
+    "electoral seats": 29,
+    "population per house seat": 724824,
+    "population per electoral vote": 674837,
+    "population per senator": 9873114
+  },
+  {
+    "state": "Illinois",
+    "population": 12880580,
+    "house seats": 18,
+    "electoral seats": 20,
+    "population per house seat": 715292,
+    "population per electoral vote": 643763,
+    "population per senator": 6440290
+  },
+  {
+    "state": "Pennsylvania",
+    "population": 12787209,
+    "house seats": 18,
+    "electoral seats": 20,
+    "population per house seat": 709085,
+    "population per electoral vote": 638177,
+    "population per senator": 6393605
+  },
+  {
+    "state": "Ohio",
+    "population": 11594163,
+    "house seats": 16,
+    "electoral seats": 18,
+    "population per house seat": 721514,
+    "population per electoral vote": 641346,
+    "population per senator": 5797082
+  },
+  {
+    "state": "Georgia",
+    "population": 10097343,
+    "house seats": 14,
+    "electoral seats": 16,
+    "population per house seat": 708568,
+    "population per electoral vote": 619997,
+    "population per senator": 5048672
+  },
+  {
+    "state": "North Carolina",
+    "population": 9943964,
+    "house seats": 13,
+    "electoral seats": 15,
+    "population per house seat": 750159,
+    "population per electoral vote": 650138,
+    "population per senator": 4971982
+  },
+  {
+    "state": "Michigan",
+    "population": 9909877,
+    "house seats": 14,
+    "electoral seats": 16,
+    "population per house seat": 705954,
+    "population per electoral vote": 617710,
+    "population per senator": 4954939
+  },
+  {
+    "state": "New Jersey",
+    "population": 8938175,
+    "house seats": 12,
+    "electoral seats": 14,
+    "population per house seat": 738716,
+    "population per electoral vote": 633185,
+    "population per senator": 4469088
+  },
+  {
+    "state": "Virginia",
+    "population": 8326289,
+    "house seats": 11,
+    "electoral seats": 13,
+    "population per house seat": 744170,
+    "population per electoral vote": 629682,
+    "population per senator": 4163145
+  },
+  {
+    "state": "Washington",
+    "population": 7061530,
+    "house seats": 10,
+    "electoral seats": 12,
+    "population per house seat": 689701,
+    "population per electoral vote": 574751,
+    "population per senator": 3530765
+  },
+  {
+    "state": "Massachusetts",
+    "population": 6745408,
+    "house seats": 9,
+    "electoral seats": 11,
+    "population per house seat": 738460,
+    "population per electoral vote": 604195,
+    "population per senator": 3372704
+  },
+  {
+    "state": "Arizona",
+    "population": 6731484,
+    "house seats": 9,
+    "electoral seats": 11,
+    "population per house seat": 728139,
+    "population per electoral vote": 595750,
+    "population per senator": 3365742
+  },
+  {
+    "state": "Indiana",
+    "population": 6596855,
+    "house seats": 9,
+    "electoral seats": 11,
+    "population per house seat": 726370,
+    "population per electoral vote": 594303,
+    "population per senator": 3298428
+  },
+  {
+    "state": "Tennessee",
+    "population": 6549352,
+    "house seats": 9,
+    "electoral seats": 11,
+    "population per house seat": 717360,
+    "population per electoral vote": 586931,
+    "population per senator": 3274676
+  },
+  {
+    "state": "Missouri",
+    "population": 6063589,
+    "house seats": 8,
+    "electoral seats": 10,
+    "population per house seat": 752749,
+    "population per electoral vote": 602199,
+    "population per senator": 3031795
+  },
+  {
+    "state": "Maryland",
+    "population": 5976407,
+    "house seats": 8,
+    "electoral seats": 10,
+    "population per house seat": 735570,
+    "population per electoral vote": 588456,
+    "population per senator": 2988204
+  },
+  {
+    "state": "Wisconsin",
+    "population": 5757564,
+    "house seats": 8,
+    "electoral seats": 10,
+    "population per house seat": 715800,
+    "population per electoral vote": 572640,
+    "population per senator": 2878782
+  },
+  {
+    "state": "Minnesota",
+    "population": 5457173,
+    "house seats": 8,
+    "electoral seats": 10,
+    "population per house seat": 672392,
+    "population per electoral vote": 537914,
+    "population per senator": 2728587
+  },
+  {
+    "state": "Colorado",
+    "population": 5355856,
+    "house seats": 7,
+    "electoral seats": 9,
+    "population per house seat": 741083,
+    "population per electoral vote": 576398,
+    "population per senator": 2677928
+  },
+  {
+    "state": "Alabama",
+    "population": 4849377,
+    "house seats": 7,
+    "electoral seats": 9,
+    "population per house seat": 688860,
+    "population per electoral vote": 535780,
+    "population per senator": 2424689
+  },
+  {
+    "state": "South Carolina",
+    "population": 4832482,
+    "house seats": 7,
+    "electoral seats": 9,
+    "population per house seat": 674818,
+    "population per electoral vote": 524858,
+    "population per senator": 2416241
+  },
+  {
+    "state": "Louisiana",
+    "population": 4649676,
+    "house seats": 6,
+    "electoral seats": 8,
+    "population per house seat": 766982,
+    "population per electoral vote": 575237,
+    "population per senator": 2324838
+  },
+  {
+    "state": "Kentucky",
+    "population": 4413457,
+    "house seats": 6,
+    "electoral seats": 8,
+    "population per house seat": 730069,
+    "population per electoral vote": 547552,
+    "population per senator": 2206729
+  },
+  {
+    "state": "Oregon",
+    "population": 3970239,
+    "house seats": 5,
+    "electoral seats": 7,
+    "population per house seat": 779871,
+    "population per electoral vote": 557050,
+    "population per senator": 1985120
+  },
+  {
+    "state": "Oklahoma",
+    "population": 3878051,
+    "house seats": 5,
+    "electoral seats": 7,
+    "population per house seat": 762964,
+    "population per electoral vote": 544974,
+    "population per senator": 1939026
+  },
+  {
+    "state": "Connecticut",
+    "population": 3596677,
+    "house seats": 5,
+    "electoral seats": 7,
+    "population per house seat": 718059,
+    "population per electoral vote": 512907,
+    "population per senator": 1798339
+  },
+  {
+    "state": "Iowa",
+    "population": 3107126,
+    "house seats": 4,
+    "electoral seats": 6,
+    "population per house seat": 768547,
+    "population per electoral vote": 513364,
+    "population per senator": 1553563
+  },
+  {
+    "state": "Arkansas",
+    "population": 2994079,
+    "house seats": 4,
+    "electoral seats": 6,
+    "population per house seat": 737283,
+    "population per electoral vote": 491522,
+    "population per senator": 1497040
+  },
+  {
+    "state": "Mississippi",
+    "population": 2984926,
+    "house seats": 4,
+    "electoral seats": 6,
+    "population per house seat": 746232,
+    "population per electoral vote": 497488,
+    "population per senator": 1492463
+  },
+  {
+    "state": "Utah",
+    "population": 2942902,
+    "house seats": 4,
+    "electoral seats": 6,
+    "population per house seat": 713822,
+    "population per electoral vote": 475881,
+    "population per senator": 1471451
+  },
+  {
+    "state": "Kansas",
+    "population": 2904021,
+    "house seats": 4,
+    "electoral seats": 6,
+    "population per house seat": 721476,
+    "population per electoral vote": 480984,
+    "population per senator": 1452011
+  },
+  {
+    "state": "Nevada",
+    "population": 2839099,
+    "house seats": 4,
+    "electoral seats": 6,
+    "population per house seat": 689733,
+    "population per electoral vote": 459822,
+    "population per senator": 1419550
+  },
+  {
+    "state": "New Mexico",
+    "population": 2085572,
+    "house seats": 3,
+    "electoral seats": 5,
+    "population per house seat": 695179,
+    "population per electoral vote": 417108,
+    "population per senator": 1042786
+  },
+  {
+    "state": "Nebraska",
+    "population": 1881503,
+    "house seats": 3,
+    "electoral seats": 5,
+    "population per house seat": 618508,
+    "population per electoral vote": 371105,
+    "population per senator": 940752
+  },
+  {
+    "state": "West Virginia",
+    "population": 1850326,
+    "house seats": 3,
+    "electoral seats": 5,
+    "population per house seat": 618471,
+    "population per electoral vote": 371083,
+    "population per senator": 925163
+  },
+  {
+    "state": "Idaho",
+    "population": 1634464,
+    "house seats": 2,
+    "electoral seats": 4,
+    "population per house seat": 797864,
+    "population per electoral vote": 398932,
+    "population per senator": 817232
+  },
+  {
+    "state": "Hawaii",
+    "population": 1419561,
+    "house seats": 2,
+    "electoral seats": 4,
+    "population per house seat": 696157,
+    "population per electoral vote": 348078,
+    "population per senator": 709781
+  },
+  {
+    "state": "Maine",
+    "population": 1330089,
+    "house seats": 2,
+    "electoral seats": 4,
+    "population per house seat": 664596,
+    "population per electoral vote": 332298,
+    "population per senator": 665045
+  },
+  {
+    "state": "New Hampshire",
+    "population": 1326813,
+    "house seats": 2,
+    "electoral seats": 4,
+    "population per house seat": 660359,
+    "population per electoral vote": 330180,
+    "population per senator": 663407
+  },
+  {
+    "state": "Rhode Island",
+    "population": 1055173,
+    "house seats": 2,
+    "electoral seats": 4,
+    "population per house seat": 525146,
+    "population per electoral vote": 262273,
+    "population per senator": 527587
+  },
+  {
+    "state": "Montana",
+    "population": 1023579,
+    "house seats": 1,
+    "electoral seats": 3,
+    "population per house seat": 1005141,
+    "population per electoral vote": 335047,
+    "population per senator": 511790
+  },
+  {
+    "state": "Delaware",
+    "population": 935614,
+    "house seats": 1,
+    "electoral seats": 3,
+    "population per house seat": 917092,
+    "population per electoral vote": 305697,
+    "population per senator": 467807
+  },
+  {
+    "state": "South Dakota",
+    "population": 853175,
+    "house seats": 1,
+    "electoral seats": 3,
+    "population per house seat": 833354,
+    "population per electoral vote": 277785,
+    "population per senator": 426588
+  },
+  {
+    "state": "North Dakota",
+    "population": 739482,
+    "house seats": 1,
+    "electoral seats": 3,
+    "population per house seat": 699628,
+    "population per electoral vote": 233209,
+    "population per senator": 369741
+  },
+  {
+    "state": "Alaska",
+    "population": 737732,
+    "house seats": 1,
+    "electoral seats": 3,
+    "population per house seat": 736732,
+    "population per electoral vote": 243816,
+    "population per senator": 368866
+  },
+  {
+    "state": "Vermont",
+    "population": 626011,
+    "house seats": 1,
+    "electoral seats": 3,
+    "population per house seat": 626562,
+    "population per electoral vote": 208670,
+    "population per senator": 313006
+  },
+  {
+    "state": "Wyoming",
+    "population": 584153,
+    "house seats": 1,
+    "electoral seats": 3,
+    "population per house seat": 576412,
+    "population per electoral vote": 192137,
+    "population per senator": 292077
+  }
 ]

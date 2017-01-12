@@ -5,7 +5,6 @@ import StatesTopology from '../data/StatesTopology.json';
 import MapTooltip from '../tooltips/MapTooltip';
 
 const colors = [
-  '#ffffff',
   '#f2f0f7',
   '#cbc9e2',
   '#9e9ac8',
@@ -40,7 +39,10 @@ export default function BasicStatesMap (props) {
         topologyMatcher="properties.name"
         fillColor={ fillColor }
       >
-        <MapTooltip position={ TooltipPositions.topCenter } />
+        <MapTooltip
+          position={ TooltipPositions.topCenter }
+          metricName={ props.metricName }
+        />
       </ChoroplethMap>
     </Chart>
   );
@@ -49,4 +51,5 @@ BasicStatesMap.propTypes = {
   data: React.PropTypes.array,
   valueKeys: React.PropTypes.array,
   xKey: React.PropTypes.string,
+  metricName: React.PropTypes.string,
 };

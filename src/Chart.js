@@ -8,6 +8,10 @@ import {
   arrayOrFunc,
   stringOrNumber,
 } from './propTypes/customPropTypes';
+import {
+  updateYScaleDomain,
+  updateXScaleDomain,
+} from './helpers/scaleHelpers';
 import splitHTMLElementProps from './helpers/splitHTMLElementProps';
 
 export default class Chart extends Component {
@@ -84,7 +88,7 @@ export default class Chart extends Component {
     const data = this.calculateData(props);
     this.xScale = this.setupScale(props.xScale);
     this.yScale = this.setupScale(props.yScale);
-    this.updateScalesFromData(data);
+    this.updateScalesFromData(props, data);
     this.chartData = data;
   }
 
@@ -149,66 +153,18 @@ export default class Chart extends Component {
   }
 
   calculateData (props) {
-    return this.calculateDenormalizedData(props.data || []);
+    return this.calculateDenormalizedData(props.valueKeys || [], props.xKey, props.data || []);
   }
 
-  calculateDenormalizedData (data) {
-    return this.props.valueKeys.map(valueKey => dataDenormalizer(data || [], this.props.xKey, valueKey));
+  calculateDenormalizedData (valueKeys, xKey, data) {
+    return valueKeys.map(valueKey => dataDenormalizer(data || [], xKey, valueKey));
   }
 
-  updateScalesFromData (data) {
-    if (this.props.xKey) {
-      this.updateXScaleDomain(data);
+  updateScalesFromData (props, data) {
+    if (props.xKey) {
+      updateXScaleDomain(this.xScale, props, data);
     }
-    this.updateYScaleDomain(data);
-  }
-
-  updateYScaleDomain (data) {
-    if (this.props.yScaleDomain) {
-      if (_.isFunction(this.props.yScaleDomain)) {
-        this.yScale.domain(this.props.yScaleDomain(data));
-      } else {
-        this.yScale.domain(this.props.yScaleDomain);
-      }
-    } else {
-      const allExtents = _.flatten(data.map(datum => d3.extent(datum, d => d.yValue)));
-      const valueExtent = d3.extent(allExtents);
-      if (this.props.yScaleMinimum !== undefined) {
-        valueExtent[0] = this.props.yScaleMinimum;
-      }
-      if (this.props.yScaleMaximum !== undefined) {
-        valueExtent[1] = this.props.yScaleMaximum;
-      }
-      this.yScale.domain(valueExtent);
-      if (this.props.DEBUG) {
-        /* eslint-disable no-console */
-        console.debug('yScale domain', valueExtent);
-      }
-    }
-  }
-
-  updateXScaleDomain (data) {
-    let domain;
-    if (this.props.xScaleDomain) {
-      if (_.isFunction(this.props.xScaleDomain)) {
-        domain = this.props.xScaleDomain(data);
-      } else {
-        domain = this.props.xScaleDomain;
-      }
-    } else {
-      const first = _.first(this.props.data);
-      const last = _.last(this.props.data);
-      if (first && last) {
-        domain = [first[this.props.xKey], last[this.props.xKey]];
-      }
-    }
-    if (domain) {
-      this.xScale.domain(domain);
-      if (this.props.DEBUG) {
-        /* eslint-disable no-console */
-        console.debug('xScale domain', domain);
-      }
-    }
+    updateYScaleDomain(this.yScale, props, data);
   }
 
   resize (props) {
@@ -220,7 +176,7 @@ export default class Chart extends Component {
     const width = props.width || rect.width;
     const areaWidth = width - (props.paddingLeft + props.paddingRight);
     const areaHeight = height - (props.paddingTop + props.paddingBottom);
-    const rangeMethod = this.props.rangeRound ? 'rangeRound' : 'range';
+    const rangeMethod = props.rangeRound ? 'rangeRound' : 'range';
     this.xScale[rangeMethod]([0, areaWidth]);
     this.yScale[rangeMethod]([areaHeight, 0]);
     this.setState({

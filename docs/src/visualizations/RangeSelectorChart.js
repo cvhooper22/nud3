@@ -1,4 +1,4 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
 import moment from 'moment';
 import _ from 'lodash';
 import {
@@ -7,23 +7,24 @@ import {
   AxisBottom,
   AxisLeft,
   PadDataBetweenDates,
-  HorizontalHoverBar,
-  VerticalHoverBar,
-  TooltipPositions,
   VerticalGrid,
   HorizontalGrid,
   RangeSelector,
   AreaChart,
 } from 'nud3';
 import * as d3 from 'd3';
-import LineTooltip from '../tooltips/LineTooltip';
 
 export default class RangeSelectorChart extends Component {
+
+  static propTypes = {
+    data: React.PropTypes.array,
+    valueKeys: React.PropTypes.array,
+    titleKeys: React.PropTypes.array,
+  };
 
   constructor (props, ...args) {
     super(props, ...args);
     this.state = {
-      filteredData: props.data,
       rangeStart: moment(_.last(this.props.data).date).subtract(3, 'days').toDate(),
       rangeEnd: moment(_.last(this.props.data).date).toDate(),
     };
@@ -47,7 +48,7 @@ export default class RangeSelectorChart extends Component {
       <g className="range-band-chart">
         <Chart
           className="basic-line-chart"
-          data={ this.state.filteredData }
+          data={ this.props.data }
           xKey="date"
           valueKeys={ this.props.valueKeys }
           height={ 300 }
@@ -93,8 +94,3 @@ export default class RangeSelectorChart extends Component {
     );
   }
 }
-RangeSelectorChart.propTypes = {
-  data: React.PropTypes.array,
-  valueKeys: React.PropTypes.array,
-  titleKeys: React.PropTypes.array,
-};

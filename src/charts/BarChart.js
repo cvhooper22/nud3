@@ -26,6 +26,7 @@ export default class BarChart extends Component {
     transitionDuration: PropTypes.number,
     transitionDelay: PropTypes.number,
     transitionEase: stringOrFunc,
+    transition: PropTypes.func,
     groupPadding: PropTypes.any,
   };
 
@@ -59,11 +60,11 @@ export default class BarChart extends Component {
   }
 
   getUniqueDataKey = (dataSet, i) => {
-    return this.props.valueKeys[i];
+    return `${this.props.valueKeys[i]}`;
   }
 
   getUniqueItemKey = (datum, i) => {
-    return datum.xValue || i;
+    return `${datum.xValue || i}`;
   }
 
   getFilter = (d, i) => {
@@ -88,6 +89,17 @@ export default class BarChart extends Component {
     return null;
   }
 
+  getTransition () {
+    const ease = _.isFunction(this.props.transitionEase) ? this.props.transitionEase : d3[this.props.transitionEase];
+    if (this.props.transition) {
+      return this.props.transition;
+    }
+    return d3.transition()
+      .duration(this.props.transitionDuration)
+      .delay(this.props.transitionDelay)
+      .ease(ease);
+  }
+
   render () {
     const className = [
       'bar-chart',
@@ -101,7 +113,7 @@ export default class BarChart extends Component {
     return (
       <g
         className={ className.join(' ') }
-        ref={ n => this.node = n }
+        ref={ n => this.node = d3.select(n) }
         transform={ `translate(${this.props.paddingLeft},${this.props.paddingTop})` }
         clipPath={ this.props.clipPath }
       />
@@ -109,55 +121,55 @@ export default class BarChart extends Component {
   }
 
   renderChart () {
-    this.group = d3.select(this.node);
-    this.group.selectAll('.bar-chart__group')
-      .data(this.props.chartData, this.getUniqueDataKey)
+    const groups = this.node.selectAll('.bar-chart__group')
+      .data(this.props.chartData, this.getUniqueDataKey);
+
+    groups
+      .exit()
+      .remove();
+
+    groups
       .enter()
       .append('g')
       .attr('class', 'bar-chart__group')
+      .merge(groups)
       .style('fill', this.getFillFromColorPalette)
-      .attr('mask', this.getPathMask)
-      .exit().remove();
+      .attr('mask', this.getPathMask);
     this.renderGroupedBars();
   }
 
   renderGroupedBars () {
     const xScale = this.props.xScale.copy();
-    const ease = _.isFunction(this.props.transitionEase) ? this.props.transitionEase : d3[this.props.transitionEase];
+    const bottomY = this.props.yScale(this.props.yScale.domain()[0]);
     xScale.range([0, this.props.xScale.bandwidth()]);
     xScale.domain(this.props.valueKeys);
 
-    const groups = this.group.selectAll('.bar-chart__group');
-    groups.exit().remove();
-    const bottomY = this.props.yScale(this.props.yScale.domain()[0]);
-    groups.selectAll('.bar-chart__group__bar')
-      .data(d => d, this.getUniqueItemKey)
+    const groups = this.node.selectAll('.bar-chart__group');
+    const bars = groups.selectAll('.bar-chart__group__bar')
+      .data(d => d, this.getUniqueItemKey);
+
+    bars
+      .exit()
+      .transition(this.getTransition())
+      .attr('y', bottomY)
+      .attr('width', 0)
+      .remove();
+
+    bars
       .enter()
       .append('rect')
-      .attr('y', bottomY)
-      .attr('width', xScale.bandwidth())
-      .attr('x', d => xScale(d.yKey) + this.props.xScale(d.xValue))
       .attr('class', 'bar-chart__group__bar')
       .attr('height', 0)
+      .attr('width', 0)
+      .attr('x', d => xScale(d.yKey) + this.props.xScale(d.xValue))
+      .attr('y', bottomY)
+    .merge(bars)
       .style('filter', this.getFilter)
-      .transition()
-      .duration(this.props.transitionDuration)
-      .delay(this.props.transitionDelay)
-      .attr('height', d => (this.props.areaHeight - this.props.yScale(d.yValue || 0)) || 1);
-
-    groups.selectAll('.bar-chart__group__bar')
-      .exit().remove();
-
-    groups.selectAll('.bar-chart__group__bar')
-      .transition()
-      .duration(this.props.transitionDuration)
-      .delay(this.props.transitionDelay)
-      .ease(ease)
+      .transition(this.getTransition())
+      .attr('x', d => xScale(d.yKey) + this.props.xScale(d.xValue))
       .attr('width', xScale.bandwidth())
       .attr('y', d => this.props.yScale(d.yValue || 0))
-      .attr('x', d => xScale(d.yKey) + this.props.xScale(d.xValue))
-      .attr('height', d => (this.props.areaHeight - this.props.yScale(d.yValue || 0)) || 1)
-      .style('filter', this.getFilter);
+      .attr('height', d => (this.props.areaHeight - this.props.yScale(d.yValue || 0)) || 1);
   }
 
 }
