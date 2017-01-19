@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import * as d3 from 'd3';
 import _ from 'lodash';
 import TooltipRenderer from '../helpers/TooltipRenderer';
+import { stringOrFunc } from '../propTypes/customPropTypes';
 
 export default class ChoroplethMap extends Component {
 
@@ -13,7 +14,9 @@ export default class ChoroplethMap extends Component {
     paddingLeft: PropTypes.number,
     paddingRight: PropTypes.number,
     paddingTop: PropTypes.number,
-    topology: PropTypes.object,
+    topology: PropTypes.shape({
+      features: PropTypes.array.isRequired,
+    }),
     projection: PropTypes.func,
     areaHeight: PropTypes.number,
     areaWidth: PropTypes.number,
@@ -21,6 +24,8 @@ export default class ChoroplethMap extends Component {
     fillColor: PropTypes.any,
     strokeColor: PropTypes.any,
     children: PropTypes.node,
+    mask: stringOrFunc,
+    filter: stringOrFunc,
   };
 
   static defaultProps = {
@@ -41,15 +46,40 @@ export default class ChoroplethMap extends Component {
     }
   }
 
-  getPathGenerator () {
+  getPathGenerator = () => {
     return d3.geoPath().projection(this.getProjection());
   }
 
-  getProjection () {
+  getProjection = () => {
     if (_.isFunction(this.props.projection)) {
       return this.props.projection(this.props);
     }
     return this.props.projection;
+  }
+
+  getPathFilter = (d, i) => {
+    let filter = this.props.filter;
+    if (_.isFunction(filter)) {
+      return filter;
+    }
+    if (_.isArray(filter)) {
+      filter = filter[i];
+    }
+    if (filter) {
+      return `url(#${filter})`;
+    }
+    return null;
+  }
+
+  getPathMask = (d, i) => {
+    let mask = this.props.mask;
+    if (_.isArray(mask)) {
+      mask = mask[i];
+    }
+    if (mask) {
+      return `url(#${mask})`;
+    }
+    return null;
   }
 
   render () {
@@ -73,24 +103,18 @@ export default class ChoroplethMap extends Component {
 
   renderMap () {
     const group = d3.select(this.node);
-    group.selectAll('.choropleth-map__feature')
-      .data(this.generateTopology().features)
+    const features = group.selectAll('.choropleth-map__feature')
+      .data(this.generateTopology().features);
+    features
       .enter()
       .append('path')
-      .attr('class', 'choropleth-map__feature');
-
-    const features = group.selectAll('.choropleth-map__feature')
-      .attr('d', this.getPathGenerator());
-    if (this.props.fillColor) {
-      features.style('fill', this.props.fillColor);
-    } else {
-      features.style('fill', null);
-    }
-    if (this.props.strokeColor) {
-      features.style('stroke', this.props.strokeColor);
-    } else {
-      features.style('stroke', null);
-    }
+      .attr('class', 'choropleth-map__feature')
+      .merge(features)
+      .attr('d', this.getPathGenerator())
+      .style('fill', this.props.fillColor)
+      .style('stroke', this.props.strokeColor)
+      .attr('mask', this.getPathMask)
+      .style('filter', this.getPathFilter);
     this.renderTooltip();
   }
 

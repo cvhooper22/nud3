@@ -42,11 +42,11 @@ export default class Chart extends Component {
   };
 
   static defaultProps = {
-    paddingBottom: 10,
-    paddingLeft: 10,
-    paddingRight: 10,
-    paddingTop: 10,
-    resizeDebounce: 50,
+    paddingBottom: 0,
+    paddingLeft: 0,
+    paddingRight: 0,
+    paddingTop: 0,
+    resizeDebounce: 100,
     valueKeys: ['value'],
     xScale: 'scaleTime',
     xmlns: 'http://www.w3.org/2000/svg',
@@ -56,8 +56,7 @@ export default class Chart extends Component {
 
   constructor (props, ...args) {
     super(props, ...args);
-    this.renderChild = ::this.renderChild;
-    this.onWindowResize = _.debounce(::this.onWindowResize, props.resizeDebounce);
+    this.onWindowResize = _.debounce(this.onWindowResize, props.resizeDebounce);
     this.setupData(props);
     this.state = {};
   }
@@ -80,8 +79,10 @@ export default class Chart extends Component {
     window.removeEventListener('resize', this.onWindowResize);
   }
 
-  onWindowResize () {
-    this.resize(this.props);
+  onWindowResize = () => {
+    if (this.node) {
+      this.resize(this.props);
+    }
   }
 
   setupData (props) {
@@ -127,7 +128,7 @@ export default class Chart extends Component {
     return React.Children.map(this.props.children, this.renderChild);
   }
 
-  renderChild (child, i = 0) {
+  renderChild = (child, i = 0) => {
     if (typeof child.type === 'string') {
       return child;
     }
