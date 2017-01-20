@@ -119,15 +119,17 @@ export default class ChoroplethMap extends Component {
   }
 
   renderTooltip () {
-    const group = d3.select(this.node);
-    const features = group.selectAll('.choropleth-map__feature');
+    const node = d3.select(this.node);
+    const features = node.selectAll('.choropleth-map__feature');
     if (this.hasTooltip()) {
-      group.call(this.tooltipRenderer.bind);
+      node.call(this.tooltipRenderer.bind);
       features.on('mouseover.ChoroplethMap', this.tooltipRenderer.onShow);
       features.on('mouseout.ChoroplethMap', this.tooltipRenderer.onHide);
+      node.on('mousemove.ChoroplethMap', this.tooltipRenderer.onMove);
     } else {
       features.on('mouseover.ChoroplethMap', null);
       features.on('mouseout.ChoroplethMap', null);
+      node.on('mousemove.ChoroplethMap', null);
     }
   }
 

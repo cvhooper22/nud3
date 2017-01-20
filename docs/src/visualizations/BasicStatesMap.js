@@ -1,6 +1,6 @@
 import React from 'react';
 import { geoAlbersUsa, scaleQuantize, max } from 'd3';
-import { Chart, ChoroplethMap, TooltipPositions } from 'nud3';
+import { Chart, ChoroplethMap, TooltipPositions, TooltipAnchors } from 'nud3';
 import StatesTopology from '../data/StatesTopology.json';
 import MapTooltip from '../tooltips/MapTooltip';
 
@@ -41,6 +41,7 @@ export default function BasicStatesMap (props) {
       >
         <MapTooltip
           position={ TooltipPositions.topCenter }
+          anchor={ TooltipAnchors.mouse }
           metricName={ props.metricName }
         />
       </ChoroplethMap>

@@ -14,6 +14,7 @@ export VerticalCurtain from './animators/VerticalCurtain';
 export ChoroplethMap from './charts/ChoroplethMap';
 export TooltipRenderer from './helpers/TooltipRenderer';
 export TooltipPositions from './helpers/TooltipPositions';
+export TooltipAnchors from './helpers/TooltipAnchors';
 export tooltipPositioner from './helpers/tooltipPositioner';
 export HorizontalHoverBar from './axes/HorizontalHoverBar';
 export VerticalHoverBar from './axes/VerticalHoverBar';
