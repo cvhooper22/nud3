@@ -36,7 +36,6 @@ export default class BasicStatesMapView extends React.Component {
   render () {
     return (
       <div>
-        <div style={{ height: '2000px', background: 'red' }} />
         <BasicStatesMap
           data={ this.state.data }
           valueKeys={ [this.state.metric] }
