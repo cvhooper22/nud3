@@ -115,8 +115,8 @@ export default class TooltipRenderer {
     const mousePosition = mouse(eventElement);
     const svg = this.svg.getBoundingClientRect();
     const padding = this.options.mousePadding;
-    const x = (mousePosition[0] + svg.left) - window.scrollX;
-    const y = (mousePosition[1] + svg.top) - window.scrollY;
+    const x = mousePosition[0] + svg.left;
+    const y = mousePosition[1] + svg.top;
     return {
       left: x - padding,
       top: y - padding,
