@@ -1,10 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { mouse } from 'd3';
 import curryThisElement from './curryThisElement';
 import tooltipPositioner from './tooltipPositioner';
 import TooltipPositions from './TooltipPositions';
 import TooltipAnchors from './TooltipAnchors';
-import { mouse } from 'd3';
 
 export default class TooltipRenderer {
 

@@ -121,6 +121,12 @@ export default class BarChart extends Component {
   }
 
   renderChart () {
+    if (!this.props.xScale.bandwidth) {
+      /* eslint-disable no-console */
+      console.warn('BarChart\'s xScale needs to provide the bandwidth function. See d3.scaleBand');
+      return;
+    }
+
     const groups = this.node.selectAll('.bar-chart__group')
       .data(this.props.chartData, this.getUniqueDataKey);
 

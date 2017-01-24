@@ -28,17 +28,9 @@ export default class PadDataBetweenDates extends Component {
     normalize: true,
   };
 
-  constructor (...args) {
-    super(...args);
-    this.renderChild = ::this.renderChild;
-  }
-
   setupData () {
     const startMoment = moment(this.props.startDate);
     const endMoment = moment(this.props.endDate);
-    if (!startMoment.isBefore(endMoment)) {
-      return;
-    }
     if (this.props.DEBUG) {
       /* eslint-disable no-console */
       console.debug(`PadDataBetweenDates performing pad between
@@ -46,19 +38,27 @@ export default class PadDataBetweenDates extends Component {
                     with the pad interval of ${this.props.dateInterval},
                     with normalizing to start of ${this.props.dateInterval} ${this.props.normalize ? 'enabled' : 'disabled'}.`);
     }
-    this.chartData = this.props.chartData.map((datum) => {
-      const first = _.first(datum) || {};
-      return padDataBetweenDates(datum,
-                                 this.props.startDate,
-                                 this.props.endDate,
-                                 this.props,
-                                 this.props.padWith || {
-                                   ...first,
-                                   yValue: undefined,
-                                   xValue: undefined,
-                                 }
-                                );
-    });
+    if (this.props.startDate && this.props.endDate && startMoment.isBefore(endMoment)) {
+      this.chartData = this.props.chartData.map((datum) => {
+        const first = _.first(datum) || {};
+        return padDataBetweenDates(datum,
+                                   this.props.startDate,
+                                   this.props.endDate,
+                                   this.props,
+                                   this.props.padWith || {
+                                     ...first,
+                                     yValue: undefined,
+                                     xValue: undefined,
+                                   },
+                                  );
+      });
+    } else {
+      console.warn(`PadDataBetweenDates received invalid startDate or endDate prop
+startDate: ${this.props.startDate}
+endDate: ${this.props.endDate}
+`);
+      this.chartData = [];
+    }
     this.xScale = this.props.xScale.copy();
     this.updateXScaleDomain();
     this.yScale = this.props.yScale.copy();
@@ -82,7 +82,7 @@ export default class PadDataBetweenDates extends Component {
     );
   }
 
-  renderChild (child, i = 0) {
+  renderChild = (child, i = 0) => {
     if (typeof child.type === 'string') {
       return child;
     }

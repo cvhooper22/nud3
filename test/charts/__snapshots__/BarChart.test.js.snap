@@ -1,0 +1,27 @@
+exports[`BarChart.js should render the clip path 1`] = `
+<g
+  className="bar-chart"
+  clipPath="my-clip-path"
+  transform="translate(0,0)" />
+`;
+
+exports[`BarChart.js should take stubbed data and do basic rendering 1`] = `
+<g
+  className="bar-chart"
+  clipPath={undefined}
+  transform="translate(0,0)" />
+`;
+
+exports[`BarChart.js should take stubbed data repositions based on padding 1`] = `
+<g
+  className="bar-chart"
+  clipPath={undefined}
+  transform="translate(10,10)" />
+`;
+
+exports[`BarChart.js shouldnt throw an error when providing bad xScale without bandwidth 1`] = `
+<g
+  className="bar-chart"
+  clipPath="my-clip-path"
+  transform="translate(0,0)" />
+`;

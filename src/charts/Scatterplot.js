@@ -117,6 +117,7 @@ export default class Scatterplot extends Component {
   renderChart () {
     this.renderDotsContainer();
     this.renderDots();
+    this.renderTooltips();
   }
 
   renderDotsContainer () {
@@ -155,13 +156,19 @@ export default class Scatterplot extends Component {
       .attr('r', this.props.dotRadius)
       .attr('cy', d => this.props.yScale(d.yValue || 0))
       .attr('cx', d => this.props.xScale(d.xValue));
+  }
 
+  renderTooltips () {
+    const dots = this.group.selectAll('.scatterplot__dots')
+      .selectAll('.scatterplot__dots__dot');
     if (this.hasTooltip()) {
-      dot.on('mouseover.Scatterplot', this.tooltipRenderer.onShow);
-      dot.on('mouseout.Scatterplot', this.tooltipRenderer.onHide);
+      dots.on('mouseover.Scatterplot', this.tooltipRenderer.onShow);
+      dots.on('mouseout.Scatterplot', this.tooltipRenderer.onHide);
+      this.group.on('mousemove.Scatterplot', this.tooltipRenderer.onMove);
     } else {
-      dot.on('mouseover.Scatterplot', null);
-      dot.on('mouseout.Scatterplot', null);
+      dots.on('mouseover.Scatterplot', null);
+      dots.on('mouseout.Scatterplot', null);
+      this.group.on('mousemove.Scatterplot', null);
     }
   }
 

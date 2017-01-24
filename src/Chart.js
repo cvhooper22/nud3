@@ -90,7 +90,7 @@ export default class Chart extends Component {
     this.xScale = this.setupScale(props.xScale);
     this.yScale = this.setupScale(props.yScale);
     this.updateScalesFromData(props, data);
-    this.chartData = data;
+    this.chartData = data || [];
   }
 
   setupScale (prop) {

@@ -129,7 +129,6 @@ export default class AreaChart extends Component {
 
     paths
       .exit()
-      .interrupt()
       .transition(this.getTransition())
       .attr('d', enterAreaGenerator)
       .remove();

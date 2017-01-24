@@ -1,0 +1,20 @@
+exports[`LineChart.js should render the clip path 1`] = `
+<g
+  className="line-chart"
+  clipPath="my-clip-path"
+  transform="translate(0,0)" />
+`;
+
+exports[`LineChart.js should take stubbed data and do basic rendering 1`] = `
+<g
+  className="line-chart"
+  clipPath={undefined}
+  transform="translate(0,0)" />
+`;
+
+exports[`LineChart.js should take stubbed data repositions based on padding 1`] = `
+<g
+  className="line-chart"
+  clipPath={undefined}
+  transform="translate(10,10)" />
+`;
