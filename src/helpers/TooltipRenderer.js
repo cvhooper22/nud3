@@ -57,19 +57,24 @@ export default class TooltipRenderer {
     if (!container.parentNode) {
       window.document.body.appendChild(container);
     }
-    ReactDOM.render(React.cloneElement(
-      this.component, {
-        options: this.options,
-        ...this.ownerComponent.props,
-        ...this.component.props,
-        data,
-        i,
-      }
-    ), container);
-    const position = this.component.props.position || this.options.position;
-    const anchor = this.component.props.anchor || this.options.anchor;
-    const anchorRect = this.getAnchorRect(anchor, eventElement);
-    tooltipPositioner(position, anchorRect, container, this.options);
+    const tooltipElement = React.cloneElement(this.component, {
+      options: this.options,
+      ...this.ownerComponent.props,
+      ...this.component.props,
+      data,
+      i,
+    });
+    if (tooltipElement) {
+      ReactDOM.render(tooltipElement, container);
+      const position = this.component.props.position || this.options.position;
+      const anchor = this.component.props.anchor || this.options.anchor;
+      const anchorRect = this.getAnchorRect(anchor, eventElement);
+      tooltipPositioner(position, anchorRect, container, this.options);
+    } else {
+      const name = this.component.displayName || this.component.name;
+      /* eslint-disable no-console */
+      console.warn(`${name} didn't return a valid tooltip, so skipping.`);
+    }
   }
 
   onMove (eventElement) {

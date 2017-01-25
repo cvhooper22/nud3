@@ -34,15 +34,15 @@ export default class Scatterplot extends Component {
     dotRadius: 5,
   };
 
-  constructor (props, ...args) {
-    super(props, ...args);
+  constructor (...args) {
+    super(...args);
     this.onMouseOver = curryThisElement(this.onMouseOver, this);
     this.onMouseOut = curryThisElement(this.onMouseOut, this);
   }
 
   componentDidMount () {
     this.tooltipRenderer = new TooltipRenderer(this);
-    this.group.call(this.tooltipRenderer.bind);
+    this.node.call(this.tooltipRenderer.bind);
     if (this.hasTooltip()) {
       this.tooltipRenderer.update(React.Children.only(this.props.children));
     }
@@ -109,7 +109,7 @@ export default class Scatterplot extends Component {
         className={ className.join(' ') }
         transform={ `translate(${this.props.paddingLeft},${this.props.paddingTop})` }
         clipPath={ this.props.clipPath }
-        ref={ n => this.group = d3.select(n) }
+        ref={ n => this.node = d3.select(n) }
       />
     );
   }
@@ -121,7 +121,7 @@ export default class Scatterplot extends Component {
   }
 
   renderDotsContainer () {
-    const dots = this.group.selectAll('.scatterplot__dots')
+    const dots = this.node.selectAll('.scatterplot__dots')
       .data(this.props.chartData, this.getUniqueDataKey);
 
     dots
@@ -139,7 +139,7 @@ export default class Scatterplot extends Component {
 
   renderDots () {
     const bottomY = this.props.yScale(this.props.yScale.domain()[0]);
-    const dots = this.group.selectAll('.scatterplot__dots');
+    const dots = this.node.selectAll('.scatterplot__dots');
     const dot = dots
       .selectAll('.scatterplot__dots__dot')
       .data(d => d);
@@ -159,16 +159,16 @@ export default class Scatterplot extends Component {
   }
 
   renderTooltips () {
-    const dots = this.group.selectAll('.scatterplot__dots')
+    const dots = this.node.selectAll('.scatterplot__dots')
       .selectAll('.scatterplot__dots__dot');
     if (this.hasTooltip()) {
       dots.on('mouseover.Scatterplot', this.tooltipRenderer.onShow);
       dots.on('mouseout.Scatterplot', this.tooltipRenderer.onHide);
-      this.group.on('mousemove.Scatterplot', this.tooltipRenderer.onMove);
+      this.node.on('mousemove.Scatterplot', this.tooltipRenderer.onMove);
     } else {
       dots.on('mouseover.Scatterplot', null);
       dots.on('mouseout.Scatterplot', null);
-      this.group.on('mousemove.Scatterplot', null);
+      this.node.on('mousemove.Scatterplot', null);
     }
   }
 

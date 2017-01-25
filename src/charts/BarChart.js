@@ -1,33 +1,36 @@
 import React, { Component, PropTypes } from 'react';
 import * as d3 from 'd3';
 import _ from 'lodash';
+import curryThisElement from '../helpers/curryThisElement';
 import { stringOrArrayOfStrings, stringOrFunc } from '../propTypes/customPropTypes';
+import TooltipRenderer from '../helpers/TooltipRenderer';
 
 export default class BarChart extends Component {
 
   static propTypes = {
+    areaHeight: PropTypes.number,
+    areaWidth: PropTypes.number,
     chartData: PropTypes.array,
+    children: PropTypes.node,
     className: PropTypes.string,
     classNamePrefix: PropTypes.string,
+    clipPath: PropTypes.string,
     colorPalette: PropTypes.any,
     fill: PropTypes.bool,
     filter: stringOrArrayOfStrings,
+    groupPadding: PropTypes.any,
     mask: stringOrArrayOfStrings,
     paddingBottom: PropTypes.number,
     paddingLeft: PropTypes.number,
     paddingRight: PropTypes.number,
     paddingTop: PropTypes.number,
+    transition: PropTypes.func,
+    transitionDelay: PropTypes.number,
+    transitionDuration: PropTypes.number,
+    transitionEase: stringOrFunc,
     valueKeys: PropTypes.array,
     xScale: PropTypes.func,
     yScale: PropTypes.func,
-    clipPath: PropTypes.string,
-    areaWidth: PropTypes.number,
-    areaHeight: PropTypes.number,
-    transitionDuration: PropTypes.number,
-    transitionDelay: PropTypes.number,
-    transitionEase: stringOrFunc,
-    transition: PropTypes.func,
-    groupPadding: PropTypes.any,
   };
 
   static defaultProps = {
@@ -38,7 +41,18 @@ export default class BarChart extends Component {
     groupPadding: 0.1,
   };
 
+  constructor (...args) {
+    super(...args);
+    this.onMouseOver = curryThisElement(this.onMouseOver, this);
+    this.onMouseOut = curryThisElement(this.onMouseOut, this);
+  }
+
   componentDidMount () {
+    this.tooltipRenderer = new TooltipRenderer(this);
+    this.node.call(this.tooltipRenderer.bind);
+    if (this.hasTooltip()) {
+      this.tooltipRenderer.update(React.Children.only(this.props.children));
+    }
     this.renderChart();
   }
 
@@ -142,6 +156,7 @@ export default class BarChart extends Component {
       .style('fill', this.getFillFromColorPalette)
       .attr('mask', this.getPathMask);
     this.renderGroupedBars();
+    this.renderTooltips();
   }
 
   renderGroupedBars () {
@@ -176,6 +191,25 @@ export default class BarChart extends Component {
       .attr('width', xScale.bandwidth())
       .attr('y', d => this.props.yScale(d.yValue || 0))
       .attr('height', d => (this.props.areaHeight - this.props.yScale(d.yValue || 0)) || 1);
+  }
+
+  renderTooltips () {
+    const bars = this.node
+      .selectAll('.bar-chart__group')
+      .selectAll('.bar-chart__group__bar');
+    if (this.hasTooltip()) {
+      bars.on('mouseover.BarChart', this.tooltipRenderer.onShow);
+      bars.on('mouseout.BarChart', this.tooltipRenderer.onHide);
+      this.node.on('mousemove.BarChart', this.tooltipRenderer.onMove);
+    } else {
+      bars.on('mouseover.BarChart', null);
+      bars.on('mouseout.BarChart', null);
+      this.node.on('mousemove.BarChart', null);
+    }
+  }
+
+  hasTooltip () {
+    return React.Children.count(this.props.children) === 1;
   }
 
 }
