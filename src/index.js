@@ -23,5 +23,11 @@ export VerticalCurtain from './animators/VerticalCurtain';
 export VerticalGrid from './axes/VerticalGrid';
 export VerticalHoverBar from './axes/VerticalHoverBar';
 export curryThisElement from './helpers/curryThisElement';
-export customPropTypes from './propTypes/customPropTypes';
+export {
+  arrayOrFunc,
+  numberOrFunc,
+  stringOrArrayOfStrings,
+  stringOrFunc,
+  stringOrNumber,
+} from './propTypes/customPropTypes';
 export tooltipPositioner from './helpers/tooltipPositioner';
