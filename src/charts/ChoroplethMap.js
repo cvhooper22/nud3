@@ -26,6 +26,10 @@ export default class ChoroplethMap extends Component {
     children: PropTypes.node,
     mask: stringOrFunc,
     filter: stringOrFunc,
+    onTooltipShow: PropTypes.func,
+    onTooltipHide: PropTypes.func,
+    displayItem: PropTypes.object,
+    displayItemFilter: PropTypes.func,
   };
 
   static defaultProps = {
@@ -43,6 +47,24 @@ export default class ChoroplethMap extends Component {
     this.renderMap();
     if (this.hasTooltip()) {
       this.tooltipRenderer.update(React.Children.only(this.props.children));
+
+      if (this.props.displayItem) {
+        this.showTooltipForItem(this.props.displayItem);
+      } else {
+        this.hideTooltips();
+      }
+    }
+  }
+
+  onTooltipShow = (eventElement) => {
+    if (this.props.onTooltipShow) {
+      this.props.onTooltipShow(eventElement.properties);
+    }
+  }
+
+  onTooltipHide = (eventElement) => {
+    if (this.props.onTooltipHide) {
+      this.props.onTooltipHide(eventElement.properties);
     }
   }
 
@@ -125,10 +147,14 @@ export default class ChoroplethMap extends Component {
       node.call(this.tooltipRenderer.bind);
       features.on('mouseover.ChoroplethMap', this.tooltipRenderer.onShow);
       features.on('mouseout.ChoroplethMap', this.tooltipRenderer.onHide);
+      features.on('mouseover.ChoroplethTooltip', this.onTooltipShow);
+      features.on('mouseout.ChoroplethTooltip', this.onTooltipHide);
       node.on('mousemove.ChoroplethMap', this.tooltipRenderer.onMove);
     } else {
       features.on('mouseover.ChoroplethMap', null);
       features.on('mouseout.ChoroplethMap', null);
+      features.on('mouseover.ChoroplethTooltip', null);
+      features.on('mouseout.ChoroplethTooltip', null);
       node.on('mousemove.ChoroplethMap', null);
     }
   }
@@ -161,5 +187,18 @@ export default class ChoroplethMap extends Component {
 
   hasTooltip () {
     return React.Children.count(this.props.children) === 1;
+  }
+
+  showTooltipForItem () {
+    if (this.props.displayItemFilter) {
+      const node = d3.select(this.node);
+      const feature = node.selectAll('.choropleth-map__feature').filter(this.props.displayItemFilter);
+      feature.each(this.tooltipRenderer.onShow);
+    }
+  }
+
+  hideTooltips () {
+    const node = d3.select(this.node);
+    node.selectAll('.choropleth-map__feature').each(this.tooltipRenderer.onHide);
   }
 }
