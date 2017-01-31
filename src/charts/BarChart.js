@@ -73,15 +73,15 @@ export default class BarChart extends Component {
     }
   }
 
-  onTooltipShow = (eventElement) => {
+  onTooltipShow = (elementData) => {
     if (this.props.onTooltipShow) {
-      this.props.onTooltipShow(eventElement.original);
+      this.props.onTooltipShow(elementData.original);
     }
   }
 
-  onTooltipHide = (eventElement) => {
+  onTooltipHide = (elementData) => {
     if (this.props.onTooltipHide) {
-      this.props.onTooltipHide(eventElement.original);
+      this.props.onTooltipHide(elementData.original);
     }
   }
 
