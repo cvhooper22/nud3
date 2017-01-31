@@ -31,6 +31,10 @@ export default class BarChart extends Component {
     valueKeys: PropTypes.array,
     xScale: PropTypes.func,
     yScale: PropTypes.func,
+    onTooltipShow: PropTypes.func,
+    onTooltipHide: PropTypes.func,
+    displayItem: PropTypes.object,
+    displayItemFilter: PropTypes.func,
   };
 
   static defaultProps = {
@@ -58,6 +62,27 @@ export default class BarChart extends Component {
 
   componentDidUpdate () {
     this.renderChart();
+    if (this.hasTooltip()) {
+      this.tooltipRenderer.update(React.Children.only(this.props.children));
+
+      if (this.props.displayItem) {
+        this.showTooltipForItem(this.props.displayItem);
+      } else {
+        this.hideTooltips();
+      }
+    }
+  }
+
+  onTooltipShow = (eventElement) => {
+    if (this.props.onTooltipShow) {
+      this.props.onTooltipShow(eventElement.original);
+    }
+  }
+
+  onTooltipHide = (eventElement) => {
+    if (this.props.onTooltipHide) {
+      this.props.onTooltipHide(eventElement.original);
+    }
   }
 
   getFillFromColorPalette = (d, i) => {
@@ -200,16 +225,37 @@ export default class BarChart extends Component {
     if (this.hasTooltip()) {
       bars.on('mouseover.BarChart', this.tooltipRenderer.onShow);
       bars.on('mouseout.BarChart', this.tooltipRenderer.onHide);
+      bars.on('mouseover.BarChartTooltip', this.onTooltipShow);
+      bars.on('mouseout.BarChartTooltip', this.onTooltipHide);
       this.node.on('mousemove.BarChart', this.tooltipRenderer.onMove);
     } else {
       bars.on('mouseover.BarChart', null);
       bars.on('mouseout.BarChart', null);
+      bars.on('mouseover.BarChartTooltip', null);
+      bars.on('mouseout.BarChartTooltip', null);
       this.node.on('mousemove.BarChart', null);
     }
   }
 
   hasTooltip () {
     return React.Children.count(this.props.children) === 1;
+  }
+
+  showTooltipForItem () {
+    if (this.props.displayItemFilter) {
+      const feature = this.node
+        .selectAll('.bar-chart__group')
+        .selectAll('.bar-chart__group__bar')
+        .filter(this.props.displayItemFilter);
+      feature.each(this.tooltipRenderer.onShow);
+    }
+  }
+
+  hideTooltips () {
+    this.node
+      .selectAll('.bar-chart__group')
+      .selectAll('.bar-chart__group__bar')
+      .each(this.tooltipRenderer.onHide);
   }
 
 }
