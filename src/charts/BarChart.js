@@ -1,7 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import * as d3 from 'd3';
 import _ from 'lodash';
-import curryThisElement from '../helpers/curryThisElement';
 import { stringOrArrayOfStrings, stringOrFunc } from '../propTypes/customPropTypes';
 import TooltipRenderer from '../helpers/TooltipRenderer';
 
@@ -40,12 +39,6 @@ export default class BarChart extends Component {
     transitionEase: d3.easePolyInOut,
     groupPadding: 0.1,
   };
-
-  constructor (...args) {
-    super(...args);
-    this.onMouseOver = curryThisElement(this.onMouseOver, this);
-    this.onMouseOut = curryThisElement(this.onMouseOut, this);
-  }
 
   componentDidMount () {
     this.tooltipRenderer = new TooltipRenderer(this);
