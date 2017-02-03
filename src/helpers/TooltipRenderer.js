@@ -92,7 +92,7 @@ export default class TooltipRenderer {
   }
 
   onHide () {
-    if (this.container.parentNode) {
+    if (this.container && this.container.parentNode) {
       window.document.body.removeChild(this.container);
     }
   }
@@ -117,11 +117,11 @@ export default class TooltipRenderer {
   }
 
   generateMouseRect (eventElement) {
-    const mousePosition = mouse(eventElement);
-    const svg = this.svg.getBoundingClientRect();
+    let [x, y] = mouse(this.svg || eventElement);
     const padding = this.options.mousePadding;
-    const x = mousePosition[0] + svg.left;
-    const y = mousePosition[1] + svg.top;
+    const svg = this.svg.getBoundingClientRect();
+    x += svg.left;
+    y += svg.top;
     return {
       left: x - padding,
       top: y - padding,
