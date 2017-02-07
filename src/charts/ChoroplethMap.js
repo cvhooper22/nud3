@@ -58,13 +58,13 @@ export default class ChoroplethMap extends Component {
 
   onTooltipShow = (eventElement) => {
     if (this.props.onTooltipShow) {
-      this.props.onTooltipShow(eventElement.properties);
+      this.props.onTooltipShow(eventElement.data);
     }
   }
 
   onTooltipHide = (eventElement) => {
     if (this.props.onTooltipHide) {
-      this.props.onTooltipHide(eventElement.properties);
+      this.props.onTooltipHide(eventElement.data);
     }
   }
 
