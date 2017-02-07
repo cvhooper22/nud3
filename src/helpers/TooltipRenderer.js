@@ -67,7 +67,11 @@ export default class TooltipRenderer {
     if (tooltipElement) {
       ReactDOM.render(tooltipElement, container);
       const position = this.component.props.position || this.options.position;
-      const anchor = this.component.props.anchor || this.options.anchor;
+      let anchor = this.component.props.anchor || this.options.anchor;
+      if (this.ownerComponent.props.displayItem) {
+        // I'm being forced to show tooltip
+        anchor = TooltipAnchors.path;
+      }
       const anchorRect = this.getAnchorRect(anchor, eventElement);
       tooltipPositioner(position, anchorRect, container, this.options);
     } else {
