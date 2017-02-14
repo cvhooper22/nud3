@@ -115,6 +115,7 @@ export default class Chart extends Component {
         { ...elementProps }
         style={ style }
         ref={ n => this.node = n }
+        viewBox={ `0 0 ${this.state.width} ${this.state.height}` }
       >
         { this.renderChildren() }
       </svg>

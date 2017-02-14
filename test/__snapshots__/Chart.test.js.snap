@@ -6,7 +6,8 @@ exports[`Chart.js should convert width and height percentages when strings 1`] =
       "height": "55%",
       "width": "100%",
     }
-  } />
+  }
+  viewBox="0 0 undefined undefined" />
 `;
 
 exports[`Chart.js should convert width and height to styles 1`] = `
@@ -17,7 +18,8 @@ exports[`Chart.js should convert width and height to styles 1`] = `
       "height": "555px",
       "width": "999px",
     }
-  } />
+  }
+  viewBox="0 0 undefined undefined" />
 `;
 
 exports[`Chart.js should take proper html items and render them out 1`] = `
@@ -27,5 +29,6 @@ exports[`Chart.js should take proper html items and render them out 1`] = `
     Object {
       "backgroundColor": "red",
     }
-  } />
+  }
+  viewBox="0 0 undefined undefined" />
 `;
