@@ -32,8 +32,7 @@ export default class BarChart extends Component {
     yScale: PropTypes.func,
     onTooltipShow: PropTypes.func,
     onTooltipHide: PropTypes.func,
-    displayItem: PropTypes.object,
-    displayItemFilter: PropTypes.func,
+    forceShowTooltip: PropTypes.bool,
   };
 
   static defaultProps = {
@@ -57,12 +56,6 @@ export default class BarChart extends Component {
     this.renderChart();
     if (this.hasTooltip()) {
       this.tooltipRenderer.update(React.Children.only(this.props.children));
-
-      if (this.props.displayItem) {
-        this.showTooltipForItem(this.props.displayItem);
-      } else {
-        this.hideTooltips();
-      }
     }
   }
 
@@ -233,22 +226,4 @@ export default class BarChart extends Component {
   hasTooltip () {
     return React.Children.count(this.props.children) === 1;
   }
-
-  showTooltipForItem () {
-    if (this.props.displayItemFilter) {
-      const feature = this.node
-        .selectAll('.bar-chart__group')
-        .selectAll('.bar-chart__group__bar')
-        .filter(this.props.displayItemFilter);
-      feature.each(this.tooltipRenderer.onShow);
-    }
-  }
-
-  hideTooltips () {
-    this.node
-      .selectAll('.bar-chart__group')
-      .selectAll('.bar-chart__group__bar')
-      .each(this.tooltipRenderer.onHide);
-  }
-
 }
