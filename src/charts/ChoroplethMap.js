@@ -28,8 +28,7 @@ export default class ChoroplethMap extends Component {
     filter: stringOrFunc,
     onTooltipShow: PropTypes.func,
     onTooltipHide: PropTypes.func,
-    displayItem: PropTypes.object,
-    displayItemFilter: PropTypes.func,
+    forceShowTooltip: PropTypes.bool,
   };
 
   static defaultProps = {
@@ -47,12 +46,6 @@ export default class ChoroplethMap extends Component {
     this.renderMap();
     if (this.hasTooltip()) {
       this.tooltipRenderer.update(React.Children.only(this.props.children));
-
-      if (this.props.displayItem) {
-        this.showTooltipForItem(this.props.displayItem);
-      } else {
-        this.hideTooltips();
-      }
     }
   }
 
@@ -187,18 +180,5 @@ export default class ChoroplethMap extends Component {
 
   hasTooltip () {
     return React.Children.count(this.props.children) === 1;
-  }
-
-  showTooltipForItem () {
-    if (this.props.displayItemFilter) {
-      const node = d3.select(this.node);
-      const feature = node.selectAll('.choropleth-map__feature').filter(this.props.displayItemFilter);
-      feature.each(this.tooltipRenderer.onShow);
-    }
-  }
-
-  hideTooltips () {
-    const node = d3.select(this.node);
-    node.selectAll('.choropleth-map__feature').each(this.tooltipRenderer.onHide);
   }
 }
