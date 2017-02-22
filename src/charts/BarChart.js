@@ -32,7 +32,6 @@ export default class BarChart extends Component {
     yScale: PropTypes.func,
     onTooltipShow: PropTypes.func,
     onTooltipHide: PropTypes.func,
-    forceShowTooltip: PropTypes.bool,
   };
 
   static defaultProps = {
