@@ -26,6 +26,8 @@ export default class ChoroplethMap extends Component {
     children: PropTypes.node,
     mask: stringOrFunc,
     filter: stringOrFunc,
+    onTooltipShow: PropTypes.func,
+    onTooltipHide: PropTypes.func,
   };
 
   static defaultProps = {
@@ -43,6 +45,18 @@ export default class ChoroplethMap extends Component {
     this.renderMap();
     if (this.hasTooltip()) {
       this.tooltipRenderer.update(React.Children.only(this.props.children));
+    }
+  }
+
+  onTooltipShow = (eventElement) => {
+    if (this.props.onTooltipShow) {
+      this.props.onTooltipShow(eventElement.data);
+    }
+  }
+
+  onTooltipHide = (eventElement) => {
+    if (this.props.onTooltipHide) {
+      this.props.onTooltipHide(eventElement.data);
     }
   }
 
@@ -125,10 +139,14 @@ export default class ChoroplethMap extends Component {
       node.call(this.tooltipRenderer.bind);
       features.on('mouseover.ChoroplethMap', this.tooltipRenderer.onShow);
       features.on('mouseout.ChoroplethMap', this.tooltipRenderer.onHide);
+      features.on('mouseover.ChoroplethTooltip', this.onTooltipShow);
+      features.on('mouseout.ChoroplethTooltip', this.onTooltipHide);
       node.on('mousemove.ChoroplethMap', this.tooltipRenderer.onMove);
     } else {
       features.on('mouseover.ChoroplethMap', null);
       features.on('mouseout.ChoroplethMap', null);
+      features.on('mouseover.ChoroplethTooltip', null);
+      features.on('mouseout.ChoroplethTooltip', null);
       node.on('mousemove.ChoroplethMap', null);
     }
   }
