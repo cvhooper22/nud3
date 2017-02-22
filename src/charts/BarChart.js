@@ -30,6 +30,8 @@ export default class BarChart extends Component {
     valueKeys: PropTypes.array,
     xScale: PropTypes.func,
     yScale: PropTypes.func,
+    onTooltipShow: PropTypes.func,
+    onTooltipHide: PropTypes.func,
   };
 
   static defaultProps = {
@@ -51,6 +53,21 @@ export default class BarChart extends Component {
 
   componentDidUpdate () {
     this.renderChart();
+    if (this.hasTooltip()) {
+      this.tooltipRenderer.update(React.Children.only(this.props.children));
+    }
+  }
+
+  onTooltipShow = (elementData) => {
+    if (this.props.onTooltipShow) {
+      this.props.onTooltipShow(elementData.original);
+    }
+  }
+
+  onTooltipHide = (elementData) => {
+    if (this.props.onTooltipHide) {
+      this.props.onTooltipHide(elementData.original);
+    }
   }
 
   getFillFromColorPalette = (d, i) => {
@@ -193,10 +210,14 @@ export default class BarChart extends Component {
     if (this.hasTooltip()) {
       bars.on('mouseover.BarChart', this.tooltipRenderer.onShow);
       bars.on('mouseout.BarChart', this.tooltipRenderer.onHide);
+      bars.on('mouseover.BarChartTooltip', this.onTooltipShow);
+      bars.on('mouseout.BarChartTooltip', this.onTooltipHide);
       this.node.on('mousemove.BarChart', this.tooltipRenderer.onMove);
     } else {
       bars.on('mouseover.BarChart', null);
       bars.on('mouseout.BarChart', null);
+      bars.on('mouseover.BarChartTooltip', null);
+      bars.on('mouseout.BarChartTooltip', null);
       this.node.on('mousemove.BarChart', null);
     }
   }
@@ -204,5 +225,4 @@ export default class BarChart extends Component {
   hasTooltip () {
     return React.Children.count(this.props.children) === 1;
   }
-
 }
