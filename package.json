@@ -1,6 +1,6 @@
 {
   "name": "nud3",
-  "version": "0.0.1-alpha.16",
+  "version": "0.0.1-alpha.17",
   "description": "New D3 composable charts for React",
   "repository": "https://github.com/inlineblock/nud3",
   "main": "lib/index",
