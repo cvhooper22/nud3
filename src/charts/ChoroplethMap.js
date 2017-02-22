@@ -28,7 +28,6 @@ export default class ChoroplethMap extends Component {
     filter: stringOrFunc,
     onTooltipShow: PropTypes.func,
     onTooltipHide: PropTypes.func,
-    forceShowTooltip: PropTypes.bool,
   };
 
   static defaultProps = {
