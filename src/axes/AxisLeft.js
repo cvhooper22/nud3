@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import * as d3 from 'd3';
+import shallowCompare from 'react-addons-shallow-compare';
 import { stringOrFunc } from '../propTypes/customPropTypes';
 
 export default class AxisLeft extends Component {
@@ -23,6 +24,10 @@ export default class AxisLeft extends Component {
 
   componentDidMount () {
     this.renderAxis();
+  }
+
+  shouldComponentUpdate (...args) {
+    return shallowCompare(this, ...args);
   }
 
   componentDidUpdate () {
